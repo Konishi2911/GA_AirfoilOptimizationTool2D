@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29306.81
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GA_AirfoilOptimizationTool2D", "GA_AirfoilOptimizationTool2D\GA_AirfoilOptimizationTool2D.csproj", "{1B08CA01-4EBB-4E51-AB84-FCDBAF993016}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1B08CA01-4EBB-4E51-AB84-FCDBAF993016}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B08CA01-4EBB-4E51-AB84-FCDBAF993016}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B08CA01-4EBB-4E51-AB84-FCDBAF993016}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B08CA01-4EBB-4E51-AB84-FCDBAF993016}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5DE24C3B-100E-49E6-922F-A4168DF8CA2E}
+	EndGlobalSection
+EndGlobal

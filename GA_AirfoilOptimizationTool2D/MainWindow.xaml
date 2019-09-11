@@ -1,0 +1,126 @@
+﻿<Window x:Class="GA_AirfoilOptimizationTool2D.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GA_AirfoilOptimizationTool2D"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="900" Width="1600">
+    <Grid>
+        <Menu VerticalAlignment="Top" Height="20">
+            <MenuItem Header=" File (_F)">
+                <MenuItem Header=" Load File"/>
+                <MenuItem Header="Load Airfoil"/>
+                <MenuItem Header="Export CSV"/>
+                <MenuItem Header="Prefarence"/>
+            </MenuItem>
+            <MenuItem Header="Edit (_E)"/>
+            <MenuItem Header="GeneticAlgorithm (_G)">
+                <MenuItem Header="Generating Configuration"/>
+                <MenuItem Header="Start Genetic Optimization"/>
+                <MenuItem Header="Airfoil Specifications Manager"/>
+            </MenuItem>
+            <MenuItem Header="Option (_O)"/>
+        </Menu>
+
+        <Grid Margin="5,5,5,30">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="360"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Border BorderBrush="Black" BorderThickness="1" Margin="5" Grid.Column="1" Grid.Row="1">
+                <Canvas x:Name="AirfoilWindow2" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow2_MouseLeftButtonDown">
+                    <Canvas.Background>
+                        <SolidColorBrush Color="Black" Opacity="0"/>
+                    </Canvas.Background>
+                    <Polyline x:Name="AirfoilLine2" Stroke ="Black"/>
+                </Canvas>
+            </Border>
+            <Border BorderBrush="Black" BorderThickness="1" Margin="5" Grid.Column="2" Grid.Row="1">
+                <Canvas x:Name="AirfoilWindow3" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow3_MouseLeftButtonDown">
+                    <Canvas.Background>
+                        <SolidColorBrush Color="Black" Opacity="0"/>
+                    </Canvas.Background>
+                    <Polyline x:Name="AirfoilLine3" Stroke ="Black"/>
+                </Canvas>
+            </Border>
+            <Border BorderBrush="Black" BorderThickness="1" Margin="5" Grid.Column="3" Grid.Row="1">
+                <Canvas x:Name="AirfoilWindow4" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow4_MouseLeftButtonDown">
+                    <Canvas.Background>
+                        <SolidColorBrush Color="Black" Opacity="0"/>
+                    </Canvas.Background>
+                    <Polyline x:Name="AirfoilLine4" Stroke ="Black"/>
+                </Canvas>
+            </Border>
+            <Border BorderBrush="Black" BorderThickness="1" Margin="5" Grid.Column="4" Grid.Row="1">
+                <Canvas x:Name="AirfoilWindow5" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow5_MouseLeftButtonDown">
+                    <Canvas.Background>
+                        <SolidColorBrush Color="Black" Opacity="0"/>
+                    </Canvas.Background>
+                    <Polyline x:Name="AirfoilLine5" Stroke ="Black"/>
+                </Canvas>
+            </Border>
+            <Border BorderBrush="Black" BorderThickness="1" Margin="5" Grid.Column="0" Grid.Row="2">
+                <Canvas x:Name="AirfoilWindow6" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow6_MouseLeftButtonDown">
+                    <Canvas.Background>
+                        <SolidColorBrush Color="Black" Opacity="0"/>
+                    </Canvas.Background>
+                    <Polyline x:Name="AirfoilLine6" Stroke ="Black"/>
+                </Canvas>
+            </Border>
+            <Border BorderBrush="Black" BorderThickness="1" Margin="5" Grid.Column="1" Grid.Row="2">
+                <Canvas x:Name="AirfoilWindow7" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow7_MouseLeftButtonDown">
+                    <Canvas.Background>
+                        <SolidColorBrush Color="Black" Opacity="0"/>
+                    </Canvas.Background>
+                    <Polyline x:Name="AirfoilLine7" Stroke ="Black"/>
+                </Canvas>
+            </Border>
+            <Border BorderBrush="Black" BorderThickness="1" Margin="5" Grid.Column="2" Grid.Row="2">
+                <Canvas x:Name="AirfoilWindow8" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow8_MouseLeftButtonDown">
+                    <Canvas.Background>
+                        <SolidColorBrush Color="Black" Opacity="0"/>
+                    </Canvas.Background>
+                    <Polyline x:Name="AirfoilLine8" Stroke ="Black"/>
+                </Canvas>
+            </Border>
+            <Border BorderBrush="Black" BorderThickness="1" Margin="5" Grid.Column="3" Grid.Row="2">
+                <Canvas x:Name="AirfoilWindow9" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow9_MouseLeftButtonDown">
+                    <Canvas.Background>
+                        <SolidColorBrush Color="Black" Opacity="0"/>
+                    </Canvas.Background>
+                    <Polyline x:Name="AirfoilLine9" Stroke ="Black"/>
+                </Canvas>
+            </Border>
+            <Border BorderBrush="Black" BorderThickness="1" Margin="5" Grid.Column="4" Grid.Row="2">
+                <Canvas x:Name="AirfoilWindow10" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow10_MouseLeftButtonDown">
+                    <Canvas.Background>
+                        <SolidColorBrush Color="Black" Opacity="0"/>
+                    </Canvas.Background>
+                    <Polyline x:Name="AirfoilLine10" Stroke ="Black"/>
+                </Canvas>
+            </Border>
+            <TextBox x:Name="GA_LogBox" TextWrapping="Wrap" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Margin="5" VerticalScrollBarVisibility="Auto"/>
+            <DataGrid x:Name="specDataGrid" Margin="5" Grid.Column="4" Grid.Row="3" CanUserResizeColumns="False" CanUserSortColumns="False" CanUserReorderColumns="False" HeadersVisibility="None" ColumnWidth="*"/>
+            <Border BorderBrush="Black" BorderThickness="1" Margin="5" Grid.Column="0" Grid.Row="1">
+                <Canvas x:Name="AirfoilWindow1" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow1_MouseLeftButtonDown">
+                    <Canvas.Background>
+                        <SolidColorBrush Color="Black" Opacity="0"/>
+                    </Canvas.Background>
+                    <Polyline x:Name="AirfoilLine1" Stroke ="Black"/>
+                </Canvas>
+            </Border>
+        </Grid>
+        <StatusBar Grid.Row="1" Margin="0" Height="25" VerticalAlignment="Bottom">
+        </StatusBar>
+    </Grid>
+</Window>

@@ -63,6 +63,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="General\ViewModelBase.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -73,9 +74,14 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MainWindowModel.cs" />
+    <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="OptConfig.xaml.cs">
       <DependentUpon>OptConfig.xaml</DependentUpon>
     </Compile>
+    <Compile Include="OptConfigCommand.cs" />
+    <Compile Include="OptConfigModel.cs" />
+    <Compile Include="OptConfigViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

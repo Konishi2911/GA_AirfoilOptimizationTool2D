@@ -8,5 +8,9 @@ namespace GA_AirfoilOptimizationTool2D
 {
     class OptConfigModel
     {
+        public OptConfigModel()
+        {
+
+        }
     }
 }

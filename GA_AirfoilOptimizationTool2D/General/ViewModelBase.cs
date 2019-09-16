@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace GA_AirfoilOptimizationTool2D.General
 {
-    class ViewModelBase: INotifyPropertyChanged
+    public class ViewModelBase: INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void NotifyPropertyChanged(string propertyName)
+        protected void OnPropertyChanged(string propertyName)
         {
-            if (propertyName != null)
+            if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }

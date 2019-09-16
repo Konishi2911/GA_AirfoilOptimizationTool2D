@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:GA_AirfoilOptimizationTool2D"
         mc:Ignorable="d"
         Title="Airfoil Optimization Tools 2D" Height="900" Width="1600">
+    <Window.DataContext>
+        <local:MainWindowViewModel/>
+    </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace GA_AirfoilOptimizationTool2D
+namespace GA_AirfoilOptimizationTool2D.FOptConfig
 {
-    public class OptConfigViewModel : General.ViewModelBase
+    class OptConfigGeneralViewModel : General.ViewModelBase
     {
         private FOptConfig.AirfoilRepresentationModeViewModel selectedAirfoilRepresentationMode;
         private FOptConfig.OptimizingParameterTypeViewModel selectedOptimizingParameter;
@@ -26,7 +23,7 @@ namespace GA_AirfoilOptimizationTool2D
         }
 
         public IEnumerable<FOptConfig.OptimizingParameterTypeViewModel> OptimizingParameterTypes { get; private set; }
-        public FOptConfig.OptimizingParameterTypeViewModel SelectedOptimizingMode
+        public FOptConfig.OptimizingParameterTypeViewModel SelectedOptimizingParameter
         {
             get
             {
@@ -35,17 +32,17 @@ namespace GA_AirfoilOptimizationTool2D
             set
             {
                 this.selectedOptimizingParameter = value;
-                this.OnPropertyChanged("SelectedOptimizingMode");
+                this.OnPropertyChanged("SelectedOptimizingParameter");
             }
         }
 
-        public OptConfigViewModel()
+        public OptConfigGeneralViewModel()
         {
             this.AirfoilRepresentationModes = FOptConfig.AirfoilRepresentationModeViewModel.Create();
             this.SelectedAirfoilRepresentationMode = this.AirfoilRepresentationModes.First();
 
             this.OptimizingParameterTypes = FOptConfig.OptimizingParameterTypeViewModel.Create();
-            this.SelectedOptimizingMode = this.OptimizingParameterTypes.First();
+            this.SelectedOptimizingParameter = this.OptimizingParameterTypes.First();
         }
     }
 }

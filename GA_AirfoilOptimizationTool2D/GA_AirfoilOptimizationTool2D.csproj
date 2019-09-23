@@ -64,14 +64,19 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FOptConfig\AirfoilRepresentationMode.cs" />
+    <Compile Include="FOptConfig\AirfoilSelectorViewModel.cs" />
+    <Compile Include="FOptConfig\Models\FileLoader.cs" />
+    <Compile Include="FOptConfig\OptConfigBAViewModel.cs" />
+    <Compile Include="FOptConfig\OptConfigGeneralViewModel.cs" />
     <Compile Include="FOptConfig\OptimizingParameterType.cs" />
     <Compile Include="FOptConfig\OptimizingParameterTypeViewModel.cs" />
+    <Compile Include="FOptConfig\ShowFileDialogAction.cs" />
     <Compile Include="General\ViewModelBase.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="FOptConfig\OptConfig.xaml">
+    <Page Include="OptConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -80,10 +85,10 @@
     <Compile Include="MainWindowModel.cs" />
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="FOptConfig\AirfoilRepresentationModeViewModel.cs" />
-    <Compile Include="FOptConfig\OptConfigCommand.cs" />
-    <Compile Include="FOptConfig\OptConfigModel.cs" />
-    <Compile Include="FOptConfig\OptConfigViewModel.cs" />
-    <Compile Include="FOptConfig\OptConfig.xaml.cs">
+    <Compile Include="FOptConfig\OptConfigDelegateCommand.cs" />
+    <Compile Include="OptConfigModel.cs" />
+    <Compile Include="OptConfigViewModel.cs" />
+    <Compile Include="OptConfig.xaml.cs">
       <DependentUpon>OptConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">

@@ -19,6 +19,11 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             isSelectable = new Func<bool>(IsAirfoilSelectable);
 
             airfoilSelection = new OptConfigDelegateCommand(airfoilSelectionMethod, isSelectable);
+
+            NumberOfAirfoil = 1;
+            AirfoilSelectionStatus 
+                = numberOfLoadedAirfoils.ToString() + " airfoil is loaded." + "  " 
+                + (numberOfBAirfoils - numberOfLoadedAirfoils).ToString() + " airfoils left are remaining.";
         }
 
         public Double NumberOfAirfoil
@@ -50,7 +55,7 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             }
             set
             {
-                airfoilSelectionStatus = "";
+                airfoilSelectionStatus = value;
                 OnPropertyChanged("AirfoilSelectionStatus");
             }
         }
@@ -58,25 +63,14 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
         private void AirfoilSelectionMethod()
         {
             Microsoft.Win32.OpenFileDialog _ofd = new Microsoft.Win32.OpenFileDialog();
+            Models.AirfoilCsvAnalyzer airfoilCsvAnalyzer = new Models.AirfoilCsvAnalyzer();
             String _airfoil_path;
 
-            //Show OpenFileDialog
-            var ofdResults = _ofd.ShowDialog();
+            // Issue the Messenger displaying OpenFileDialog
+            _airfoil_path = FOptConfig.Messenger.OpenFileMessenger.Show();
 
-
-            if (ofdResults == true)
-            {
-                //Get airfoil data path
-                _airfoil_path = _ofd.FileName;
-            }
-            else if (ofdResults == false)
-            {
-                //OpenFileDialog was canceled
-            }
-            else
-            {
-                //If OpenFileDialog is null
-            }
+            // Analyze the CSV file located in _airfoil_path
+            airfoilCsvAnalyzer.Analyze(_airfoil_path);
         }
 
         private Boolean IsAirfoilSelectable()

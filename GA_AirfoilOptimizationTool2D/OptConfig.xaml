@@ -5,11 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GA_AirfoilOptimizationTool2D"
         xmlns:opt="clr-namespace:GA_AirfoilOptimizationTool2D.FOptConfig"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:tr="clr-namespace:GA_AirfoilOptimizationTool2D.FOptConfig.Event"
+        xmlns:ac="clr-namespace:GA_AirfoilOptimizationTool2D.FOptConfig.Actions"
         mc:Ignorable="d"
         Title="OptConfig" Height="450" Width="800">
     <Window.DataContext>
         <local:OptConfigViewModel/>
     </Window.DataContext>
+
+    <i:Interaction.Triggers>
+        <tr:OpenFileDialogTrigger>
+            <ac:ShowFileDialogAction/>
+        </tr:OpenFileDialogTrigger>
+    </i:Interaction.Triggers>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>

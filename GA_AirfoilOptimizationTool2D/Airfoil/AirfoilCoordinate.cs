@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GA_AirfoilOptimizationTool2D.FOptConfig.Models
+namespace GA_AirfoilOptimizationTool2D.Airfoil
 {
     public class AirfoilCoordinate
     {
@@ -40,6 +40,19 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig.Models
             {
 
             }
+        }
+
+        public Double[,] ToDouleArray()
+        {
+            // Convert List<Double> type to Double type Array.
+            var length = CoordinateList.Count;
+            var result = new Double[length, 2];
+            for (int i = 0; i < length; i++)
+            {
+                result[i, 0] = CoordinateList[i][0];
+                result[i, 1] = CoordinateList[i][1];
+            }
+            return result;
         }
     }
 }

@@ -74,6 +74,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Airfoil\AirfoilManager.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -82,14 +83,20 @@
     <Compile Include="FOptConfig\AirfoilSelectorViewModel.cs" />
     <Compile Include="FOptConfig\Event\OpenFileDialogTrigger.cs" />
     <Compile Include="FOptConfig\Messenger\OpenFileMessenger.cs" />
-    <Compile Include="FOptConfig\Models\AirfoilCoordinate.cs" />
+    <Compile Include="Airfoil\AirfoilCoordinate.cs" />
     <Compile Include="FOptConfig\Models\AirfoilCsvAnalyzer.cs" />
     <Compile Include="FOptConfig\Models\CsvAnalyzer.cs" />
+    <Compile Include="FOptConfig\Models\ImportedAirfoilManager.cs" />
     <Compile Include="FOptConfig\OptConfigBAViewModel.cs" />
     <Compile Include="FOptConfig\OptConfigGeneralViewModel.cs" />
     <Compile Include="FOptConfig\OptimizingParameterType.cs" />
     <Compile Include="FOptConfig\OptimizingParameterTypeViewModel.cs" />
     <Compile Include="FOptConfig\Actions\ShowFileDialogAction.cs" />
+    <Compile Include="Airfoil\AirfoilGroupeManagerBase.cs" />
+    <Compile Include="General\Interpolation.cs" />
+    <Compile Include="General\Matrix.cs" />
+    <Compile Include="General\ModelBase.cs" />
+    <Compile Include="General\Vector.cs" />
     <Compile Include="General\ViewModelBase.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

@@ -9,21 +9,45 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
         private AirfoilSelectorViewModel selectedAirfoil;
         private OptConfigDelegateCommand airfoilSelection;
         private String airfoilSelectionStatus;
+        private Models.ImportedAirfoilManager ImportedAirfoil;
 
         private Action airfoilSelectionMethod;
         private Func<bool> isSelectable;
 
+        private void assignEventHandler()
+        {
+            ImportedAirfoil.PropertyChanged += ImportedAirfoil_PropertyChanged;
+        }
+
+        private void ImportedAirfoil_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(ImportedAirfoil.NumberOfAirfoils))
+            {
+                // Update numberOfAirfoils.
+                numberOfLoadedAirfoils = ImportedAirfoil.NumberOfAirfoils;
+
+                // Update status message
+                AirfoilSelectionStatus
+                    = numberOfLoadedAirfoils.ToString() + " airfoil is loaded." + "  "
+                    + (numberOfBAirfoils - numberOfLoadedAirfoils).ToString() + " airfoils left are required.";
+            }
+        }
+
         public OptConfigBAViewModel()
         {
+            #region Instantiate
+            // ------------------------------------------------------------
             airfoilSelectionMethod = new Action(AirfoilSelectionMethod);
             isSelectable = new Func<bool>(IsAirfoilSelectable);
 
             airfoilSelection = new OptConfigDelegateCommand(airfoilSelectionMethod, isSelectable);
+            // ------------------------------------------------------------
+            #endregion
 
             NumberOfAirfoil = 1;
-            AirfoilSelectionStatus 
-                = numberOfLoadedAirfoils.ToString() + " airfoil is loaded." + "  " 
-                + (numberOfBAirfoils - numberOfLoadedAirfoils).ToString() + " airfoils left are remaining.";
+            AirfoilSelectionStatus
+                = numberOfLoadedAirfoils.ToString() + " airfoil is loaded." + "  "
+                + (numberOfBAirfoils - numberOfLoadedAirfoils).ToString() + " airfoils left are required.";
         }
 
         public Double NumberOfAirfoil
@@ -63,7 +87,7 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
         private void AirfoilSelectionMethod()
         {
             Microsoft.Win32.OpenFileDialog _ofd = new Microsoft.Win32.OpenFileDialog();
-            Models.AirfoilCsvAnalyzer airfoilCsvAnalyzer = new Models.AirfoilCsvAnalyzer();
+            Models.AirfoilCsvAnalyzer airfoilCsvAnalyzer = Models.AirfoilCsvAnalyzer.GetInstance();
             String _airfoil_path;
 
             // Issue the Messenger displaying OpenFileDialog

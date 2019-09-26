@@ -8,7 +8,8 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig.Models
 {
     public class AirfoilCsvAnalyzer : CsvAnalyzer
     {
-        public AirfoilCoordinate AirfoilCoordinate { get; private set; } = new AirfoilCoordinate();
+        private static AirfoilCsvAnalyzer Instance;
+        public Airfoil.AirfoilCoordinate AirfoilCoordinate { get; private set; } = new Airfoil.AirfoilCoordinate();
 
         public override void Analyze(String filePath)
         { 
@@ -18,6 +19,19 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig.Models
 
             //Create AirfoilCoordinate
             AirfoilCoordinate.Import(dataArray);
+        }
+
+        public static new AirfoilCsvAnalyzer GetInstance()
+        {
+            if (Instance == null)
+            {
+                Instance = new AirfoilCsvAnalyzer();
+            }
+            return Instance;
+        }
+        private AirfoilCsvAnalyzer()
+        {
+
         }
     }
 }

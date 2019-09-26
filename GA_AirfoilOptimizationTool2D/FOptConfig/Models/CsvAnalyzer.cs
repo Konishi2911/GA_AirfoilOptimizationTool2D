@@ -9,6 +9,7 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig.Models
 {
     public class CsvAnalyzer
     {
+        private static CsvAnalyzer Instance;
         private String filePath;
         private String csvStr;
 
@@ -32,7 +33,15 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig.Models
             return getDoubleArray(strLine);
         }
 
-        public CsvAnalyzer() { }
+        public static CsvAnalyzer GetInstance()
+        {
+            if (Instance == null)
+            {
+                Instance = new CsvAnalyzer();
+            }
+            return Instance;
+        }
+        protected  CsvAnalyzer() { }
 
         private void loadFile()
         {

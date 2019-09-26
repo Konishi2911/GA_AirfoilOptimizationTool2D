@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GA_AirfoilOptimizationTool2D.Airfoil
 {
-    public abstract class AirfoilGroupeManagerBase : General.ModelBase
+    public abstract class AirfoilGroupManagerBase : General.ModelBase
     {
         private Double numberOfAirfoil;
         private List<Airfoil.AirfoilManager> airfoils;
@@ -25,6 +25,13 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             }
         }
 
+        public AirfoilGroupManagerBase()
+        {
+            #region Instantiation
+            airfoils = new List<AirfoilManager>();
+            #endregion
+        }
+
         /// <summary>
         /// Add airfoil.
         /// </summary>
@@ -32,6 +39,16 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         public void Add(AirfoilManager specification)
         {
             airfoils.Add(specification);
+            ++NumberOfAirfoils;
+        }
+
+        /// <summary>
+        /// Add airfoil.
+        /// </summary>
+        /// <param name="coordinate"></param>
+        public void Add(AirfoilCoordinate coordinate)
+        {
+            airfoils.Add(new AirfoilManager(coordinate));
             ++NumberOfAirfoils;
         }
 

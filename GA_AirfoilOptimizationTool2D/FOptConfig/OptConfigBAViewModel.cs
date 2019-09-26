@@ -9,7 +9,7 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
         private AirfoilSelectorViewModel selectedAirfoil;
         private OptConfigDelegateCommand airfoilSelection;
         private String airfoilSelectionStatus;
-        private Models.ImportedAirfoilManager ImportedAirfoil;
+        private Models.ImportedAirfoilGroupManager ImportedAirfoil;
 
         private Action airfoilSelectionMethod;
         private Func<bool> isSelectable;
@@ -21,6 +21,7 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
 
         private void ImportedAirfoil_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
+            // Number of loaded Airfoil Changed
             if (e.PropertyName == nameof(ImportedAirfoil.NumberOfAirfoils))
             {
                 // Update numberOfAirfoils.
@@ -41,13 +42,18 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             isSelectable = new Func<bool>(IsAirfoilSelectable);
 
             airfoilSelection = new OptConfigDelegateCommand(airfoilSelectionMethod, isSelectable);
+            ImportedAirfoil = new Models.ImportedAirfoilGroupManager();
             // ------------------------------------------------------------
             #endregion
 
+            // Substitute Initial Value.
             NumberOfAirfoil = 1;
             AirfoilSelectionStatus
                 = numberOfLoadedAirfoils.ToString() + " airfoil is loaded." + "  "
                 + (numberOfBAirfoils - numberOfLoadedAirfoils).ToString() + " airfoils left are required.";
+
+            // Assign EventHandler
+            assignEventHandler();
         }
 
         public Double NumberOfAirfoil
@@ -94,7 +100,9 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             _airfoil_path = FOptConfig.Messenger.OpenFileMessenger.Show();
 
             // Analyze the CSV file located in _airfoil_path
-            airfoilCsvAnalyzer.Analyze(_airfoil_path);
+            var result = airfoilCsvAnalyzer.Analyze(_airfoil_path);
+
+            ImportedAirfoil.Add(result);
         }
 
         private Boolean IsAirfoilSelectable()

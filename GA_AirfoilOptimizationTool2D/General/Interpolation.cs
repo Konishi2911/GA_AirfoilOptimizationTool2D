@@ -53,7 +53,7 @@ namespace GA_AirfoilOptimizationTool2D.General
         public static double[,] SplineInterpolation(double[,] point_vector, int splits)
         {
             // Convert Double type array to List<Point> type.
-            var iLength = point_vector.Length;
+            var iLength = point_vector.GetLength(0);
             var converted_point_vector = new List<System.Windows.Point>();
             for (int i = 0; i < iLength; i++)
             {
@@ -75,9 +75,11 @@ namespace GA_AirfoilOptimizationTool2D.General
             
             return convertedResult;
         }
-        public static List<System.Windows.Point> SplineInterpolation(List<System.Windows.Point> point_vector, int splits)
+        public static List<System.Windows.Point> SplineInterpolation(List<System.Windows.Point> point_vector, int _splits)
         {
             int n = point_vector.Count - 1;
+            var splits = _splits / n;
+
             double[] ax = new double[n + 1];
             double[] bx = new double[n + 1];
             double[] cx = new double[n + 1];

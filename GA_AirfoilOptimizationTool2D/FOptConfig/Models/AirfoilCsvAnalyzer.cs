@@ -6,19 +6,38 @@ using System.Threading.Tasks;
 
 namespace GA_AirfoilOptimizationTool2D.FOptConfig.Models
 {
+    /// <summary>
+    /// This class is singleton.
+    /// </summary>
     public class AirfoilCsvAnalyzer : CsvAnalyzer
     {
         private static AirfoilCsvAnalyzer Instance;
-        public Airfoil.AirfoilCoordinate AirfoilCoordinate { get; private set; } = new Airfoil.AirfoilCoordinate();
+        private Airfoil.AirfoilCoordinate airfoilCoordinate;
 
-        public override void Analyze(String filePath)
-        { 
+        public Airfoil.AirfoilCoordinate AirfoilCoordinate
+        {
+            get
+            {
+                return airfoilCoordinate;
+            }
+            private set
+            {
+                airfoilCoordinate = value;
+            }
+        }
+
+        public new Airfoil.AirfoilCoordinate Analyze(String filePath)
+        {
+            //instantiate
+            AirfoilCoordinate = new Airfoil.AirfoilCoordinate();
+
             // Get Double type Array by analyzing CSV file
             var dataArray = base.analyze(filePath);
-            if (dataArray == null) return;              //null check
+            if (dataArray == null) return null;              //null check
 
             //Create AirfoilCoordinate
             AirfoilCoordinate.Import(dataArray);
+            return AirfoilCoordinate;
         }
 
         public static new AirfoilCsvAnalyzer GetInstance()

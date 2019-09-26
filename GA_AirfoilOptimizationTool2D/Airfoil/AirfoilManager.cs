@@ -46,12 +46,29 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         public Double MinimumCamber { get { return minimumCamber; } }
         #endregion
 
+        private void InitializeComponent()
+        {
+            InterpolatedCoordinate = new AirfoilCoordinate();
+        }
+        public AirfoilManager()
+        {
+            InitializeComponent();
+        }
+
+        public AirfoilManager(AirfoilCoordinate coordinate)
+        {
+            InitializeComponent();
+
+            _importedCoordinate = coordinate;
+            airfoilInterpolation();
+        }
+
         /// <summary>
         /// Interpolate airfoil coordinate with three dimensional Spline.
         /// </summary>
         private void airfoilInterpolation()
         {
-            var Result = General.Interpolation.SplineInterpolation(_interpolatedCoordinate.ToDouleArray(), NumberOfControlPoint);
+            var Result = General.Interpolation.SplineInterpolation(_importedCoordinate.ToDouleArray(), NumberOfControlPoint);
             InterpolatedCoordinate.Import(Result);
         }
     }

@@ -15,7 +15,7 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig.Models
 
         private static Double[,] DataArray { get; set; }
 
-        public virtual void Analyze(String filePath)
+        public void Analyze(String filePath)
         {
             DataArray = analyze(filePath);
         }

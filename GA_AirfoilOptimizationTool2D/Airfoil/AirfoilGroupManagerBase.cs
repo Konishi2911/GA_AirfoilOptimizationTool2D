@@ -10,7 +10,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
     public abstract class AirfoilGroupManagerBase : General.ModelBase
     {
         private Double numberOfAirfoil;
-        private List<Airfoil.AirfoilManager> airfoils;
+        private List<Airfoil.AirfoilManager> airfoilGroup;
 
         public double NumberOfAirfoils
         {
@@ -25,10 +25,24 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             }
         }
 
+        public List<Airfoil.AirfoilManager> AirfoilGroup
+        {
+            get
+            {
+                return airfoilGroup;
+            }
+            set
+            {
+                // Issue PropertyChanged Condition.
+                airfoilGroup = value;
+                OnPropertyChanged(nameof(AirfoilGroup));
+            }
+        }
+
         public AirfoilGroupManagerBase()
         {
             #region Instantiation
-            airfoils = new List<AirfoilManager>();
+            airfoilGroup = new List<AirfoilManager>();
             #endregion
         }
 
@@ -38,7 +52,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         /// <param name="specification"></param>
         public void Add(AirfoilManager specification)
         {
-            airfoils.Add(specification);
+            airfoilGroup.Add(specification);
             ++NumberOfAirfoils;
         }
 
@@ -48,7 +62,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         /// <param name="coordinate"></param>
         public void Add(AirfoilCoordinate coordinate)
         {
-            airfoils.Add(new AirfoilManager(coordinate));
+            airfoilGroup.Add(new AirfoilManager(coordinate));
             ++NumberOfAirfoils;
         }
 
@@ -60,11 +74,11 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         /// <returns></returns>
         public Airfoil.AirfoilManager GetAirfoil(int index)
         {
-            if (airfoils.Count == 0)
+            if (airfoilGroup.Count == 0)
             {
                 return null;
             }
-            return airfoils[index];
+            return airfoilGroup[index];
         }
     }
 }

@@ -14,6 +14,14 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
         private Action airfoilSelectionMethod;
         private Func<bool> isSelectable;
 
+        private void UpdateStatusMessage()
+        {
+            AirfoilSelectionStatus
+                = numberOfLoadedAirfoils.ToString() + " airfoil is loaded." + "  "
+                + (numberOfBAirfoils - numberOfLoadedAirfoils).ToString() + " airfoils left are required.";
+        }
+
+        #region Events
         private void assignEventHandler()
         {
             ImportedAirfoil.PropertyChanged += ImportedAirfoil_PropertyChanged;
@@ -28,11 +36,10 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
                 numberOfLoadedAirfoils = ImportedAirfoil.NumberOfAirfoils;
 
                 // Update status message
-                AirfoilSelectionStatus
-                    = numberOfLoadedAirfoils.ToString() + " airfoil is loaded." + "  "
-                    + (numberOfBAirfoils - numberOfLoadedAirfoils).ToString() + " airfoils left are required.";
+                UpdateStatusMessage();
             }
         }
+        #endregion
 
         public OptConfigBAViewModel()
         {
@@ -46,11 +53,13 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             // ------------------------------------------------------------
             #endregion
 
+            #region Initialize Fields
             // Substitute Initial Value.
             NumberOfAirfoil = 1;
             AirfoilSelectionStatus
                 = numberOfLoadedAirfoils.ToString() + " airfoil is loaded." + "  "
                 + (numberOfBAirfoils - numberOfLoadedAirfoils).ToString() + " airfoils left are required.";
+            #endregion
 
             // Assign EventHandler
             assignEventHandler();
@@ -65,6 +74,8 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             set
             {
                 this.numberOfBAirfoils = value;
+
+                UpdateStatusMessage();
                 OnPropertyChanged("NumberOfBAirfoil");
             }
         }
@@ -102,6 +113,7 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             // Analyze the CSV file located in _airfoil_path
             var result = airfoilCsvAnalyzer.Analyze(_airfoil_path);
 
+            // Registrate imported Airfoil to the AirfoilGroupManager.
             ImportedAirfoil.Add(result);
         }
 

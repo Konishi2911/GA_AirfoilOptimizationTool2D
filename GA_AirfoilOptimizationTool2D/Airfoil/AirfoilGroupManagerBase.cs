@@ -52,7 +52,12 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         /// <param name="specification"></param>
         public void Add(AirfoilManager specification)
         {
-            airfoilGroup.Add(specification);
+            // Add new Airfoil Collection
+            var _airfoilGroup = AirfoilGroup;
+            _airfoilGroup.Add(specification);
+            AirfoilGroup = _airfoilGroup;
+
+            // Increment number of airfoils
             ++NumberOfAirfoils;
         }
 
@@ -62,7 +67,12 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         /// <param name="coordinate"></param>
         public void Add(AirfoilCoordinate coordinate)
         {
-            airfoilGroup.Add(new AirfoilManager(coordinate));
+            // Add new Airfoil Collection
+            var _airfoilGroup = AirfoilGroup;
+            _airfoilGroup.Add(new AirfoilManager(coordinate));
+            AirfoilGroup = _airfoilGroup;
+
+            // Increment number of airfoils
             ++NumberOfAirfoils;
         }
 

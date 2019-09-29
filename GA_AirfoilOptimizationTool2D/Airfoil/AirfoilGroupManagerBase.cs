@@ -37,14 +37,16 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
 
         public class AirfoilRemovedEventArgs : EventArgs
         {
+            public String Lable { get; private set; }
             public Airfoil.AirfoilManager RemovedAirfoil { get; private set; }
 
             /// <summary>
             /// 
             /// </summary>
             /// <param name="airfoil">Added Airfoil</param>
-            public AirfoilRemovedEventArgs(Airfoil.AirfoilManager airfoil)
+            public AirfoilRemovedEventArgs(Airfoil.AirfoilManager airfoil, String label)
             {
+                this.Lable = label;
                 RemovedAirfoil = airfoil;
             }
         }
@@ -108,6 +110,18 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         {
             // Add new Airfoil Collection
             Add(new AirfoilManager(coordinate));
+        }
+
+        public void Remove(AirfoilManager airfoil, String label)
+        {
+            // Remove specified airfoil.
+            AirfoilGroup.Remove(airfoil);
+
+            // Decrement number of airfoils
+            --NumberOfAirfoils;
+
+            // Issue the Event removed specified airfoil from AirfoilGroupList
+            AirfoilRemoved?.Invoke(this, new AirfoilRemovedEventArgs(airfoil, label));
         }
 
         /// <summary>

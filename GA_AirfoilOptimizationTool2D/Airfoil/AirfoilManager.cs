@@ -10,7 +10,9 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         #region Fields
         private const int NumberOfControlPoint = 400;
         private const int NumberOfDivision = 100;
-        
+
+        private String airfoilName;
+
         private Airfoil.AirfoilCoordinate _importedCoordinate;
         private Airfoil.AirfoilCoordinate _interpolatedCoordinate;
         private Airfoil.AirfoilCoordinate _upperCoordinate;
@@ -24,6 +26,18 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         #endregion
 
         #region Properties
+        public String AirfoilName
+        {
+            get
+            {
+                return airfoilName;
+            }
+            private set
+            {
+                airfoilName = value;
+            }
+        }
+
         public Airfoil.AirfoilCoordinate InterpolatedCoordinate
         {
             get

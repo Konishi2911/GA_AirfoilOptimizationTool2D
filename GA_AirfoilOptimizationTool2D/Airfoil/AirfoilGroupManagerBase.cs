@@ -12,6 +12,44 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         private Double numberOfAirfoil;
         private List<Airfoil.AirfoilManager> airfoilGroup;
 
+        public event AirfoilAddedEventHandler AirfoilAdded;
+        public event AirfoilRemovedEventHandler AirfoilRemoved;
+
+        #region CustomEventHandler
+        public delegate void AirfoilAddedEventHandler(object sender, AirfoilAddedEventArgs e);
+        public delegate void AirfoilRemovedEventHandler(object sender, AirfoilRemovedEventArgs e);
+        #endregion
+
+        #region CostomEventArgs
+        public class AirfoilAddedEventArgs : EventArgs
+        {
+            public  Airfoil.AirfoilManager AddedAirfoil { get; private set; }
+
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="airfoil">Added Airfoil</param>
+            public AirfoilAddedEventArgs(Airfoil.AirfoilManager airfoil)
+            {
+                AddedAirfoil = airfoil;
+            }
+        }
+
+        public class AirfoilRemovedEventArgs : EventArgs
+        {
+            public Airfoil.AirfoilManager RemovedAirfoil { get; private set; }
+
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="airfoil">Added Airfoil</param>
+            public AirfoilRemovedEventArgs(Airfoil.AirfoilManager airfoil)
+            {
+                RemovedAirfoil = airfoil;
+            }
+        }
+        #endregion
+
         public double NumberOfAirfoils
         {
             get
@@ -53,12 +91,13 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         public void Add(AirfoilManager specification)
         {
             // Add new Airfoil Collection
-            var _airfoilGroup = AirfoilGroup;
-            _airfoilGroup.Add(specification);
-            AirfoilGroup = _airfoilGroup;
+            AirfoilGroup.Add(specification);
 
             // Increment number of airfoils
             ++NumberOfAirfoils;
+
+            // Issue the Event added new airfoil to AirfoilGroupList
+            AirfoilAdded?.Invoke(this, new AirfoilAddedEventArgs(specification));    
         }
 
         /// <summary>
@@ -68,12 +107,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         public void Add(AirfoilCoordinate coordinate)
         {
             // Add new Airfoil Collection
-            var _airfoilGroup = AirfoilGroup;
-            _airfoilGroup.Add(new AirfoilManager(coordinate));
-            AirfoilGroup = _airfoilGroup;
-
-            // Increment number of airfoils
-            ++NumberOfAirfoils;
+            Add(new AirfoilManager(coordinate));
         }
 
         /// <summary>

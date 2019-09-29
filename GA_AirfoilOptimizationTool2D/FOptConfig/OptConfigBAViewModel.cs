@@ -1,18 +1,40 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace GA_AirfoilOptimizationTool2D.FOptConfig
 {
     class OptConfigBAViewModel : General.ViewModelBase
     {
+        // Fields =====================================================
         private Double numberOfBAirfoils;
         private Double numberOfLoadedAirfoils;
         private AirfoilSelectorViewModel selectedAirfoil;
         private OptConfigDelegateCommand airfoilSelection;
         private String airfoilSelectionStatus;
+        /// <summary>
+        /// Storing and Managing imported Airfoil.
+        /// </summary>
         private Models.ImportedAirfoilGroupManager ImportedAirfoil;
+        // ============================================================
 
+        // Command Actions ========================
         private Action airfoilSelectionMethod;
         private Func<bool> isSelectable;
+        // ========================================
+
+        public System.Collections.ObjectModel.ObservableCollection<AirfoilSelectorViewModel> LoadedAirfoils { get; private set; }
+        public AirfoilSelectorViewModel SelectedAirfoil
+        {
+            get
+            {
+                return selectedAirfoil;
+            }
+            set
+            {
+                selectedAirfoil = value;
+                OnPropertyChanged(nameof(SelectedAirfoil));
+            }
+        }
 
         private void UpdateStatusMessage()
         {
@@ -21,19 +43,57 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
                 + (numberOfBAirfoils - numberOfLoadedAirfoils).ToString() + " airfoils left are required.";
         }
 
-        #region Events
         private void assignEventHandler()
         {
             ImportedAirfoil.PropertyChanged += ImportedAirfoil_PropertyChanged;
+            ImportedAirfoil.AirfoilAdded += ImportedAirfoil_AirfoilAdded;
+            ImportedAirfoil.AirfoilRemoved += ImportedAirfoil_AirfoilRemoved;
+        }
+
+        #region Events
+        private void ImportedAirfoil_AirfoilRemoved(object sender, Airfoil.AirfoilGroupManagerBase.AirfoilRemovedEventArgs e)
+        {
+            // Remove Airfoil
+            //LoadedAirfoils.Remove(new AirfoilSelectorViewModel(e.RemovedAirfoil, );
+        }
+
+        private void ImportedAirfoil_AirfoilAdded(object sender, Airfoil.AirfoilGroupManagerBase.AirfoilAddedEventArgs e)
+        {
+            // Get Airfoil Name
+            String label;
+            if (e.AddedAirfoil.AirfoilName != null)
+            {
+                label = e.AddedAirfoil.AirfoilName;
+            }
+            else
+            {
+                label = "Airfoil" + (numberOfLoadedAirfoils).ToString();
+            }
+
+            // If LoadedAirfoil is null, Instantiate LoadedAirfoils
+            if (LoadedAirfoils == null)
+            {
+                LoadedAirfoils = new System.Collections.ObjectModel.ObservableCollection<AirfoilSelectorViewModel>();
+            }
+            // Add Airfoil List
+            LoadedAirfoils.Add(new AirfoilSelectorViewModel(e.AddedAirfoil, label));
+
+            // Set selected airfoil.
+            if (LoadedAirfoils.Count != 0)
+            {
+                SelectedAirfoil = LoadedAirfoils[0];
+            }
         }
 
         private void ImportedAirfoil_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
+            var instance = sender as Models.ImportedAirfoilGroupManager;
+
             // Number of loaded Airfoil Changed
-            if (e.PropertyName == nameof(ImportedAirfoil.NumberOfAirfoils))
+            if (e.PropertyName == nameof(instance.NumberOfAirfoils))
             {
                 // Update numberOfAirfoils.
-                numberOfLoadedAirfoils = ImportedAirfoil.NumberOfAirfoils;
+                numberOfLoadedAirfoils = instance.NumberOfAirfoils;
 
                 // Update status message
                 UpdateStatusMessage();
@@ -45,11 +105,19 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
         {
             #region Instantiate
             // ------------------------------------------------------------
+            // SelectBaseAirfoil Button related ============================
             airfoilSelectionMethod = new Action(AirfoilSelectionMethod);
             isSelectable = new Func<bool>(IsAirfoilSelectable);
-
             airfoilSelection = new OptConfigDelegateCommand(airfoilSelectionMethod, isSelectable);
+            // =============================================================
+
+            // AirfoilSelection ComboBox related ====================================================================
+            LoadedAirfoils = new System.Collections.ObjectModel.ObservableCollection<AirfoilSelectorViewModel>();
+            // ======================================================================================================
+
+            // Models ====================================================
             ImportedAirfoil = new Models.ImportedAirfoilGroupManager();
+            // ===========================================================
             // ------------------------------------------------------------
             #endregion
 

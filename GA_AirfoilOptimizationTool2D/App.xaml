@@ -11,5 +11,8 @@
         <DataTemplate DataType="{x:Type vm:OptimizingParameterTypeViewModel}">
             <TextBlock Text="{Binding Label}"/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AirfoilSelectorViewModel}">
+            <TextBlock Text="{Binding Label}"/>
+        </DataTemplate>
     </Application.Resources>
 </Application>

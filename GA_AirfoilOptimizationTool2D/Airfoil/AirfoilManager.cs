@@ -20,9 +20,8 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
 
         private Double chordLength;
         private Double maximumThickness;
-        private Double minimumThickness;
         private Double maximumCamber;
-        private Double minimumCamber;
+        private Double leadingEdgeRadius;
         #endregion
 
         #region Properties
@@ -55,9 +54,8 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
 
         public Double ChordLength { get { return chordLength; } }
         public Double MaximumThickness { get { return maximumThickness; } }
-        public Double MinimumThickness { get { return minimumThickness; } }
         public Double MaximumCamber { get { return maximumCamber; } }
-        public Double MinimumCamber { get { return minimumCamber; } }
+        public Double LeadingEdgeRadius { get { return leadingEdgeRadius; } }
         #endregion
 
         private void InitializeComponent()

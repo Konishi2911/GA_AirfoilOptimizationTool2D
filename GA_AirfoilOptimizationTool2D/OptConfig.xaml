@@ -93,7 +93,9 @@
                             <Polyline x:Name="AirfoilLineBA" Stroke ="Black"/>
                         </Canvas>
                     </Border>
-                    <DataGrid Grid.Column="2" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="2" Width="180" Grid.RowSpan="2"/>
+                    <DataGrid Grid.Column="2" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="2" Width="180" Grid.RowSpan="2" HeadersVisibility="None"
+                              ItemsSource="{Binding Path=AirfoilSpecifications}" AutomationProperties.IsRowHeader="True"/>
+
                     <ComboBox Margin="5,0,5,2" Grid.Row="2" VerticalAlignment="Bottom" Grid.ColumnSpan="2"
                               ItemsSource="{Binding Path = LoadedAirfoils}"
                               SelectedItem="{Binding Path = SelectedAirfoil,Mode=TwoWay}"/>

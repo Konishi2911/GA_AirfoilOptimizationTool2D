@@ -11,6 +11,7 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
         private AirfoilSelectorViewModel selectedAirfoil;
         private OptConfigDelegateCommand airfoilSelection;
         private String airfoilSelectionStatus;
+
         /// <summary>
         /// Storing and Managing imported Airfoil.
         /// </summary>
@@ -22,6 +23,8 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
         private Func<bool> isSelectable;
         // ========================================
 
+        #region Binding Data
+        // Binding Data of Airfoil Selection ComboBox =================================================================================
         public System.Collections.ObjectModel.ObservableCollection<AirfoilSelectorViewModel> LoadedAirfoils { get; private set; }
         public AirfoilSelectorViewModel SelectedAirfoil
         {
@@ -33,9 +36,19 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             {
                 selectedAirfoil = value;
                 OnPropertyChanged(nameof(SelectedAirfoil));
+
+                // Update Specification DataGrid
+                CreateTable(SelectedAirfoil.SelectedAirfoil);
             }
         }
+        // =============================================================================================================================
 
+        // Binding Data of Airfoil Specification DataGrid ============================================================================================
+        public System.Data.DataTable AirfoilSpecifications { get; private set; }
+        // ===========================================================================================================================================
+        #endregion
+
+        #region Scripts
         private void UpdateStatusMessage()
         {
             AirfoilSelectionStatus
@@ -50,11 +63,27 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             ImportedAirfoil.AirfoilRemoved += ImportedAirfoil_AirfoilRemoved;
         }
 
+        private void CreateTable(Airfoil.AirfoilManager airfoil)
+        {
+            if (AirfoilSpecifications == null)
+            {
+                AirfoilSpecifications = new System.Data.DataTable();
+            }
+
+            AirfoilSpecifications.Clear();
+            AirfoilSpecifications.Rows.Add(new AirfoilSpecificationGridViewModel("Airfoil Name", airfoil.AirfoilName));
+            AirfoilSpecifications.Rows.Add(new AirfoilSpecificationGridViewModel("Chord Length", airfoil.ChordLength.ToString()));
+            AirfoilSpecifications.Rows.Add(new AirfoilSpecificationGridViewModel("Max Thickness", airfoil.MaximumThickness.ToString()));
+            AirfoilSpecifications.Rows.Add(new AirfoilSpecificationGridViewModel("Max Camber", airfoil.MaximumCamber.ToString()));
+            AirfoilSpecifications.Rows.Add(new AirfoilSpecificationGridViewModel("Leading Edge Radius", airfoil.LeadingEdgeRadius.ToString()));
+        }
+        #endregion
+
         #region Events
         private void ImportedAirfoil_AirfoilRemoved(object sender, Airfoil.AirfoilGroupManagerBase.AirfoilRemovedEventArgs e)
         {
             // Remove Airfoil
-            //LoadedAirfoils.Remove(new AirfoilSelectorViewModel(e.RemovedAirfoil, );
+            LoadedAirfoils.Remove(new AirfoilSelectorViewModel(e.RemovedAirfoil, e.Lable));
         }
 
         private void ImportedAirfoil_AirfoilAdded(object sender, Airfoil.AirfoilGroupManagerBase.AirfoilAddedEventArgs e)
@@ -101,23 +130,65 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
         }
         #endregion
 
+        #region DelegateCommand Actions
+        // DelegateCommand Action ==========================================================================
+        private void AirfoilSelectionMethod()
+        {
+            Microsoft.Win32.OpenFileDialog _ofd = new Microsoft.Win32.OpenFileDialog();
+            Models.AirfoilCsvAnalyzer airfoilCsvAnalyzer = Models.AirfoilCsvAnalyzer.GetInstance();
+            String _airfoil_path;
+
+            // Issue the Messenger displaying OpenFileDialog
+            _airfoil_path = FOptConfig.Messenger.OpenFileMessenger.Show();
+
+            // Analyze the CSV file located in _airfoil_path
+            var result = airfoilCsvAnalyzer.Analyze(_airfoil_path);
+
+            // Registrate imported Airfoil to the AirfoilGroupManager.
+            ImportedAirfoil.Add(result);
+        }
+
+        private Boolean IsAirfoilSelectable()
+        {
+            if (numberOfLoadedAirfoils == numberOfBAirfoils)
+            {
+                return false;
+            }
+            else if (numberOfLoadedAirfoils < numberOfBAirfoils)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        // ===============================================================================================
+        #endregion
+
         public OptConfigBAViewModel()
         {
             #region Instantiate
             // ------------------------------------------------------------
+
             // SelectBaseAirfoil Button related ============================
             airfoilSelectionMethod = new Action(AirfoilSelectionMethod);
             isSelectable = new Func<bool>(IsAirfoilSelectable);
             airfoilSelection = new OptConfigDelegateCommand(airfoilSelectionMethod, isSelectable);
-            // =============================================================
+            //
 
             // AirfoilSelection ComboBox related ====================================================================
             LoadedAirfoils = new System.Collections.ObjectModel.ObservableCollection<AirfoilSelectorViewModel>();
-            // ======================================================================================================
+            //
+
+            // Airfoil Specification DataGrid related =============================================================================
+            AirfoilSpecifications = new System.Data.DataTable();
+            //
 
             // Models ====================================================
             ImportedAirfoil = new Models.ImportedAirfoilGroupManager();
-            // ===========================================================
+            //
+
             // ------------------------------------------------------------
             #endregion
 
@@ -166,38 +237,6 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             {
                 airfoilSelectionStatus = value;
                 OnPropertyChanged("AirfoilSelectionStatus");
-            }
-        }
-
-        private void AirfoilSelectionMethod()
-        {
-            Microsoft.Win32.OpenFileDialog _ofd = new Microsoft.Win32.OpenFileDialog();
-            Models.AirfoilCsvAnalyzer airfoilCsvAnalyzer = Models.AirfoilCsvAnalyzer.GetInstance();
-            String _airfoil_path;
-
-            // Issue the Messenger displaying OpenFileDialog
-            _airfoil_path = FOptConfig.Messenger.OpenFileMessenger.Show();
-
-            // Analyze the CSV file located in _airfoil_path
-            var result = airfoilCsvAnalyzer.Analyze(_airfoil_path);
-
-            // Registrate imported Airfoil to the AirfoilGroupManager.
-            ImportedAirfoil.Add(result);
-        }
-
-        private Boolean IsAirfoilSelectable()
-        {
-            if (numberOfLoadedAirfoils == numberOfBAirfoils)
-            {
-                return false;
-            }
-            else if (numberOfLoadedAirfoils < numberOfBAirfoils)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
             }
         }
     }

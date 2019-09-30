@@ -81,6 +81,7 @@
     </Compile>
     <Compile Include="FOptConfig\AirfoilRepresentationMode.cs" />
     <Compile Include="FOptConfig\AirfoilSelectorViewModel.cs" />
+    <Compile Include="FOptConfig\AirfoilSpecificationGridViewModel.cs" />
     <Compile Include="FOptConfig\Event\OpenFileDialogTrigger.cs" />
     <Compile Include="FOptConfig\Messenger\OpenFileMessenger.cs" />
     <Compile Include="Airfoil\AirfoilCoordinate.cs" />

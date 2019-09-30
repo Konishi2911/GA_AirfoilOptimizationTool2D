@@ -10,6 +10,18 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
     {
         public List<Double[]> CoordinateList = new List<double[]>();
 
+        public class Coordinate
+        {
+            public Double X { get; set; }
+            public Double Z { get; set; }
+
+            public Coordinate(Double[] val)
+            {
+                X = val[0];
+                Z = val[1];
+            }
+        }
+
         public AirfoilCoordinate() { }
 
         public void Import(Double[,] coordinate)
@@ -54,5 +66,14 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             }
             return result;
         }
+
+        public Coordinate this[int i]
+        {
+            get
+            {
+                return new Coordinate(CoordinateList[i]);
+            }
+        }
+
     }
 }

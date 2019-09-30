@@ -24,5 +24,10 @@ namespace GA_AirfoilOptimizationTool2D
             InitializeComponent();
             this.GeneralTab.DataContext = new FOptConfig.OptConfigGeneralViewModel();
         }
+
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

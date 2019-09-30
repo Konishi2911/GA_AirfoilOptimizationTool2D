@@ -72,7 +72,9 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             InitializeComponent();
 
             _importedCoordinate = coordinate;
+
             airfoilInterpolation();
+
         }
 
         /// <summary>
@@ -82,6 +84,11 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         {
             var Result = General.Interpolation.SplineInterpolation(_importedCoordinate.ToDouleArray(), NumberOfControlPoint);
             InterpolatedCoordinate.Import(Result);
+        }
+
+        private void GetSpecifications()
+        {
+            
         }
     }
 }

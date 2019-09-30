@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Collections.Generic;
 
 namespace GA_AirfoilOptimizationTool2D.FOptConfig
@@ -11,6 +12,7 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
         private AirfoilSelectorViewModel selectedAirfoil;
         private OptConfigDelegateCommand airfoilSelection;
         private String airfoilSelectionStatus;
+        private DataTable airfoilSpecifications;
 
         /// <summary>
         /// Storing and Managing imported Airfoil.
@@ -38,13 +40,23 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
                 OnPropertyChanged(nameof(SelectedAirfoil));
 
                 // Update Specification DataGrid
-                CreateTable(SelectedAirfoil.SelectedAirfoil);
+                AirfoilSpecifications = CreateTable(SelectedAirfoil.SelectedAirfoil);
             }
         }
         // =============================================================================================================================
 
         // Binding Data of Airfoil Specification DataGrid ============================================================================================
-        public System.Data.DataTable AirfoilSpecifications { get; private set; }
+        public System.Data.DataTable AirfoilSpecifications {
+            get
+            {
+                return airfoilSpecifications;
+            }
+            private set
+            {
+                airfoilSpecifications = value;
+                OnPropertyChanged(nameof(AirfoilSpecifications));
+            }
+        }
         // ===========================================================================================================================================
         #endregion
 
@@ -63,19 +75,20 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             ImportedAirfoil.AirfoilRemoved += ImportedAirfoil_AirfoilRemoved;
         }
 
-        private void CreateTable(Airfoil.AirfoilManager airfoil)
+        private DataTable CreateTable(Airfoil.AirfoilManager airfoil)
         {
-            if (AirfoilSpecifications == null)
-            {
-                AirfoilSpecifications = new System.Data.DataTable();
-            }
+            var specifications = new System.Data.DataTable();
 
-            AirfoilSpecifications.Clear();
-            AirfoilSpecifications.Rows.Add(new AirfoilSpecificationGridViewModel("Airfoil Name", airfoil.AirfoilName));
-            AirfoilSpecifications.Rows.Add(new AirfoilSpecificationGridViewModel("Chord Length", airfoil.ChordLength.ToString()));
-            AirfoilSpecifications.Rows.Add(new AirfoilSpecificationGridViewModel("Max Thickness", airfoil.MaximumThickness.ToString()));
-            AirfoilSpecifications.Rows.Add(new AirfoilSpecificationGridViewModel("Max Camber", airfoil.MaximumCamber.ToString()));
-            AirfoilSpecifications.Rows.Add(new AirfoilSpecificationGridViewModel("Leading Edge Radius", airfoil.LeadingEdgeRadius.ToString()));
+            specifications.Columns.Add();
+            specifications.Columns.Add();
+
+            specifications.Rows.Add("Airfoil Name", airfoil.AirfoilName);
+            specifications.Rows.Add("Chord Length", airfoil.ChordLength);
+            specifications.Rows.Add("Max Thickness", airfoil.MaximumThickness);
+            specifications.Rows.Add("Max Camber", airfoil.MaximumCamber);
+            specifications.Rows.Add("Leading Edge Radius", airfoil.LeadingEdgeRadius);
+
+            return specifications;
         }
         #endregion
 
@@ -182,7 +195,6 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             //
 
             // Airfoil Specification DataGrid related =============================================================================
-            AirfoilSpecifications = new System.Data.DataTable();
             //
 
             // Models ====================================================

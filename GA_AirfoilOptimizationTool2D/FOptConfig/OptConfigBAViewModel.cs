@@ -86,7 +86,7 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             specifications.Rows.Add("Chord Length", airfoil.ChordLength);
             specifications.Rows.Add("Max Thickness", airfoil.MaximumThickness);
             specifications.Rows.Add("Max Camber", airfoil.MaximumCamber);
-            specifications.Rows.Add("Leading Edge Radius", airfoil.LeadingEdgeRadius);
+            specifications.Rows.Add("L.E. Radius", airfoil.LeadingEdgeRadius);
 
             return specifications;
         }

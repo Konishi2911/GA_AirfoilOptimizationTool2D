@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="GA_AirfoilOptimizationTool2D.OptConfigViewModel">
+    <Position X="2.75" Y="2.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAQAAAAAAQAAAAAAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>OptConfigViewModel.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="GeneralTab" />
+      <Field Name="selectedAirfoilRepresentationMode" />
+      <Field Name="selectedOptimizingParameter" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="GA_AirfoilOptimizationTool2D.FOptConfig.OptConfigGeneralViewModel">
+    <Position X="6.75" Y="3" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAEBAAAAAQAAAAAQAAAAAAAAAAAAAAAAEAAAAQAAAAA=</HashCode>
+      <FileName>FOptConfig\OptConfigGeneralViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GA_AirfoilOptimizationTool2D.FOptConfig.AirfoilRepresentationModeViewModel" Collapsed="true">
+    <Position X="9.5" Y="1.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAgAAAAAAAAAAAAAAAAAEAAAAABAAAAAAA=</HashCode>
+      <FileName>FOptConfig\AirfoilRepresentationModeViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GA_AirfoilOptimizationTool2D.FOptConfig.OptimizingParameterTypeViewModel" Collapsed="true">
+    <Position X="13" Y="1.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAAAAAAAAAAAAABAAEAAEAAAAAAAAAA=</HashCode>
+      <FileName>FOptConfig\OptimizingParameterTypeViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="メイリオ" Size="9" />
+</ClassDiagram>

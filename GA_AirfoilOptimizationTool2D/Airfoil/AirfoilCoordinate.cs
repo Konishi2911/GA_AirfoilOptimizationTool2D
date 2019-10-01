@@ -8,7 +8,9 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
 {
     public class AirfoilCoordinate
     {
-        public List<Double[]> CoordinateList = new List<double[]>();
+        private List<Double[]> CoordinateList = new List<double[]>();
+
+        public int Length { get; private set; }
 
         public class Coordinate
         {
@@ -23,6 +25,48 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         }
 
         public AirfoilCoordinate() { }
+
+        /// <summary>
+        /// Get UpperLine From CoordinateList
+        /// </summary>
+        /// <returns></returns>
+        public AirfoilCoordinate GetUpperLine()
+        {
+            var index = (int)GetMinimumIndex(CoordinateList, 0);
+
+            Double[,] temp = new Double[index + 1, 2];
+            for (int i = 0; i <= index; ++i)
+            {
+                temp[i, 0] = CoordinateList[index - i][0];
+                temp[i, 1] = CoordinateList[index - i][1];
+            }
+
+            AirfoilCoordinate coordinate = new AirfoilCoordinate();
+            coordinate.Import(temp);
+
+            return coordinate;
+        }
+
+        /// <summary>
+        /// Get LowerLine From CoordinateList
+        /// </summary>
+        /// <returns></returns>
+        public AirfoilCoordinate GetLowerLine()
+        {
+            var index = (int)GetMinimumIndex(CoordinateList, 0);
+
+            Double[,] temp = new Double[index + 1, 2];
+            for (int i = index; i < CoordinateList.Count; ++i)
+            {
+                temp[i - index, 0] = CoordinateList[i][0];
+                temp[i - index, 1] = CoordinateList[i][1];
+            }
+
+            AirfoilCoordinate coordinate = new AirfoilCoordinate();
+            coordinate.Import(temp);
+
+            return coordinate;
+        }
 
         public void Import(Double[,] coordinate)
         {
@@ -46,6 +90,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
                     }
                     CoordinateList.Add(dataRpw);
                 }
+                Length = CoordinateList.Count;
 
             }
             catch (FormatException)
@@ -75,5 +120,177 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             }
         }
 
+        /// <summary>
+        /// Return the index corresponding to the minimum value.
+        /// </summary>
+        /// <param name="vs"></param>
+        /// <param name="searchIndex"></param>
+        /// <returns></returns>
+        public static int? GetMinimumIndex(in List<double[]> vs, int searchIndex)
+        {
+            // Null check
+            if (vs == null)
+            {
+                return null;
+            }
+
+            var minimumIndex = 0;
+            var minimum = vs[0][searchIndex];
+            for (int i = 1; i < vs.Count; i++)
+            {
+                if (vs[i][searchIndex] < minimum)
+                {
+                    minimum = vs[i][searchIndex];
+                    minimumIndex = i;
+                }
+            }
+            return minimumIndex;
+        }
+        public static int? GetMinimumIndex(in AirfoilCoordinate vs, int searchIndex)
+        {
+            var array = vs.ToDouleArray();
+            var list = new List<Double[]>();
+
+            for (int i = 0; i < array.GetLength(0); ++i)
+            {
+                var temp_array = new Double[2];
+                temp_array[0] = array[i, 0];
+                temp_array[1] = array[i, 1];
+
+                list.Add(temp_array);
+            }
+
+            return GetMinimumIndex(list, searchIndex);
+        }
+
+        /// <summary>
+        /// Return the index corresponding to the maximum value.
+        /// </summary>
+        /// <param name="vs"></param>
+        /// <param name="searchIndex"></param>
+        /// <returns></returns>
+        public static int? GetMaximumIndex(in List<double[]> vs, int searchIndex)
+        {
+            // Null check
+            if (vs == null)
+            {
+                return null;
+            }
+
+            var maximumIndex = 0;
+            var maximum = vs[0][searchIndex];
+            for (int i = 1; i < vs.Count; i++)
+            {
+                if (maximum < vs[i][searchIndex])
+                {
+                    maximum = vs[i][searchIndex];
+                    maximumIndex = i;
+                }
+            }
+            return maximumIndex;
+        }
+        public static int? GetMaximumIndex(in AirfoilCoordinate vs, int searchIndex)
+        {
+            var array = vs.ToDouleArray();
+            var list = new List<Double[]>();
+
+            for (int i = 0; i < array.GetLength(0); ++i)
+            {
+                var temp_array = new Double[2];
+                temp_array[0] = array[i, 0];
+                temp_array[1] = array[i, 1];
+
+                list.Add(temp_array);
+            }
+
+            return GetMaximumIndex(list, searchIndex);
+        }
+
+
+        /// <summary>
+        /// Return the minimum value.
+        /// </summary>
+        /// <param name="vs"></param>
+        /// <param name="searchIndex"></param>
+        /// <returns></returns>
+        public static Double GetMinimumValue(in List<double[]> vs, int searchIndex)
+        {
+            // Null check
+            if (vs == null)
+            {
+                throw new ArgumentNullException("Inputed List was Null.");
+            }
+
+            var minimumIndex = 0;
+            var minimum = vs[0][searchIndex];
+            for (int i = 1; i < vs.Count; i++)
+            {
+                if (vs[i][searchIndex] < minimum)
+                {
+                    minimum = vs[i][searchIndex];
+                    minimumIndex = i;
+                }
+            }
+            return minimum;
+        }
+        public static Double GetMinimumValue(in AirfoilCoordinate vs, int searchIndex)
+        {
+            var array = vs.ToDouleArray();
+            var list = new List<Double[]>();
+
+            for (int i = 0; i < array.GetLength(0); ++i)
+            {
+                var temp_array = new Double[2];
+                temp_array[0] = array[i, 0];
+                temp_array[1] = array[i, 1];
+
+                list.Add(temp_array);
+            }
+
+            return GetMinimumValue(list, searchIndex);
+        }
+
+        /// <summary>
+        /// Return the maximum value.
+        /// </summary>
+        /// <param name="vs"></param>
+        /// <param name="searchIndex"></param>
+        /// <returns></returns>
+        public static Double GetMaximumValue(in List<double[]> vs, int searchIndex)
+        {
+            // Null check
+            if (vs == null)
+            {
+                throw new ArgumentNullException("Inputed List was Null.");
+            }
+
+            var maximumIndex = 0;
+            var maximum = vs[0][searchIndex];
+            for (int i = 1; i < vs.Count; i++)
+            {
+                if (maximum < vs[i][searchIndex])
+                {
+                    maximum = vs[i][searchIndex];
+                    maximumIndex = i;
+                }
+            }
+            return maximum;
+        }
+        public static Double GetMaximumValue(in AirfoilCoordinate vs, int searchIndex)
+        {
+            var array = vs.ToDouleArray();
+            var list = new List<Double[]>();
+
+            for (int i = 0; i < array.GetLength(0); ++i)
+            {
+                var temp_array = new Double[2];
+                temp_array[0] = array[i, 0];
+                temp_array[1] = array[i, 1];
+
+                list.Add(temp_array);
+            }
+
+            return GetMaximumValue(list, searchIndex);
+        }
     }
 }

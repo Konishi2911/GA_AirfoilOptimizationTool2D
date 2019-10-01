@@ -8,6 +8,32 @@ namespace GA_AirfoilOptimizationTool2D.General
 {
     static class Interpolation
     {
+        public static double[,] LinearInterpolation(double[,] point_vector, int splits)
+        {
+            // Convert Double type array to List<Point> type.
+            var iLength = point_vector.GetLength(0);
+            var converted_point_vector = new List<System.Windows.Point>();
+            for (int i = 0; i < iLength; i++)
+            {
+                var point = new System.Windows.Point { X = point_vector[i, 0], Y = point_vector[i, 1] };
+                converted_point_vector.Add(point);
+            }
+
+            // Execute interpolation.
+            var result = LinearInterpolation(converted_point_vector, splits);
+
+            // Convert List<Point> type to Double type array.
+            var rLength = result.Count;
+            var convertedResult = new double[rLength, 2];
+            for (int i = 0; i < rLength; i++)
+            {
+                convertedResult[i, 0] = result[i].X;
+                convertedResult[i, 1] = result[i].Y;
+            }
+
+            return convertedResult;
+        }
+
         public static List<System.Windows.Point> LinearInterpolation(List<System.Windows.Point> point_vector, int splits)
         {
             int no_of_points = point_vector.Count;

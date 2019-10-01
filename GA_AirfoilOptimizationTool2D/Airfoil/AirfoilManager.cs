@@ -36,7 +36,6 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
                 airfoilName = value;
             }
         }
-
         public Airfoil.AirfoilCoordinate InterpolatedCoordinate
         {
             get
@@ -52,7 +51,17 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         public Airfoil.AirfoilCoordinate UpperCoordinate { get { return _upperCoordinate; } }
         public Airfoil.AirfoilCoordinate LowerCoordinate { get { return _lowerCoordinate; } }
 
-        public Double ChordLength { get { return chordLength; } }
+        public Double ChordLength
+        {
+            get
+            {
+                return chordLength;
+            }
+            private set
+            {
+                chordLength = value;
+            }
+        }
         public Double MaximumThickness { get { return maximumThickness; } }
         public Double MaximumCamber { get { return maximumCamber; } }
         public Double LeadingEdgeRadius { get { return leadingEdgeRadius; } }
@@ -61,6 +70,8 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         private void InitializeComponent()
         {
             InterpolatedCoordinate = new AirfoilCoordinate();
+            _upperCoordinate = new AirfoilCoordinate();
+            _lowerCoordinate = new AirfoilCoordinate();
         }
         public AirfoilManager()
         {
@@ -73,8 +84,11 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
 
             _importedCoordinate = coordinate;
 
+            // Interpolate Airfoil with three dimensional Spline.
             airfoilInterpolation();
 
+            // 
+            CalculateSpecifications();
         }
 
         /// <summary>
@@ -86,9 +100,32 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             InterpolatedCoordinate.Import(Result);
         }
 
-        private void GetSpecifications()
+        private void CalculateSpecifications()
         {
-            
+            var upperLine = InterpolatedCoordinate.GetUpperLine();
+            var lowerLine = InterpolatedCoordinate.GetLowerLine();
+
+            // Divide an interpolated Airfoil into UpperCoordinate and LoerCoordinate.
+            UpperCoordinate.Import(General.Interpolation.LinearInterpolation(upperLine.ToDouleArray(), NumberOfDivision));
+            LowerCoordinate.Import(General.Interpolation.LinearInterpolation(lowerLine.ToDouleArray(), NumberOfDivision));
+
+            ChordLength = GetChordLength(UpperCoordinate, LowerCoordinate);
+        }
+
+        private static Double GetChordLength(AirfoilCoordinate upper, AirfoilCoordinate lower)
+        {
+            //Null Check
+            if (upper == null || lower == null)
+            {
+                throw new ArgumentNullException("Upper Coordinate or Loewr Corrdinate is Null.");
+            }
+            // Format Check
+            if (upper.Length != lower.Length)
+            {
+                throw new FormatException("The upper and lower Coordinate length did not match.");
+            }
+
+            return AirfoilCoordinate.GetMaximumValue(upper, 0) - AirfoilCoordinate.GetMinimumValue(upper, 0);
         }
     }
 }

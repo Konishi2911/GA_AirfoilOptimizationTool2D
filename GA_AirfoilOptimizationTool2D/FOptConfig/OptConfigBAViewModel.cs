@@ -13,6 +13,7 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
         private OptConfigDelegateCommand airfoilSelection;
         private String airfoilSelectionStatus;
         private DataTable airfoilSpecifications;
+        private System.Collections.ObjectModel.ObservableCollection<System.Windows.Point> coordinateList;
 
         /// <summary>
         /// Storing and Managing imported Airfoil.
@@ -43,7 +44,6 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
                 AirfoilSpecifications = CreateTable(SelectedAirfoil.SelectedAirfoil);
             }
         }
-        // =============================================================================================================================
 
         // Binding Data of Airfoil Specification DataGrid ============================================================================================
         public System.Data.DataTable AirfoilSpecifications {
@@ -57,7 +57,20 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
                 OnPropertyChanged(nameof(AirfoilSpecifications));
             }
         }
-        // ===========================================================================================================================================
+
+        // Binding Data of the Coordinate Point List for Airfoil Preview =========================================
+        public System.Collections.ObjectModel.ObservableCollection<System.Windows.Point> CoordinateList
+        {
+            get
+            {
+                return coordinateList;
+            }
+            set
+            {
+                coordinateList = value;
+                OnPropertyChanged(nameof(CoordinateList));
+            }
+        }
         #endregion
 
         #region Scripts
@@ -117,14 +130,16 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             {
                 LoadedAirfoils = new System.Collections.ObjectModel.ObservableCollection<AirfoilSelectorViewModel>();
             }
-            // Add Airfoil List
+            // Add new Airfoil to Airfoil List
             LoadedAirfoils.Add(new AirfoilSelectorViewModel(e.AddedAirfoil, label));
 
-            // Set selected airfoil.
+            // Set selected airfoil
             if (LoadedAirfoils.Count != 0)
             {
                 SelectedAirfoil = LoadedAirfoils[0];
             }
+
+
         }
 
         private void ImportedAirfoil_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -250,6 +265,11 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
                 airfoilSelectionStatus = value;
                 OnPropertyChanged("AirfoilSelectionStatus");
             }
+        }
+
+        private void CreatePreviewPointList(Airfoil.AirfoilManager airfoil)
+        {
+
         }
     }
 }

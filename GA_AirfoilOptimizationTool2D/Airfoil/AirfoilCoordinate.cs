@@ -12,6 +12,11 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
 
         public int Length { get; private set; }
 
+        public enum Axis
+        {
+            X,
+            Z
+        }
         public class Coordinate
         {
             public Double X { get; set; }
@@ -254,7 +259,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         /// Return the maximum value.
         /// </summary>
         /// <param name="vs"></param>
-        /// <param name="searchIndex"></param>
+        /// <param name="searchIndex">0 : x  1 : z</param>
         /// <returns></returns>
         public static Double GetMaximumValue(in List<double[]> vs, int searchIndex)
         {
@@ -276,6 +281,12 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             }
             return maximum;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="vs"></param>
+        /// <param name="searchIndex">0 is x axis, 1 is z axis</param>
+        /// <returns></returns>
         public static Double GetMaximumValue(in AirfoilCoordinate vs, int searchIndex)
         {
             var array = vs.ToDouleArray();

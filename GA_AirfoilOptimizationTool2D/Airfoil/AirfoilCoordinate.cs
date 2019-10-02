@@ -303,5 +303,23 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
 
             return GetMaximumValue(list, searchIndex);
         }
+
+        public static AirfoilCoordinate Scaling(AirfoilCoordinate airfoil, Double magnification)
+        {
+            var temp = new AirfoilCoordinate();
+            var airfoilCoordinateArray = airfoil.ToDouleArray();
+
+            var tempCoordinateArray = new Double[airfoilCoordinateArray.GetLength(0), 2];
+
+            for (int i = 0; i < airfoilCoordinateArray.GetLength(0); i++)
+            {
+
+                tempCoordinateArray[i, 0] = airfoilCoordinateArray[i, 0] * magnification;
+                tempCoordinateArray[i, 1] = airfoilCoordinateArray[i, 1] * magnification;
+            }
+            temp.Import(tempCoordinateArray);
+
+            return temp;
+        }
     }
 }

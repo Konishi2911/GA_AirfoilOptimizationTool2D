@@ -71,6 +71,8 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
                 OnPropertyChanged(nameof(CoordinateList));
             }
         }
+        public Double PreviewWindowWidth { get; set; }
+        public Double PreviewWindowHeight { get; set; }
         #endregion
 
         #region Scripts
@@ -174,6 +176,8 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
 
             // Registrate imported Airfoil to the AirfoilGroupManager.
             ImportedAirfoil.Add(result);
+
+            CoordinateList = GetPreviewPointList(SelectedAirfoil.SelectedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
         }
 
         private Boolean IsAirfoilSelectable()
@@ -267,9 +271,42 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             }
         }
 
-        private void CreatePreviewPointList(Airfoil.AirfoilManager airfoil)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="airfoil">Previewing Airfoil</param>
+        /// <param name="height">Preview Window Height</param>
+        /// <param name="width">Preview Window Width</param>
+        /// <returns></returns>
+        private System.Collections.ObjectModel.ObservableCollection<System.Windows.Point> GetPreviewPointList(Airfoil.AirfoilManager airfoil, double height, double width)
         {
+            System.Collections.ObjectModel.ObservableCollection<System.Windows.Point> pointList = new System.Collections.ObjectModel.ObservableCollection<System.Windows.Point>();
+            var airfoilCoordinates = airfoil.InterpolatedCoordinate;
 
+            double airfoilLength = Airfoil.AirfoilCoordinate.GetMaximumValue(airfoilCoordinates, 0) - Airfoil.AirfoilCoordinate.GetMinimumValue(airfoilCoordinates, 0);
+            double airfoilHeight = Airfoil.AirfoilCoordinate.GetMaximumValue(airfoilCoordinates, 1) - Airfoil.AirfoilCoordinate.GetMinimumValue(airfoilCoordinates, 1);
+
+            double magnification = 0.8 * (double)width / (double)airfoilHeight;
+
+            // Adjustment variable
+            double adjustX = (width - airfoilLength * magnification) / 2 - Airfoil.AirfoilCoordinate.GetMinimumValue(airfoilCoordinates, 0);
+            double adjustZ = (width - airfoilHeight * magnification) / 2 + Airfoil.AirfoilCoordinate.GetMinimumValue(airfoilCoordinates, 1) * magnification;
+
+            // Adjust Airfoil Coordinates to Fit Preview Window
+            var adjustedCoordinate = Airfoil.AirfoilCoordinate.Scaling(airfoilCoordinates, magnification);
+            for (int i = 0; i < adjustedCoordinate.Length; i++)
+            {
+                adjustedCoordinate[i].X = adjustX + adjustedCoordinate[i].X;
+                adjustedCoordinate[i].Z = adjustZ - adjustedCoordinate[i].Z;
+            }
+
+            // Convert adjustCoordinate to ObservableCollection 
+            for (int i = 0; i < adjustedCoordinate.Length; i++)
+            {
+                pointList.Add(new System.Windows.Point() { X = adjustedCoordinate[i].X, Y = adjustedCoordinate[i].Z });
+            }
+
+            return pointList;
         }
     }
 }

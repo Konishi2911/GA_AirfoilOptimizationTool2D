@@ -70,6 +70,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="SizeObserver.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -82,7 +83,9 @@
     <Compile Include="FOptConfig\AirfoilRepresentationMode.cs" />
     <Compile Include="FOptConfig\AirfoilSelectorViewModel.cs" />
     <Compile Include="FOptConfig\AirfoilSpecificationGridViewModel.cs" />
+    <Compile Include="FOptConfig\Event\GetPreviewWindowSizeTrigger.cs" />
     <Compile Include="FOptConfig\Event\OpenFileDialogTrigger.cs" />
+    <Compile Include="FOptConfig\Messenger\GetPreviewWindowSizeMessenger.cs" />
     <Compile Include="FOptConfig\Messenger\OpenFileMessenger.cs" />
     <Compile Include="Airfoil\AirfoilCoordinate.cs" />
     <Compile Include="FOptConfig\Models\AirfoilCsvAnalyzer.cs" />

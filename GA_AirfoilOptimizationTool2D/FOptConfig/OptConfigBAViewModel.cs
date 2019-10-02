@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Collections.Generic;
 
 namespace GA_AirfoilOptimizationTool2D.FOptConfig
 {
@@ -46,7 +45,8 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
         }
 
         // Binding Data of Airfoil Specification DataGrid ============================================================================================
-        public System.Data.DataTable AirfoilSpecifications {
+        public System.Data.DataTable AirfoilSpecifications
+        {
             get
             {
                 return airfoilSpecifications;
@@ -294,20 +294,22 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
 
             // Adjustment variable
             double adjustX = (width - airfoilLength * magnification) / 2 - Airfoil.AirfoilCoordinate.GetMinimumValue(airfoilCoordinates, 0);
-            double adjustZ = (height - airfoilHeight * magnification) / 2 + Airfoil.AirfoilCoordinate.GetMinimumValue(airfoilCoordinates, 1) * magnification;
+            double adjustZ = (height - airfoilHeight * magnification) / 2 + Airfoil.AirfoilCoordinate.GetMaximumValue(airfoilCoordinates, 1) * magnification;
 
             // Adjust Airfoil Coordinates to Fit Preview Window
             var adjustedCoordinate = Airfoil.AirfoilCoordinate.Scaling(airfoilCoordinates, magnification);
+            var temp = new Double[adjustedCoordinate.Length, 2];
             for (int i = 0; i < adjustedCoordinate.Length; i++)
             {
-                adjustedCoordinate[i].X = adjustX + adjustedCoordinate[i].X;
-                adjustedCoordinate[i].Z = adjustZ + adjustedCoordinate[i].Z;
+                temp[i, 0] = adjustX + adjustedCoordinate[i].X;
+                temp[i, 1] = adjustZ - adjustedCoordinate[i].Z;
             }
+            adjustedCoordinate.Import(temp);
 
             // Convert adjustCoordinate to ObservableCollection 
             for (int i = 0; i < adjustedCoordinate.Length; i++)
             {
-                pointList.Add(new System.Windows.Point() { X = adjustedCoordinate[i].X, Y = -adjustedCoordinate[i].Z });
+                pointList.Add(new System.Windows.Point() { X = adjustedCoordinate[i].X, Y = adjustedCoordinate[i].Z });
             }
 
             return pointList;

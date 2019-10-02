@@ -85,6 +85,9 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
                     throw new FormatException();
                 }
 
+                // Clear coordinate List
+                CoordinateList.Clear();
+
                 // Add coordinate
                 for (int i = 0; i < rowNo; i++)
                 {

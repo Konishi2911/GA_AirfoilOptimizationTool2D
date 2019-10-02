@@ -216,6 +216,10 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             // Airfoil Specification DataGrid related =============================================================================
             //
 
+            // Airfoil Preview related ===============================================
+            coordinateList = new System.Collections.ObjectModel.ObservableCollection<System.Windows.Point>();
+            //
+
             // Models ====================================================
             ImportedAirfoil = new Models.ImportedAirfoilGroupManager();
             //
@@ -297,13 +301,13 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             for (int i = 0; i < adjustedCoordinate.Length; i++)
             {
                 adjustedCoordinate[i].X = adjustX + adjustedCoordinate[i].X;
-                adjustedCoordinate[i].Z = adjustZ - adjustedCoordinate[i].Z;
+                adjustedCoordinate[i].Z = adjustZ + adjustedCoordinate[i].Z;
             }
 
             // Convert adjustCoordinate to ObservableCollection 
             for (int i = 0; i < adjustedCoordinate.Length; i++)
             {
-                pointList.Add(new System.Windows.Point() { X = adjustedCoordinate[i].X, Y = adjustedCoordinate[i].Z });
+                pointList.Add(new System.Windows.Point() { X = adjustedCoordinate[i].X, Y = -adjustedCoordinate[i].Z });
             }
 
             return pointList;

@@ -286,11 +286,11 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             double airfoilLength = Airfoil.AirfoilCoordinate.GetMaximumValue(airfoilCoordinates, 0) - Airfoil.AirfoilCoordinate.GetMinimumValue(airfoilCoordinates, 0);
             double airfoilHeight = Airfoil.AirfoilCoordinate.GetMaximumValue(airfoilCoordinates, 1) - Airfoil.AirfoilCoordinate.GetMinimumValue(airfoilCoordinates, 1);
 
-            double magnification = 0.8 * (double)width / (double)airfoilHeight;
+            double magnification = 0.8 * (double)width / (double)airfoilLength;
 
             // Adjustment variable
             double adjustX = (width - airfoilLength * magnification) / 2 - Airfoil.AirfoilCoordinate.GetMinimumValue(airfoilCoordinates, 0);
-            double adjustZ = (width - airfoilHeight * magnification) / 2 + Airfoil.AirfoilCoordinate.GetMinimumValue(airfoilCoordinates, 1) * magnification;
+            double adjustZ = (height - airfoilHeight * magnification) / 2 + Airfoil.AirfoilCoordinate.GetMinimumValue(airfoilCoordinates, 1) * magnification;
 
             // Adjust Airfoil Coordinates to Fit Preview Window
             var adjustedCoordinate = Airfoil.AirfoilCoordinate.Scaling(airfoilCoordinates, magnification);

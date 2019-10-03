@@ -41,6 +41,9 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
 
                 // Update Specification DataGrid
                 AirfoilSpecifications = CreateTable(SelectedAirfoil.SelectedAirfoil);
+
+                // Update Preview
+                CoordinateList = GetPreviewPointList(SelectedAirfoil.SelectedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
             }
         }
 
@@ -176,10 +179,7 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
 
             // Registrate imported Airfoil to the AirfoilGroupManager.
             ImportedAirfoil.Add(result);
-
-            CoordinateList = GetPreviewPointList(SelectedAirfoil.SelectedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
         }
-
         private Boolean IsAirfoilSelectable()
         {
             if (numberOfLoadedAirfoils == numberOfBAirfoils)
@@ -221,7 +221,7 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             //
 
             // Models ====================================================
-            ImportedAirfoil = new Models.ImportedAirfoilGroupManager();
+            ImportedAirfoil = Models.ImportedAirfoilGroupManager.Instance;
             //
 
             // ------------------------------------------------------------

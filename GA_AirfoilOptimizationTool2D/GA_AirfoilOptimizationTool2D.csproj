@@ -70,7 +70,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="FMainWindow\Actions\ShowOptConfigDialogAction.cs" />
+    <Compile Include="FMainWindow\Events\OptConfigDialogTrigger.cs" />
+    <Compile Include="FMainWindow\Messenger\OptConfigDialogMessenger.cs" />
     <Compile Include="FOptConfig\Converter\PointCollectionConverter.cs" />
+    <Compile Include="General\DelegateCommand.cs" />
     <Compile Include="SizeObserver.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -114,11 +118,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainWindowModel.cs" />
-    <Compile Include="MainWindowViewModel.cs" />
+    <Compile Include="FMainWindow\MainWindowViewModel.cs" />
     <Compile Include="FOptConfig\AirfoilRepresentationModeViewModel.cs" />
     <Compile Include="FOptConfig\OptConfigDelegateCommand.cs" />
     <Compile Include="OptConfigModel.cs" />
-    <Compile Include="OptConfigViewModel.cs" />
+    <Compile Include="FOptConfig\OptConfigViewModel.cs" />
     <Compile Include="OptConfig.xaml.cs">
       <DependentUpon>OptConfig.xaml</DependentUpon>
     </Compile>

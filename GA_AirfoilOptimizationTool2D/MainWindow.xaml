@@ -3,12 +3,23 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:local="clr-namespace:GA_AirfoilOptimizationTool2D"
+        xmlns:main="clr-namespace:GA_AirfoilOptimizationTool2D.FMainWindow"
+        xmlns:tr="clr-namespace:GA_AirfoilOptimizationTool2D.FMainWindow.Events"
+        xmlns:ac="clr-namespace:GA_AirfoilOptimizationTool2D.FMainWindow.Actions"
         mc:Ignorable="d"
         Title="Airfoil Optimization Tools 2D" Height="900" Width="1600">
     <Window.DataContext>
-        <local:MainWindowViewModel/>
+        <main:MainWindowViewModel/>
     </Window.DataContext>
+
+    <i:Interaction.Triggers>
+        <tr:OptConfigDialogTrigger>
+            <ac:ShowOptConfigDialogAction/>
+        </tr:OptConfigDialogTrigger>
+    </i:Interaction.Triggers>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -26,7 +37,9 @@
                 <MenuItem Header="Start Genetic Optimization"/>
                 <MenuItem Header="Airfoil Specifications Manager"/>
             </MenuItem>
-            <MenuItem Header="Option (_O)"/>
+            <MenuItem Header="Option (_O)">
+                <MenuItem Header="Optimizing Configuration" Command="{Binding Path=ShowOptConfigDialog}"/>
+            </MenuItem>
         </Menu>
 
         <Grid Margin="5,5,5,30">

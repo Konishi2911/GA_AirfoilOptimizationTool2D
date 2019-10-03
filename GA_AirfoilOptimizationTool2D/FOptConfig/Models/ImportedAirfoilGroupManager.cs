@@ -7,8 +7,12 @@ using System.Threading.Tasks;
 
 namespace GA_AirfoilOptimizationTool2D.FOptConfig.Models
 {
-    public class ImportedAirfoilGroupManager : Airfoil.AirfoilGroupManagerBase
+    public sealed class ImportedAirfoilGroupManager : Airfoil.AirfoilGroupManagerBase
     {
-        public ImportedAirfoilGroupManager() { }
+        public static ImportedAirfoilGroupManager Instance { get; } = new ImportedAirfoilGroupManager();
+        /// <summary>
+        /// This class is Singleton
+        /// </summary>
+        private ImportedAirfoilGroupManager() { }
     }
 }

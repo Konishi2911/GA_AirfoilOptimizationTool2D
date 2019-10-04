@@ -14,6 +14,8 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
         private DataTable airfoilSpecifications;
         private System.Collections.ObjectModel.ObservableCollection<System.Windows.Point> coordinateList;
 
+        private Services.OpenFileDialogService _openFileDialogService;
+
         /// <summary>
         /// Storing and Managing imported Airfoil.
         /// </summary>
@@ -167,9 +169,11 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
         // DelegateCommand Action ==========================================================================
         private void AirfoilSelectionMethod()
         {
-            Microsoft.Win32.OpenFileDialog _ofd = new Microsoft.Win32.OpenFileDialog();
             Models.AirfoilCsvAnalyzer airfoilCsvAnalyzer = Models.AirfoilCsvAnalyzer.GetInstance();
             String _airfoil_path;
+            String _filter = "CSV File (*.csv)|*.csv";
+
+            _airfoil_path = _openFileDialogService.ShowDialog(_filter);
 
             // Issue the Messenger displaying OpenFileDialog
             _airfoil_path = FOptConfig.Messenger.OpenFileMessenger.Show();
@@ -198,34 +202,66 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
         // ===============================================================================================
         #endregion
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public OptConfigBAViewModel()
         {
-            #region Instantiate
-            // ------------------------------------------------------------
-
             // SelectBaseAirfoil Button related ============================
             airfoilSelectionMethod = new Action(AirfoilSelectionMethod);
             isSelectable = new Func<bool>(IsAirfoilSelectable);
             airfoilSelection = new OptConfigDelegateCommand(airfoilSelectionMethod, isSelectable);
             //
 
-            // AirfoilSelection ComboBox related ====================================================================
-            LoadedAirfoils = new System.Collections.ObjectModel.ObservableCollection<AirfoilSelectorViewModel>();
-            //
-
-            // Airfoil Specification DataGrid related =============================================================================
-            //
-
-            // Airfoil Preview related ===============================================
-            coordinateList = new System.Collections.ObjectModel.ObservableCollection<System.Windows.Point>();
-            //
-
-            // Models ====================================================
+            // Read Loaded Airfoil
             ImportedAirfoil = Models.ImportedAirfoilGroupManager.Instance;
-            //
+
+            if (ImportedAirfoil.NumberOfAirfoils == 0)
+            {
+                // AirfoilSelection ComboBox related ====================================================================
+                LoadedAirfoils = new System.Collections.ObjectModel.ObservableCollection<AirfoilSelectorViewModel>();
+                //
+
+                // Airfoil Specification DataGrid related =============================================================================
+                //
+
+                // Airfoil Preview related ===============================================
+                coordinateList = new System.Collections.ObjectModel.ObservableCollection<System.Windows.Point>();
+                //
+
+                // Models ====================================================
+                //
+            }
+            else
+            {
+                numberOfLoadedAirfoils = ImportedAirfoil.NumberOfAirfoils;
+
+                // AirfoilSelection ComboBox related ====================================================================
+                LoadedAirfoils = new System.Collections.ObjectModel.ObservableCollection<AirfoilSelectorViewModel>();
+                for (int i = 0; i < ImportedAirfoil.NumberOfAirfoils; i++)
+                {
+                    // Get Airfoil Name
+                    String label;
+                    if (ImportedAirfoil.AirfoilGroup[i].AirfoilName != null)
+                    {
+                        label = ImportedAirfoil.AirfoilGroup[i].AirfoilName;
+                    }
+                    else
+                    {
+                        label = "Airfoil" + (numberOfLoadedAirfoils).ToString();
+                    }
+
+                    LoadedAirfoils.Add(new AirfoilSelectorViewModel(ImportedAirfoil.AirfoilGroup[i], label));
+                }
+                SelectedAirfoil = LoadedAirfoils[0];
+                //
+
+                // Airfoil Preview related ===============================================
+                CoordinateList = GetPreviewPointList(SelectedAirfoil.SelectedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+                //
+            }
 
             // ------------------------------------------------------------
-            #endregion
 
             #region Initialize Fields
             // Substitute Initial Value.

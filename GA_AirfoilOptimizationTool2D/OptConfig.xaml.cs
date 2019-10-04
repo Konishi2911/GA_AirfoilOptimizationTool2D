@@ -22,6 +22,8 @@ namespace GA_AirfoilOptimizationTool2D
         public OptConfig()
         {
             InitializeComponent();
+
+            this.DataContext = new FOptConfig.OptConfigViewModel(new FOptConfig.Services.OpenFileDialogService());
         }
     }
 }

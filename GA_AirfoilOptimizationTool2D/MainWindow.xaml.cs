@@ -23,7 +23,12 @@ namespace GA_AirfoilOptimizationTool2D
         public MainWindow()
         {
             InitializeComponent();
-            (new OptConfig()).ShowDialog();
+
+            //var showOptConfigDialogService = new FMainWindow.Services.ShowOptConfigDialogService<FOptConfig.OptConfigViewModel>()
+            //{
+            //    Owner = this
+            //};
+            //this.DataContext = new FMainWindow.MainWindowViewModel(showOptConfigDialogService);
         }
 
         private void AirfoilWindow1_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

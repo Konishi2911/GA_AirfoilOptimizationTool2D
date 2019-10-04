@@ -3,27 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Interactivity;
 
-namespace GA_AirfoilOptimizationTool2D.FOptConfig.Actions
+namespace GA_AirfoilOptimizationTool2D.FOptConfig.Services
 {
-    class ShowFileDialogAction : TriggerAction<DependencyObject>
+    public class OpenFileDialogService
     {
-        protected override void Invoke(object parameter)
+        public String ShowDialog(String filter)
         {
             // Create the instance of OpenFileDialog
             Microsoft.Win32.OpenFileDialog _ofd = new Microsoft.Win32.OpenFileDialog();
 
-            // Verify the event parameters
-            var openFileDialogArgs = parameter as Messenger.OpenFileMessenger.OpenFileEventArgs;
-            if (openFileDialogArgs == null)
-            {
-                return;
-            }
-
             // Set file type filter
-            _ofd.Filter = openFileDialogArgs.Filter;
+            _ofd.Filter = filter;
 
             // Show OpenFileDialog
             var ofdResults = _ofd.ShowDialog();
@@ -40,10 +31,9 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig.Actions
             }
             else
             {
-                
+
             }
-            // Notify the result by Callback
-            openFileDialogArgs.OpenFileDialogNotifyResult?.Invoke(_path);
+            return _path;
         }
     }
 }

@@ -10,10 +10,11 @@
         xmlns:ac="clr-namespace:GA_AirfoilOptimizationTool2D.FMainWindow.Actions"
         mc:Ignorable="d"
         Title="Airfoil Optimization Tools 2D" Height="900" Width="1600">
+
     <Window.DataContext>
         <main:MainWindowViewModel/>
     </Window.DataContext>
-
+    
     <i:Interaction.Triggers>
         <tr:OptConfigDialogTrigger>
             <ac:ShowOptConfigDialogAction/>

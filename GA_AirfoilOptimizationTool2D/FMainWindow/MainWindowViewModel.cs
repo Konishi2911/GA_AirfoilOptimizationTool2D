@@ -9,10 +9,12 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
     class MainWindowViewModel:General.ViewModelBase
     {
         private General.DelegateCommand showOprConfigDialog;
+        private General.IShowUserDialogService<FOptConfig.OptConfigViewModel> _showOptConfigDialogService;
+        private FOptConfig.Models.ImportedAirfoilGroupManager importedAirfoil;
 
         public MainWindowViewModel()
         {
-            var ImportedAirfoil = FOptConfig.Models.ImportedAirfoilGroupManager.Instance;
+            importedAirfoil = FOptConfig.Models.ImportedAirfoilGroupManager.Instance;
 
             openOptConfigDialog = new Action(OpenOptimizingConfigurationDialog);
             isOptConfigEnabled = new Func<bool>(IsOptConfigDialogEnabled);
@@ -29,6 +31,9 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
 
         public void OpenOptimizingConfigurationDialog()
         {
+            var optConfigDialog = new FOptConfig.OptConfigViewModel(new FOptConfig.Services.OpenFileDialogService());
+            //this._showOptConfigDialogService.ShowDialog(optConfigDialog);
+
             // Issue the Messenger displaying OpenFileDialog.
             Messenger.OptConfigDialogMessenger.Show();
         }

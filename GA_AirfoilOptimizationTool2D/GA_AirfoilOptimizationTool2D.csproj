@@ -73,6 +73,9 @@
     <Compile Include="FMainWindow\Actions\ShowOptConfigDialogAction.cs" />
     <Compile Include="FMainWindow\Events\OptConfigDialogTrigger.cs" />
     <Compile Include="FMainWindow\Messenger\OptConfigDialogMessenger.cs" />
+    <Compile Include="FOptConfig\Services\OpenFileDialogService.cs" />
+    <Compile Include="General\IShowUserDialogService.cs" />
+    <Compile Include="FMainWindow\Services\ShowOptConfigDialogService.cs" />
     <Compile Include="FOptConfig\Converter\PointCollectionConverter.cs" />
     <Compile Include="General\DelegateCommand.cs" />
     <Compile Include="SizeObserver.cs" />

@@ -20,11 +20,28 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig.Messenger
             }
         }
 
+        private static OpenFileMessenger _instance;
         /// <summary>
         /// This Class is singleton.
         /// </summary>
-        public static OpenFileMessenger Instance { get; private set; } = new OpenFileMessenger();
-        private OpenFileMessenger()
+        public static OpenFileMessenger Instance
+        {
+            get
+            {
+                return _instance;
+            }
+            private set
+            {
+                _instance = value;
+            }
+        }
+
+        public static OpenFileMessenger GetNewInstance()
+        {
+            _instance = new OpenFileMessenger();
+            return _instance;
+        }
+        public OpenFileMessenger()
         {
 
         }

@@ -10,7 +10,7 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig.Event
     {
         public OpenFileDialogTrigger() : base(Messenger.OpenFileMessenger.EventName)
         {
-            SourceObject = Messenger.OpenFileMessenger.Instance;
+            SourceObject = Messenger.OpenFileMessenger.GetNewInstance();
         }
     }
 }

@@ -14,21 +14,37 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
         private Func<bool> isSelectable;
         // ========================================
 
+        private OptConfigDelegateCommand applyButton;
+
         #region DelegateCommand Actions
         // DelegateCommand Action ==========================================================================
         private void ApplyButtonMethod()
         {
-            
+            OptimizingConfiguration.Instance.BasisAirfoils = Models.ImportedAirfoilGroupManager.GetCurrentInstance() as Airfoil.AirfoilGroupManagerBase;
         }
-        private Boolean IsAirfoilSelectable()
+        private Boolean IsAvailableApplyButton()
         {
-            return true;
+            var currentInstance = Models.ImportedAirfoilGroupManager.GetCurrentInstance();
+            if (currentInstance == null || currentInstance.NumberOfAirfoils == 0)
+            {
+                return false;
+            }
+            return (currentInstance.NumberOfAirfoils == currentInstance.NumberOfBasisAirfoils);
         }
-        // ===============================================================================================
+        // ================================================================================================
         #endregion
 
         public OptConfigViewModel()
         {
+            applyButton = new OptConfigDelegateCommand(ApplyButtonMethod, IsAvailableApplyButton);
+        }
+
+        public OptConfigDelegateCommand ApplyButtonCommand
+        {
+            get
+            {
+                return applyButton;
+            }
         }
     }
 }

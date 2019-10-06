@@ -18,11 +18,29 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         /// </summary>
         public MainWindowViewModel()
         {
+            // Allocate Event CallBack Functions
             OptimizingConfiguration.Instance.PropertyChanged += SourceChanged;
+            //
 
+            // Assign the delegate Command
             openOptConfigDialog = new Action(OpenOptimizingConfigurationDialog);
             isOptConfigEnabled = new Func<bool>(IsOptConfigDialogEnabled);
             showOprConfigDialog = new General.DelegateCommand(openOptConfigDialog, isOptConfigEnabled);
+            //
+
+            // Instantiate Fields
+            synthesizedAirfoils = new Models.AirfoilSynthesizer[NumberOfChildren];
+            for (int i = 0; i < NumberOfChildren; i++)
+            {
+                synthesizedAirfoils[i] = new Models.AirfoilSynthesizer();
+            }
+
+            previewCoordinates = new ObservableCollection<System.Windows.Point>[NumberOfChildren];
+            for (int i = 0; i < NumberOfChildren; i++)
+            {
+                previewCoordinates[i] = new ObservableCollection<System.Windows.Point>();
+            }
+            //
         }
 
         public Action openOptConfigDialog;
@@ -171,10 +189,15 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
 
         private void SourceChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
+            if (coefficients == null)
+            {
+                return;
+            }
+
             if (e.PropertyName == nameof(OptimizingConfiguration.BasisAirfoils))
             {
                 // Update baseAirfoil
-                this.basisAirfoils = OptimizingConfiguration.Instance.BasisAirfoils as Models.BasisAirfoils;
+                this.basisAirfoils = Models.BasisAirfoils.Convert(OptimizingConfiguration.Instance.BasisAirfoils);
 
                 // Re-synthesize Airfoil
                 for (int i = 0; i < NumberOfChildren; i++)

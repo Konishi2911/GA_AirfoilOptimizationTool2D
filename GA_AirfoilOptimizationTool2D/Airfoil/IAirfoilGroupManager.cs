@@ -8,7 +8,8 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
 {
     public interface IAirfoilGroupManager
     {
-        double NumberOfAirfoils { get; set; }
+        int NumberOfAirfoils { get; set; }
+        int NumberOfBasisAirfoils { get; set; }
         List<Airfoil.AirfoilManager> AirfoilGroup { get; set; }
 
         /// <summary>

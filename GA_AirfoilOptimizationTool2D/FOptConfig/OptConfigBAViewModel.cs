@@ -6,8 +6,8 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
     class OptConfigBAViewModel : General.ViewModelBase
     {
         // Fields =====================================================
-        private Double numberOfBAirfoils;
-        private Double numberOfLoadedAirfoils;
+        private int numberOfBAirfoils;
+        private int numberOfLoadedAirfoils;
         private AirfoilSelectorViewModel selectedAirfoil;
         private OptConfigDelegateCommand airfoilSelection;
         private String airfoilSelectionStatus;
@@ -174,6 +174,11 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             // Issue the Messenger displaying OpenFileDialog
             _airfoil_path = FOptConfig.Messenger.OpenFileMessenger.Show();
 
+            if (_airfoil_path == null)
+            {
+                return;
+            }
+
             // Analyze the CSV file located in _airfoil_path
             var result = airfoilCsvAnalyzer.Analyze(_airfoil_path);
 
@@ -210,10 +215,16 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             //
 
             // Read Loaded Airfoil
-            ImportedAirfoil = Models.ImportedAirfoilGroupManager.Instance;
+            ImportedAirfoil = OptimizingConfiguration.Instance.BasisAirfoils as Models.ImportedAirfoilGroupManager;
+            if (ImportedAirfoil == null)
+            {
+                ImportedAirfoil = Models.ImportedAirfoilGroupManager.GetNewInstance();
+            }
 
             if (ImportedAirfoil.NumberOfAirfoils == 0)
             {
+                numberOfBAirfoils = 1;
+
                 // AirfoilSelection ComboBox related ====================================================================
                 LoadedAirfoils = new System.Collections.ObjectModel.ObservableCollection<AirfoilSelectorViewModel>();
                 //
@@ -231,6 +242,7 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             else
             {
                 numberOfLoadedAirfoils = ImportedAirfoil.NumberOfAirfoils;
+                NumberOfAirfoils = ImportedAirfoil.NumberOfBasisAirfoils;
 
                 // AirfoilSelection ComboBox related ====================================================================
                 LoadedAirfoils = new System.Collections.ObjectModel.ObservableCollection<AirfoilSelectorViewModel>();
@@ -262,7 +274,6 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
 
             #region Initialize Fields
             // Substitute Initial Value.
-            NumberOfAirfoil = 1;
             AirfoilSelectionStatus
                 = numberOfLoadedAirfoils.ToString() + " airfoil is loaded." + "  "
                 + (numberOfBAirfoils - numberOfLoadedAirfoils).ToString() + " airfoils left are required.";
@@ -272,7 +283,7 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             assignEventHandler();
         }
 
-        public Double NumberOfAirfoil
+        public int NumberOfAirfoils
         {
             get
             {

@@ -27,6 +27,7 @@ namespace GA_AirfoilOptimizationTool2D
             set
             {
                 _basisAirfoils = value;
+                OnPropertyChanged(nameof(BasisAirfoils));
             }
         }
     }

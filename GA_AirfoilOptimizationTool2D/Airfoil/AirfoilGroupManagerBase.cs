@@ -5,7 +5,8 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
 {
     public abstract class AirfoilGroupManagerBase : General.ModelBase, Airfoil.IAirfoilGroupManager
     {
-        private Double numberOfAirfoil;
+        private int numberOfAirfoil;
+        private int numberOfBAirfoil;
         private List<Airfoil.AirfoilManager> airfoilGroup;
 
         public event AirfoilAddedEventHandler AirfoilAdded;
@@ -48,7 +49,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         }
         #endregion
 
-        public double NumberOfAirfoils
+        public int NumberOfAirfoils
         {
             get
             {
@@ -58,6 +59,19 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             {
                 numberOfAirfoil = value;
                 OnPropertyChanged(nameof(NumberOfAirfoils));
+            }
+        }
+
+        public int NumberOfBasisAirfoils
+        {
+            get
+            {
+                return numberOfBAirfoil;
+            }
+            set
+            {
+                numberOfBAirfoil = value;
+                OnPropertyChanged(nameof(NumberOfBasisAirfoils));
             }
         }
 

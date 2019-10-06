@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace GA_AirfoilOptimizationTool2D
 {
-    class OptConfigDelegateCommand : ICommand
+    public class OptConfigDelegateCommand : ICommand
     {
         private Action execute;
         private Func<bool> canExecute;

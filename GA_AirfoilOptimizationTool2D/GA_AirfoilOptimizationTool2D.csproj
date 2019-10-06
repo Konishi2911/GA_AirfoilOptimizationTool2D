@@ -70,11 +70,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Airfoil\IAirfoilGroupManager.cs" />
     <Compile Include="FMainWindow\Actions\ShowOptConfigDialogAction.cs" />
     <Compile Include="FMainWindow\Events\OptConfigDialogTrigger.cs" />
     <Compile Include="FMainWindow\Messenger\OptConfigDialogMessenger.cs" />
-    <Compile Include="FOptConfig\Converter\PointCollectionConverter.cs" />
+    <Compile Include="FMainWindow\Models\AirfoilSynthesizer.cs" />
+    <Compile Include="FMainWindow\Models\BasisAirfoils.cs" />
+    <Compile Include="FOptConfig\Actions\ApplyWindowAction.cs" />
+    <Compile Include="FOptConfig\Actions\CloseWindowAction.cs" />
+    <Compile Include="General\AirfoilPreview.cs" />
+    <Compile Include="General\Converter\PointCollectionConverter.cs" />
     <Compile Include="General\DelegateCommand.cs" />
+    <Compile Include="OptimizingConfiguration.cs" />
     <Compile Include="SizeObserver.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -88,9 +95,9 @@
     <Compile Include="FOptConfig\AirfoilRepresentationMode.cs" />
     <Compile Include="FOptConfig\AirfoilSelectorViewModel.cs" />
     <Compile Include="FOptConfig\AirfoilSpecificationGridViewModel.cs" />
-    <Compile Include="FOptConfig\Event\GetPreviewWindowSizeTrigger.cs" />
+    <Compile Include="General\Triggers\GetPreviewWindowSizeTrigger.cs" />
     <Compile Include="FOptConfig\Event\OpenFileDialogTrigger.cs" />
-    <Compile Include="FOptConfig\Messenger\GetPreviewWindowSizeMessenger.cs" />
+    <Compile Include="General\Messengers\GetPreviewWindowSizeMessenger.cs" />
     <Compile Include="FOptConfig\Messenger\OpenFileMessenger.cs" />
     <Compile Include="Airfoil\AirfoilCoordinate.cs" />
     <Compile Include="FOptConfig\Models\AirfoilCsvAnalyzer.cs" />
@@ -117,7 +124,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MainWindowModel.cs" />
     <Compile Include="FMainWindow\MainWindowViewModel.cs" />
     <Compile Include="FOptConfig\AirfoilRepresentationModeViewModel.cs" />
     <Compile Include="FOptConfig\OptConfigDelegateCommand.cs" />

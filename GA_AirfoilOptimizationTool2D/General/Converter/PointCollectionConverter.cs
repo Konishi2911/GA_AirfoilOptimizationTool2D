@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace GA_AirfoilOptimizationTool2D.FOptConfig.Converter
+namespace GA_AirfoilOptimizationTool2D.General.Converter
 {
     public class PointCollectionConverter : IValueConverter
     {

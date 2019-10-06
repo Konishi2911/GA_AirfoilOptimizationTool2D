@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:local="clr-namespace:GA_AirfoilOptimizationTool2D"
+        xmlns:general ="clr-namespace:GA_AirfoilOptimizationTool2D.General"
+        xmlns:cvt="clr-namespace:GA_AirfoilOptimizationTool2D.General.Converter"
         xmlns:main="clr-namespace:GA_AirfoilOptimizationTool2D.FMainWindow"
         xmlns:tr="clr-namespace:GA_AirfoilOptimizationTool2D.FMainWindow.Events"
         xmlns:ac="clr-namespace:GA_AirfoilOptimizationTool2D.FMainWindow.Actions"
@@ -13,6 +15,10 @@
     <Window.DataContext>
         <main:MainWindowViewModel/>
     </Window.DataContext>
+
+    <Window.Resources>
+        <cvt:PointCollectionConverter x:Key="pointCollectionConverter"/>
+    </Window.Resources>
 
     <i:Interaction.Triggers>
         <tr:OptConfigDialogTrigger>
@@ -39,6 +45,7 @@
             </MenuItem>
             <MenuItem Header="Option (_O)">
                 <MenuItem Header="Optimizing Configuration" Command="{Binding Path=ShowOptConfigDialog}"/>
+                <MenuItem Header="Optimizing Coefficients"/>
             </MenuItem>
         </Menu>
 
@@ -56,88 +63,118 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Border BorderBrush="Black" BorderThickness="1" Margin="5" Grid.Column="1" Grid.Row="1">
-                <Canvas x:Name="AirfoilWindow2" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow2_MouseLeftButtonDown">
+            <Border BorderBrush="Black" BorderThickness="1" Margin="5" Grid.Column="0" Grid.Row="1">
+                <Canvas x:Name="AirfoilWindow1" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow1_MouseLeftButtonDown"
+                        local:SizeObserver.Observe="True"
+                        local:SizeObserver.ObservedHeight="{Binding Path=PreviewWindowHeight, Mode=OneWayToSource}"
+                        local:SizeObserver.ObservedWidth="{Binding Path=PreviewWindowWidth, Mode=OneWayToSource}">
                     <Canvas.Background>
                         <SolidColorBrush Color="Black" Opacity="0"/>
                     </Canvas.Background>
-                    <Polyline x:Name="AirfoilLine2" Stroke ="Black"/>
+                    <Polyline x:Name="AirfoilLine1" Stroke ="Black" Points="{Binding Path=PreviewCoordinate1, Converter={StaticResource pointCollectionConverter}}"/>
+                </Canvas>
+            </Border>
+            <Border BorderBrush="Black" BorderThickness="1" Margin="5" Grid.Column="1" Grid.Row="1">
+                <Canvas x:Name="AirfoilWindow2" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow2_MouseLeftButtonDown"
+                        local:SizeObserver.Observe="True"
+                        local:SizeObserver.ObservedHeight="{Binding Path=PreviewWindowHeight, Mode=OneWayToSource}"
+                        local:SizeObserver.ObservedWidth="{Binding Path=PreviewWindowWidth, Mode=OneWayToSource}">
+                    <Canvas.Background>
+                        <SolidColorBrush Color="Black" Opacity="0"/>
+                    </Canvas.Background>
+                    <Polyline x:Name="AirfoilLine2" Stroke ="Black"  Points="{Binding Path=PreviewCoordinate2, Converter={StaticResource pointCollectionConverter}}"/>
                 </Canvas>
             </Border>
             <Border BorderBrush="Black" BorderThickness="1" Margin="5" Grid.Column="2" Grid.Row="1">
-                <Canvas x:Name="AirfoilWindow3" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow3_MouseLeftButtonDown">
+                <Canvas x:Name="AirfoilWindow3" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow3_MouseLeftButtonDown"
+                        local:SizeObserver.Observe="True"
+                        local:SizeObserver.ObservedHeight="{Binding Path=PreviewWindowHeight, Mode=OneWayToSource}"
+                        local:SizeObserver.ObservedWidth="{Binding Path=PreviewWindowWidth, Mode=OneWayToSource}">
                     <Canvas.Background>
                         <SolidColorBrush Color="Black" Opacity="0"/>
                     </Canvas.Background>
-                    <Polyline x:Name="AirfoilLine3" Stroke ="Black"/>
+                    <Polyline x:Name="AirfoilLine3" Stroke ="Black"  Points="{Binding Path=PreviewCoordinate3, Converter={StaticResource pointCollectionConverter}}"/>
                 </Canvas>
             </Border>
             <Border BorderBrush="Black" BorderThickness="1" Margin="5" Grid.Column="3" Grid.Row="1">
-                <Canvas x:Name="AirfoilWindow4" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow4_MouseLeftButtonDown">
+                <Canvas x:Name="AirfoilWindow4" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow4_MouseLeftButtonDown"
+                        local:SizeObserver.Observe="True"
+                        local:SizeObserver.ObservedHeight="{Binding Path=PreviewWindowHeight, Mode=OneWayToSource}"
+                        local:SizeObserver.ObservedWidth="{Binding Path=PreviewWindowWidth, Mode=OneWayToSource}">
                     <Canvas.Background>
                         <SolidColorBrush Color="Black" Opacity="0"/>
                     </Canvas.Background>
-                    <Polyline x:Name="AirfoilLine4" Stroke ="Black"/>
+                    <Polyline x:Name="AirfoilLine4" Stroke ="Black"  Points="{Binding Path=PreviewCoordinate4, Converter={StaticResource pointCollectionConverter}}"/>
                 </Canvas>
             </Border>
             <Border BorderBrush="Black" BorderThickness="1" Margin="5" Grid.Column="4" Grid.Row="1">
-                <Canvas x:Name="AirfoilWindow5" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow5_MouseLeftButtonDown">
+                <Canvas x:Name="AirfoilWindow5" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow5_MouseLeftButtonDown"
+                        local:SizeObserver.Observe="True"
+                        local:SizeObserver.ObservedHeight="{Binding Path=PreviewWindowHeight, Mode=OneWayToSource}"
+                        local:SizeObserver.ObservedWidth="{Binding Path=PreviewWindowWidth, Mode=OneWayToSource}">
                     <Canvas.Background>
                         <SolidColorBrush Color="Black" Opacity="0"/>
                     </Canvas.Background>
-                    <Polyline x:Name="AirfoilLine5" Stroke ="Black"/>
+                    <Polyline x:Name="AirfoilLine5" Stroke ="Black"  Points="{Binding Path=PreviewCoordinate5, Converter={StaticResource pointCollectionConverter}}"/>
                 </Canvas>
             </Border>
             <Border BorderBrush="Black" BorderThickness="1" Margin="5" Grid.Column="0" Grid.Row="2">
-                <Canvas x:Name="AirfoilWindow6" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow6_MouseLeftButtonDown">
+                <Canvas x:Name="AirfoilWindow6" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow6_MouseLeftButtonDown"
+                        local:SizeObserver.Observe="True"
+                        local:SizeObserver.ObservedHeight="{Binding Path=PreviewWindowHeight, Mode=OneWayToSource}"
+                        local:SizeObserver.ObservedWidth="{Binding Path=PreviewWindowWidth, Mode=OneWayToSource}">
                     <Canvas.Background>
                         <SolidColorBrush Color="Black" Opacity="0"/>
                     </Canvas.Background>
-                    <Polyline x:Name="AirfoilLine6" Stroke ="Black"/>
+                    <Polyline x:Name="AirfoilLine6" Stroke ="Black"  Points="{Binding Path=PreviewCoordinate6, Converter={StaticResource pointCollectionConverter}}"/>
                 </Canvas>
             </Border>
             <Border BorderBrush="Black" BorderThickness="1" Margin="5" Grid.Column="1" Grid.Row="2">
-                <Canvas x:Name="AirfoilWindow7" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow7_MouseLeftButtonDown">
+                <Canvas x:Name="AirfoilWindow7" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow7_MouseLeftButtonDown"
+                        local:SizeObserver.Observe="True"
+                        local:SizeObserver.ObservedHeight="{Binding Path=PreviewWindowHeight, Mode=OneWayToSource}"
+                        local:SizeObserver.ObservedWidth="{Binding Path=PreviewWindowWidth, Mode=OneWayToSource}">
                     <Canvas.Background>
                         <SolidColorBrush Color="Black" Opacity="0"/>
                     </Canvas.Background>
-                    <Polyline x:Name="AirfoilLine7" Stroke ="Black"/>
+                    <Polyline x:Name="AirfoilLine7" Stroke ="Black"  Points="{Binding Path=PreviewCoordinate7, Converter={StaticResource pointCollectionConverter}}"/>
                 </Canvas>
             </Border>
             <Border BorderBrush="Black" BorderThickness="1" Margin="5" Grid.Column="2" Grid.Row="2">
-                <Canvas x:Name="AirfoilWindow8" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow8_MouseLeftButtonDown">
+                <Canvas x:Name="AirfoilWindow8" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow8_MouseLeftButtonDown"
+                        local:SizeObserver.Observe="True"
+                        local:SizeObserver.ObservedHeight="{Binding Path=PreviewWindowHeight, Mode=OneWayToSource}"
+                        local:SizeObserver.ObservedWidth="{Binding Path=PreviewWindowWidth, Mode=OneWayToSource}">
                     <Canvas.Background>
                         <SolidColorBrush Color="Black" Opacity="0"/>
                     </Canvas.Background>
-                    <Polyline x:Name="AirfoilLine8" Stroke ="Black"/>
+                    <Polyline x:Name="AirfoilLine8" Stroke ="Black"  Points="{Binding Path=PreviewCoordinate8, Converter={StaticResource pointCollectionConverter}}"/>
                 </Canvas>
             </Border>
             <Border BorderBrush="Black" BorderThickness="1" Margin="5" Grid.Column="3" Grid.Row="2">
-                <Canvas x:Name="AirfoilWindow9" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow9_MouseLeftButtonDown">
+                <Canvas x:Name="AirfoilWindow9" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow9_MouseLeftButtonDown"
+                        local:SizeObserver.Observe="True"
+                        local:SizeObserver.ObservedHeight="{Binding Path=PreviewWindowHeight, Mode=OneWayToSource}"
+                        local:SizeObserver.ObservedWidth="{Binding Path=PreviewWindowWidth, Mode=OneWayToSource}">
                     <Canvas.Background>
                         <SolidColorBrush Color="Black" Opacity="0"/>
                     </Canvas.Background>
-                    <Polyline x:Name="AirfoilLine9" Stroke ="Black"/>
+                    <Polyline x:Name="AirfoilLine9" Stroke ="Black" Points="{Binding Path=PreviewCoordinate9, Converter={StaticResource pointCollectionConverter}}"/>
                 </Canvas>
             </Border>
             <Border BorderBrush="Black" BorderThickness="1" Margin="5" Grid.Column="4" Grid.Row="2">
-                <Canvas x:Name="AirfoilWindow10" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow10_MouseLeftButtonDown">
+                <Canvas x:Name="AirfoilWindow10" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow10_MouseLeftButtonDown"
+                        local:SizeObserver.Observe="True"
+                        local:SizeObserver.ObservedHeight="{Binding Path=PreviewWindowHeight, Mode=OneWayToSource}"
+                        local:SizeObserver.ObservedWidth="{Binding Path=PreviewWindowWidth, Mode=OneWayToSource}">
                     <Canvas.Background>
                         <SolidColorBrush Color="Black" Opacity="0"/>
                     </Canvas.Background>
-                    <Polyline x:Name="AirfoilLine10" Stroke ="Black"/>
+                    <Polyline x:Name="AirfoilLine10" Stroke ="Black" Points="{Binding Path=PreviewCoordinate10, Converter={StaticResource pointCollectionConverter}}"/>
                 </Canvas>
             </Border>
             <TextBox x:Name="GA_LogBox" TextWrapping="Wrap" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Margin="5" VerticalScrollBarVisibility="Auto"/>
             <DataGrid x:Name="specDataGrid" Margin="5" Grid.Column="4" Grid.Row="3" CanUserResizeColumns="False" CanUserSortColumns="False" CanUserReorderColumns="False" HeadersVisibility="None" ColumnWidth="*"/>
-            <Border BorderBrush="Black" BorderThickness="1" Margin="5" Grid.Column="0" Grid.Row="1">
-                <Canvas x:Name="AirfoilWindow1" Margin="5" RenderTransformOrigin="0.503,0.542" MouseLeftButtonDown="AirfoilWindow1_MouseLeftButtonDown">
-                    <Canvas.Background>
-                        <SolidColorBrush Color="Black" Opacity="0"/>
-                    </Canvas.Background>
-                    <Polyline x:Name="AirfoilLine1" Stroke ="Black"/>
-                </Canvas>
-            </Border>
         </Grid>
         <StatusBar Margin="0" Height="25" VerticalAlignment="Bottom"/>
     </Grid>

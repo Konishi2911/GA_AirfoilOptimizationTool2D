@@ -23,7 +23,6 @@ namespace GA_AirfoilOptimizationTool2D
         public MainWindow()
         {
             InitializeComponent();
-            (new OptConfig()).ShowDialog();
         }
 
         private void AirfoilWindow1_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

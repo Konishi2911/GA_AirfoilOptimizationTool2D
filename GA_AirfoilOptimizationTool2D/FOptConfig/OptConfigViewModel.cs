@@ -22,7 +22,7 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
         }
         private Boolean IsAirfoilSelectable()
         {
-            return false;
+            return true;
         }
         // ===============================================================================================
         #endregion

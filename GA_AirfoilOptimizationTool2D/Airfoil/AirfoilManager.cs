@@ -50,6 +50,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
 
         public Airfoil.AirfoilCoordinate UpperCoordinate { get { return _upperCoordinate; } }
         public Airfoil.AirfoilCoordinate LowerCoordinate { get { return _lowerCoordinate; } }
+        public Airfoil.AirfoilCoordinate ResizedCoordinate { get; private set; }
 
         public Double ChordLength
         {
@@ -82,6 +83,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             InterpolatedCoordinate = new AirfoilCoordinate();
             _upperCoordinate = new AirfoilCoordinate();
             _lowerCoordinate = new AirfoilCoordinate();
+            ResizedCoordinate = new AirfoilCoordinate();
         }
 
         /// <summary>
@@ -131,6 +133,21 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             UpperCoordinate.Import(General.Interpolation.LinearInterpolation(upperLine.ToDouleArray(), NumberOfDivision));
             LowerCoordinate.Import(General.Interpolation.LinearInterpolation(lowerLine.ToDouleArray(), NumberOfDivision));
 
+            // Combinate the Coordinates Upper and Lower
+            Double[,] resizedCoordinate = new double[UpperCoordinate.Length + LowerCoordinate.Length, 2];
+            for (int i = 0; i < UpperCoordinate.Length; i++)
+            {
+                resizedCoordinate[i, 0] = UpperCoordinate[i].X;
+                resizedCoordinate[i, 1] = UpperCoordinate[i].Z;
+            }
+            for (int i = UpperCoordinate.Length; i < UpperCoordinate.Length + LowerCoordinate.Length - 1; i++)
+            {
+                resizedCoordinate[i, 0] = LowerCoordinate[i - UpperCoordinate.Length].X;
+                resizedCoordinate[i, 1] = LowerCoordinate[i - UpperCoordinate.Length].Z;
+            }
+            ResizedCoordinate.Import(resizedCoordinate);
+
+            // Calculate Specifications
             ChordLength = GetChordLength(UpperCoordinate, LowerCoordinate);
             LeadingEdgeRadius = GetLeadingEdgeRadius(UpperCoordinate, LowerCoordinate);
         }

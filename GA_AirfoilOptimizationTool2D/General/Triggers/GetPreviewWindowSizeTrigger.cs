@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GA_AirfoilOptimizationTool2D.FOptConfig.Event
+namespace GA_AirfoilOptimizationTool2D.General.Event
 {
     class GetPreviewWindowSizeTrigger : System.Windows.Interactivity.EventTrigger
     {

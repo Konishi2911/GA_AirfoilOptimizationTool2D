@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GA_AirfoilOptimizationTool2D.Airfoil
 {
-    public abstract class AirfoilGroupManagerBase : General.ModelBase
+    public abstract class AirfoilGroupManagerBase : General.ModelBase, Airfoil.IAirfoilGroupManager
     {
         private Double numberOfAirfoil;
         private List<Airfoil.AirfoilManager> airfoilGroup;
@@ -23,7 +19,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         #region CostomEventArgs
         public class AirfoilAddedEventArgs : EventArgs
         {
-            public  Airfoil.AirfoilManager AddedAirfoil { get; private set; }
+            public Airfoil.AirfoilManager AddedAirfoil { get; private set; }
 
             /// <summary>
             /// 
@@ -99,7 +95,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             ++NumberOfAirfoils;
 
             // Issue the Event added new airfoil to AirfoilGroupList
-            AirfoilAdded?.Invoke(this, new AirfoilAddedEventArgs(specification));    
+            AirfoilAdded?.Invoke(this, new AirfoilAddedEventArgs(specification));
         }
 
         /// <summary>

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GA_AirfoilOptimizationTool2D
+namespace GA_AirfoilOptimizationTool2D.FMainWindow.Models
 {
-    class MainWindowModel
+    class BasisAirfoils : Airfoil.AirfoilGroupManagerBase
     {
     }
 }

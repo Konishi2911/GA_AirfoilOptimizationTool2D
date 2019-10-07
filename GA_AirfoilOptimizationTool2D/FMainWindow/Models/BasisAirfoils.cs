@@ -19,5 +19,17 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow.Models
 
             return temp;
         }
+
+        public object Clone()
+        {
+            var temp = new BasisAirfoils
+            {
+                AirfoilGroup = this.AirfoilGroup,
+                NumberOfAirfoils = this.NumberOfAirfoils,
+                NumberOfBasisAirfoils = this.NumberOfBasisAirfoils
+            };
+
+            return temp;
+        }
     }
 }

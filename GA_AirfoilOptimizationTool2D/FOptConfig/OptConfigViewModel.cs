@@ -20,7 +20,7 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
         // DelegateCommand Action ==========================================================================
         private void ApplyButtonMethod()
         {
-            OptimizingConfiguration.Instance.BasisAirfoils = Models.ImportedAirfoilGroupManager.GetCurrentInstance() as Airfoil.AirfoilGroupManagerBase;
+            OptimizingConfiguration.Instance.BasisAirfoils = Models.ImportedAirfoilGroupManager.GetCurrentInstance().Convert<FMainWindow.Models.BasisAirfoils>() as Airfoil.AirfoilGroupManagerBase;
         }
         private Boolean IsAvailableApplyButton()
         {

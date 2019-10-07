@@ -15,7 +15,7 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
         private System.Collections.ObjectModel.ObservableCollection<System.Windows.Point> coordinateList;
 
         /// <summary>
-        /// Storing and Managing imported Airfoil.
+        /// Storing and Managing imported Airfoils. (This class is Singleton.)
         /// </summary>
         private Models.ImportedAirfoilGroupManager ImportedAirfoil;
         // ============================================================
@@ -24,6 +24,7 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
         private Action airfoilSelectionMethod;
         private Func<bool> isSelectable;
         // ========================================
+        
 
         #region Binding Data
         // Binding Data of Airfoil Selection ComboBox =================================================================================
@@ -88,6 +89,7 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
 
         private void assignEventHandler()
         {
+            this.PropertyChanged += This_PropertyChanged;
             ImportedAirfoil.PropertyChanged += ImportedAirfoil_PropertyChanged;
             ImportedAirfoil.AirfoilAdded += ImportedAirfoil_AirfoilAdded;
             ImportedAirfoil.AirfoilRemoved += ImportedAirfoil_AirfoilRemoved;
@@ -161,6 +163,22 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
                 UpdateStatusMessage();
             }
         }
+
+        private void This_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(this.NumberOfBasisAirfoils))
+            {
+                ImportedAirfoil.NumberOfBasisAirfoils = NumberOfBasisAirfoils;
+
+                UpdateStatusMessage();
+            }
+            else if (e.PropertyName == nameof(this.NumberOfLoadedAirfoils))
+            {
+                ImportedAirfoil.NumberOfAirfoils = NumberOfLoadedAirfoils;
+                
+                UpdateStatusMessage();
+            }
+        }
         #endregion
 
         #region DelegateCommand Actions
@@ -215,15 +233,26 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             //
 
             // Read Loaded Airfoil
-            ImportedAirfoil = OptimizingConfiguration.Instance.BasisAirfoils as Models.ImportedAirfoilGroupManager;
-            if (ImportedAirfoil == null)
+            if (OptimizingConfiguration.Instance.BasisAirfoils == null)
             {
                 ImportedAirfoil = Models.ImportedAirfoilGroupManager.GetNewInstance();
             }
+            else
+            {
+                ImportedAirfoil = Models.ImportedAirfoilGroupManager.GetNewInstance();
+                ImportedAirfoil.AirfoilGroup = new System.Collections.Generic.List<Airfoil.AirfoilManager>(OptimizingConfiguration.Instance.BasisAirfoils.AirfoilGroup);
+                ImportedAirfoil.NumberOfAirfoils = OptimizingConfiguration.Instance.BasisAirfoils.NumberOfAirfoils;
+                ImportedAirfoil.NumberOfBasisAirfoils = OptimizingConfiguration.Instance.BasisAirfoils.NumberOfBasisAirfoils;
+            }
+            #endregion
 
+            // Assign EventHandler
+            assignEventHandler();
+
+            #region Initialize Fields
             if (ImportedAirfoil.NumberOfAirfoils == 0)
             {
-                numberOfBAirfoils = 1;
+                NumberOfBasisAirfoils = 1;
 
                 // AirfoilSelection ComboBox related ====================================================================
                 LoadedAirfoils = new System.Collections.ObjectModel.ObservableCollection<AirfoilSelectorViewModel>();
@@ -241,8 +270,8 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             }
             else
             {
-                numberOfLoadedAirfoils = ImportedAirfoil.NumberOfAirfoils;
-                NumberOfAirfoils = ImportedAirfoil.NumberOfBasisAirfoils;
+                NumberOfLoadedAirfoils = ImportedAirfoil.NumberOfAirfoils;
+                NumberOfBasisAirfoils = ImportedAirfoil.NumberOfBasisAirfoils;
 
                 // AirfoilSelection ComboBox related ====================================================================
                 LoadedAirfoils = new System.Collections.ObjectModel.ObservableCollection<AirfoilSelectorViewModel>();
@@ -256,7 +285,7 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
                     }
                     else
                     {
-                        label = "Airfoil" + (numberOfLoadedAirfoils).ToString();
+                        label = "Airfoil" + (NumberOfLoadedAirfoils).ToString();
                     }
 
                     LoadedAirfoils.Add(new AirfoilSelectorViewModel(ImportedAirfoil.AirfoilGroup[i], label));
@@ -270,20 +299,18 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             }
 
             // ------------------------------------------------------------
-            #endregion
 
-            #region Initialize Fields
             // Substitute Initial Value.
             AirfoilSelectionStatus
                 = numberOfLoadedAirfoils.ToString() + " airfoil is loaded." + "  "
                 + (numberOfBAirfoils - numberOfLoadedAirfoils).ToString() + " airfoils left are required.";
             #endregion
-
-            // Assign EventHandler
-            assignEventHandler();
         }
 
-        public int NumberOfAirfoils
+        /// <summary>
+        /// Number of Basis Airfoils
+        /// </summary>
+        public int NumberOfBasisAirfoils
         {
             get
             {
@@ -292,9 +319,22 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             set
             {
                 this.numberOfBAirfoils = value;
-
-                UpdateStatusMessage();
-                OnPropertyChanged("NumberOfBAirfoil");
+                OnPropertyChanged(nameof(NumberOfBasisAirfoils));
+            }
+        }
+        /// <summary>
+        /// Number of Loaded Airfoils
+        /// </summary>
+        public int NumberOfLoadedAirfoils
+        {
+            get
+            {
+                return numberOfLoadedAirfoils;
+            }
+            set
+            {
+                this.numberOfLoadedAirfoils = value;
+                OnPropertyChanged(nameof(this.NumberOfLoadedAirfoils));
             }
         }
 

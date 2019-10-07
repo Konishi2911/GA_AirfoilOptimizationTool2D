@@ -84,7 +84,7 @@
                     <TextBlock HorizontalAlignment="Left" Margin="10,11,0,0" TextWrapping="Wrap" Text="Number of Basis Airfoils" VerticalAlignment="Top" Height="18" Width="168"/>
                     <TextBlock HorizontalAlignment="Left" Margin="10,6,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Select BasisAirfoil" VerticalAlignment="Top" Height="18" Width="127"/>
                     <TextBox Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="10,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="542" Grid.ColumnSpan="2"
-                             Text="{Binding Path=NumberOfAirfoils, Mode=TwoWay}"/>
+                             Text="{Binding Path=NumberOfBasisAirfoils, Mode=TwoWay}"/>
                     <Button Content="Select" Grid.Column="1" HorizontalAlignment="Left" Margin="10,3,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Height="20"
                             Command="{Binding AirfoilSelection}"/>
                     <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="90,5,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="462" Grid.ColumnSpan="2" Height="18"

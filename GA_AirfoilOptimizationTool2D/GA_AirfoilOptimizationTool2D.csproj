@@ -71,6 +71,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Airfoil\IAirfoilGroupManager.cs" />
+    <Compile Include="FCoefManager\CoefficientManager.xaml.cs">
+      <DependentUpon>CoefficientManager.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FMainWindow\Actions\ShowOptConfigDialogAction.cs" />
     <Compile Include="FMainWindow\Events\OptConfigDialogTrigger.cs" />
     <Compile Include="FMainWindow\Messenger\OptConfigDialogMessenger.cs" />
@@ -83,6 +86,10 @@
     <Compile Include="General\DelegateCommand.cs" />
     <Compile Include="OptimizingConfiguration.cs" />
     <Compile Include="SizeObserver.cs" />
+    <Page Include="FCoefManager\CoefficientManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -127,7 +134,6 @@
     <Compile Include="FMainWindow\MainWindowViewModel.cs" />
     <Compile Include="FOptConfig\AirfoilRepresentationModeViewModel.cs" />
     <Compile Include="FOptConfig\OptConfigDelegateCommand.cs" />
-    <Compile Include="OptConfigModel.cs" />
     <Compile Include="FOptConfig\OptConfigViewModel.cs" />
     <Compile Include="OptConfig.xaml.cs">
       <DependentUpon>OptConfig.xaml</DependentUpon>

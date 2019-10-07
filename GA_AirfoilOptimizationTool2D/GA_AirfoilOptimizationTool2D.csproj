@@ -74,6 +74,9 @@
     <Compile Include="FCoefManager\CoefficientManager.xaml.cs">
       <DependentUpon>CoefficientManager.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FCoefManager\CoefficientManagerViewModel.cs" />
+    <Compile Include="FCoefManager\Models\CoordinateOfConbination.cs" />
+    <Compile Include="FCoefManager\Models\EachCoefficients.cs" />
     <Compile Include="FMainWindow\Actions\ShowOptConfigDialogAction.cs" />
     <Compile Include="FMainWindow\Events\OptConfigDialogTrigger.cs" />
     <Compile Include="FMainWindow\Messenger\OptConfigDialogMessenger.cs" />

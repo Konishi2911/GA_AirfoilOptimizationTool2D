@@ -82,7 +82,7 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager.Models
         }
         private void Coordinates_CollectionPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            
+            OptimizingConfiguration.Instance.CoefficientOfCombination = GetDoubleArray();
         }
         #endregion
 
@@ -105,11 +105,22 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager.Models
                 }
             }
         }
-        private void GetDoubleArray()
+        /// <summary>
+        /// This method returns Two-Dimensional Double type array, which is new object.
+        /// </summary>
+        private Double[,] GetDoubleArray()
         {
             var length = _coefficients.Count;
 
             var temp = new Double[length, 10];
+            for (int i = 0; i < length; i++)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    temp[i, j] = _coefficients[i].GetArray()[j];
+                }
+            }
+            return temp;
         }
     }
 }

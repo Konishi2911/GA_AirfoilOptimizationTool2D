@@ -13,6 +13,7 @@
     
     <Grid>
         <DataGrid Margin="5,5,5,30" ColumnWidth="*" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" ItemsSource="{Binding Path=Coefficients, Mode=TwoWay}"/>
+        <Button Content="Close" HorizontalAlignment="Right" Margin="0,0,5,5" VerticalAlignment="Bottom" Width="75"/>
 
     </Grid>
 </Window>

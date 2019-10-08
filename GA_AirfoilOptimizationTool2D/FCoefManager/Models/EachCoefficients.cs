@@ -101,7 +101,7 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager.Models
             }
         }
 
-        private Double[] GetArray()
+        public Double[] GetArray()
         {
             return airfoils.Clone() as Double[];
         }

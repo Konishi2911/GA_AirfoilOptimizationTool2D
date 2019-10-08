@@ -12,7 +12,7 @@
     </Window.DataContext>
     
     <Grid>
-        <DataGrid Margin="5,5,5,30" ItemsSource="{Binding Path=Coefficients}"/>
+        <DataGrid Margin="5,5,5,30" ColumnWidth="*" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" ItemsSource="{Binding Path=Coefficients, Mode=TwoWay}"/>
 
     </Grid>
 </Window>

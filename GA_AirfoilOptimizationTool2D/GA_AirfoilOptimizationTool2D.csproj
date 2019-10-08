@@ -75,10 +75,13 @@
       <DependentUpon>CoefficientManager.xaml</DependentUpon>
     </Compile>
     <Compile Include="FCoefManager\CoefficientManagerViewModel.cs" />
-    <Compile Include="FCoefManager\Models\CoordinateOfConbination.cs" />
+    <Compile Include="FCoefManager\Models\CoefficientOfConbination.cs" />
     <Compile Include="FCoefManager\Models\EachCoefficients.cs" />
+    <Compile Include="FMainWindow\Actions\ShowCoefManagerAction.cs" />
     <Compile Include="FMainWindow\Actions\ShowOptConfigDialogAction.cs" />
+    <Compile Include="FMainWindow\Events\CoefManagerTrigger.cs" />
     <Compile Include="FMainWindow\Events\OptConfigDialogTrigger.cs" />
+    <Compile Include="FMainWindow\Messenger\CoefManagerMessenger.cs" />
     <Compile Include="FMainWindow\Messenger\OptConfigDialogMessenger.cs" />
     <Compile Include="FMainWindow\Models\AirfoilSynthesizer.cs" />
     <Compile Include="FMainWindow\Models\BasisAirfoils.cs" />

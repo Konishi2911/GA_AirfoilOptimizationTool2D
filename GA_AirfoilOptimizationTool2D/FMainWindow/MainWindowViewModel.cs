@@ -9,6 +9,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
 
         private Models.BasisAirfoils basisAirfoils;
         private General.DelegateCommand showOprConfigDialog;
+        private General.DelegateCommand showCoefficientManager;
         private Models.AirfoilSynthesizer[] synthesizedAirfoils;
         private Double[,] coefficients;
         private ObservableCollection<System.Windows.Point>[] previewCoordinates;
@@ -22,10 +23,11 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             OptimizingConfiguration.Instance.PropertyChanged += SourceChanged;
             //
 
-            // Assign the delegate Command
             openOptConfigDialog = new Action(OpenOptimizingConfigurationDialog);
             isOptConfigEnabled = new Func<bool>(IsOptConfigDialogEnabled);
+            // Assign the delegate Command
             showOprConfigDialog = new General.DelegateCommand(openOptConfigDialog, isOptConfigEnabled);
+            showCoefficientManager = new General.DelegateCommand(OpenCoefficientManager, IsCoefManagerEnabled);
             //
 
             // Instantiate Fields
@@ -45,6 +47,30 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
 
         public Action openOptConfigDialog;
         public Func<bool> isOptConfigEnabled;
+
+        #region Event CallBacks
+        private void SourceChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (coefficients == null)
+            {
+                return;
+            }
+
+            if (e.PropertyName == nameof(OptimizingConfiguration.BasisAirfoils))
+            {
+                // Update baseAirfoil
+                this.basisAirfoils = Models.BasisAirfoils.Convert(OptimizingConfiguration.Instance.BasisAirfoils);
+
+                // Re-synthesize Airfoil
+                for (int i = 0; i < NumberOfChildren; i++)
+                {
+                    synthesizedAirfoils[i].SynthesizeAirfoil(basisAirfoils.AirfoilGroup.ToArray(), ConvertArrayToJuggedArray(coefficients)[i]);
+                }
+                // Re-generate the coordinates for airfoil previewing.
+                UpdateAirfoilPreviews();
+            }
+        }
+        #endregion
 
         #region Binding Properties
         public ObservableCollection<System.Windows.Point> PreviewCoordinate1
@@ -172,14 +198,10 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         public Double PreviewWindowHeight { get; set; }
         #endregion
 
-        public General.DelegateCommand ShowOptConfigDialog
-        {
-            get { return showOprConfigDialog; }
-        }
-
+        #region DelegateCommand CallBacks
         public void OpenOptimizingConfigurationDialog()
         {
-            // Issue the Messenger displaying OpenFileDialog.
+            // Issue the Messenger displaying OptConfig.
             Messenger.OptConfigDialogMessenger.Show();
         }
         public bool IsOptConfigDialogEnabled()
@@ -187,26 +209,23 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             return true;
         }
 
-        private void SourceChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        public void OpenCoefficientManager()
         {
-            if (coefficients == null)
-            {
-                return;
-            }
-
-            if (e.PropertyName == nameof(OptimizingConfiguration.BasisAirfoils))
-            {
-                // Update baseAirfoil
-                this.basisAirfoils = Models.BasisAirfoils.Convert(OptimizingConfiguration.Instance.BasisAirfoils);
-
-                // Re-synthesize Airfoil
-                for (int i = 0; i < NumberOfChildren; i++)
-                {
-                    synthesizedAirfoils[i].SynthesizeAirfoil(basisAirfoils.AirfoilGroup.ToArray(), ConvertArrayToJuggedArray(coefficients)[i]);
-                }
-                // Re-generate the coordinates for airfoil previewing.
-                UpdateAirfoilPreviews();
-            }
+            // Issue the Messenger displaying Coefficient Manager.
+            Messenger.CoefManagerMessenger.Show();
+        }
+        public bool IsCoefManagerEnabled()
+        {
+            return (OptimizingConfiguration.Instance.BasisAirfoils != null);
+        }
+        #endregion
+        public General.DelegateCommand ShowOptConfigDialog
+        {
+            get { return showOprConfigDialog; }
+        }
+        public General.DelegateCommand ShowCoefficientManager
+        {
+            get { return showCoefficientManager; }
         }
 
         private void UpdateAirfoilPreviews()

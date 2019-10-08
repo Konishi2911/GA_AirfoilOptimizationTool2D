@@ -24,6 +24,9 @@
         <tr:OptConfigDialogTrigger>
             <ac:ShowOptConfigDialogAction/>
         </tr:OptConfigDialogTrigger>
+        <tr:CoefManagerTrigger>
+            <ac:ShowCoefManagerAction/>
+        </tr:CoefManagerTrigger>
     </i:Interaction.Triggers>
     
     <Grid>
@@ -45,7 +48,7 @@
             </MenuItem>
             <MenuItem Header="Option (_O)">
                 <MenuItem Header="Optimizing Configuration" Command="{Binding Path=ShowOptConfigDialog}"/>
-                <MenuItem Header="Optimizing Coefficients"/>
+                <MenuItem Header="Manage Coefficients" Command="{Binding Path=ShowCoefficientManager}"/>
             </MenuItem>
         </Menu>
 

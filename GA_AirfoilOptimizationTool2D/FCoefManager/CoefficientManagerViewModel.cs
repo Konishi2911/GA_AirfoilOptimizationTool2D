@@ -13,6 +13,9 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager
         private int numberOfBasisAirfoils;
         private ObservableCollection<Models.EachCoefficients> _coefficients;
 
+        private Models.CoefficientOfConbination coefficientOfCombination;
+
+
         public ObservableCollection<Models.EachCoefficients> Coefficients
         {
             get { return _coefficients; }
@@ -37,23 +40,58 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager
             // NumberOFBasisAirfoils
             if (e.PropertyName == nameof(this.NumberOfBasisAirfoils))
             {
-                // If BasisAirfoils are diminished.
-                if (NumberOfBasisAirfoils < Coefficients.Count)
+                if (coefficientOfCombination.NumberOfBasisAirfoils != this.NumberOfBasisAirfoils)
                 {
-                    for (int i = 0; i < Coefficients.Count - NumberOfBasisAirfoils; i++)
-                    {
-                        Coefficients.RemoveAt(Coefficients.Count - 1);
-                    }
-                }
-                //If BasisAirfoils are increased.
-                else
-                {
-                    for (int i = 0; i < NumberOfBasisAirfoils - Coefficients.Count; i++)
-                    {
-                        Coefficients.Add(new Models.EachCoefficients());
-                    }
+                    coefficientOfCombination.NumberOfBasisAirfoils = NumberOfBasisAirfoils;
                 }
             }
+        }
+
+        private void CoefOfCombination_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            // NumberOFBasisAirfoils
+            if (e.PropertyName == nameof(coefficientOfCombination.NumberOfBasisAirfoils))
+            {
+                if (coefficientOfCombination.NumberOfBasisAirfoils != this.NumberOfBasisAirfoils)
+                {
+                    NumberOfBasisAirfoils = coefficientOfCombination.NumberOfBasisAirfoils;
+                }
+            }
+        }
+
+        private void CoefficientCollectionSizeUpdated(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (var item in e.NewItems)
+                {
+                    this.Coefficients.Add(item as Models.EachCoefficients);
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (var item in e.OldItems)
+                {
+                    this.Coefficients.Remove(item as Models.EachCoefficients);
+                }
+            }
+
+            //int error = this.Coefficients.Count - (sender as Models.CoefficientOfConbination).Coefficients.Count;
+
+            //if (error < 0)
+            //{
+            //    for (int i = 0; i < -error; i++)
+            //    {
+            //        this.Coefficients.Add(new Models.EachCoefficients());
+            //    }
+            //}
+            //else
+            //{
+            //    for (int i = 0; i < error; i++)
+            //    {
+            //        this.Coefficients.RemoveAt(Coefficients.Count - 1);
+            //    }
+            //}
         }
         #endregion
 
@@ -61,6 +99,13 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager
         {
             // Instantiate
             Coefficients = new ObservableCollection<Models.EachCoefficients>();
+            coefficientOfCombination = new Models.CoefficientOfConbination();
+            //
+
+            // Assign Event Call Backs
+            PropertyChanged += this.This_PropertyChanged;
+            coefficientOfCombination.PropertyChanged += this.CoefOfCombination_PropertyChanged;
+            coefficientOfCombination.CoefficientCollectionSizeUpdated += this.CoefficientCollectionSizeUpdated;
             //
 
             NumberOfBasisAirfoils = OptimizingConfiguration.Instance.BasisAirfoils.NumberOfBasisAirfoils; 

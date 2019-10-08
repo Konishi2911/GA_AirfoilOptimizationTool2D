@@ -105,5 +105,11 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager.Models
                 }
             }
         }
+        private void GetDoubleArray()
+        {
+            var length = _coefficients.Count;
+
+            var temp = new Double[length, 10];
+        }
     }
 }

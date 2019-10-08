@@ -75,23 +75,6 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager
                     this.Coefficients.Remove(item as Models.EachCoefficients);
                 }
             }
-
-            //int error = this.Coefficients.Count - (sender as Models.CoefficientOfConbination).Coefficients.Count;
-
-            //if (error < 0)
-            //{
-            //    for (int i = 0; i < -error; i++)
-            //    {
-            //        this.Coefficients.Add(new Models.EachCoefficients());
-            //    }
-            //}
-            //else
-            //{
-            //    for (int i = 0; i < error; i++)
-            //    {
-            //        this.Coefficients.RemoveAt(Coefficients.Count - 1);
-            //    }
-            //}
         }
         #endregion
 

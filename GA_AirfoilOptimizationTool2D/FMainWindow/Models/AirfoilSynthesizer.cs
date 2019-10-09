@@ -37,7 +37,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow.Models
             {
                 var basis = airfoils[i].ResizedCoordinate;
 
-                newCoordinate[i, 0] += coefficients[i] * basis[i].X;
+                newCoordinate[i, 0] += basis[i].X;
                 newCoordinate[i, 1] += coefficients[i] * basis[i].Z;
             }
             var sAirfoil = new Airfoil.AirfoilCoordinate();

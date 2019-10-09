@@ -221,5 +221,36 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
 
             return Math.Sqrt(X[0] * X[0] + X[1] * X[1]);
         }
+
+        public AirfoilCoordinate GetResizedAirfoil(in int x_splits)
+        {
+            AirfoilCoordinate upperCoordinate = new AirfoilCoordinate();
+            AirfoilCoordinate lowerCoordinate = new AirfoilCoordinate();
+            AirfoilCoordinate resizedCoordinate = new AirfoilCoordinate();
+
+
+            var upperLine = InterpolatedCoordinate.GetUpperLine();
+            var lowerLine = InterpolatedCoordinate.GetLowerLine();
+
+            // Divide an interpolated Airfoil into UpperCoordinate and LoerCoordinate.
+            upperCoordinate.Import(General.Interpolation.LinearInterpolation(upperLine.ToDouleArray(), x_splits));
+            lowerCoordinate.Import(General.Interpolation.LinearInterpolation(lowerLine.ToDouleArray(), x_splits));
+
+            // Combinate the Coordinates Upper and Lower
+            Double[,] resizedCoordinateArray = new double[UpperCoordinate.Length + LowerCoordinate.Length, 2];
+            for (int i = 0; i < UpperCoordinate.Length; i++)
+            {
+                resizedCoordinateArray[i, 0] = UpperCoordinate[i].X;
+                resizedCoordinateArray[i, 1] = UpperCoordinate[i].Z;
+            }
+            for (int i = UpperCoordinate.Length; i < UpperCoordinate.Length + LowerCoordinate.Length - 1; i++)
+            {
+                resizedCoordinateArray[i, 0] = LowerCoordinate[i - UpperCoordinate.Length].X;
+                resizedCoordinateArray[i, 1] = LowerCoordinate[i - UpperCoordinate.Length].Z;
+            }
+            resizedCoordinate.Import(resizedCoordinateArray);
+
+            return resizedCoordinate;
+        }
     }
 }

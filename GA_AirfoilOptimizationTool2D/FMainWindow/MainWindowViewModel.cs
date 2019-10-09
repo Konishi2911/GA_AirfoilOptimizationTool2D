@@ -3,14 +3,14 @@ using System.Collections.ObjectModel;
 
 namespace GA_AirfoilOptimizationTool2D.FMainWindow
 {
-    class MainWindowViewModel : General.ViewModelBase
+    class MainWindowViewModel : General.ViewModelBase 
     {
         private const int NumberOfChildren = 10;
 
         private Models.BasisAirfoils basisAirfoils;
         private General.DelegateCommand showOprConfigDialog;
         private General.DelegateCommand showCoefficientManager;
-        private Models.AirfoilSynthesizer[] synthesizedAirfoils;
+        private Airfoil.Representation.AirfoilCombiner[] combinedAirfoils;
         private Double[,] coefficients;
         private ObservableCollection<System.Windows.Point>[] previewCoordinates;
 
@@ -31,10 +31,10 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             //
 
             // Instantiate Fields
-            synthesizedAirfoils = new Models.AirfoilSynthesizer[NumberOfChildren];
+            combinedAirfoils = new Airfoil.Representation.AirfoilCombiner[NumberOfChildren];
             for (int i = 0; i < NumberOfChildren; i++)
             {
-                synthesizedAirfoils[i] = new Models.AirfoilSynthesizer();
+                combinedAirfoils[i] = new Airfoil.Representation.AirfoilCombiner();
             }
 
             previewCoordinates = new ObservableCollection<System.Windows.Point>[NumberOfChildren];
@@ -64,7 +64,8 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
                 // Re-synthesize Airfoil
                 for (int i = 0; i < NumberOfChildren; i++)
                 {
-                    synthesizedAirfoils[i].SynthesizeAirfoil(basisAirfoils.AirfoilGroup.ToArray(), ConvertArrayToJuggedArray(coefficients)[i]);
+                    combinedAirfoils[i].BasisAirfoils = basisAirfoils.AirfoilGroup.ToArray();
+                    combinedAirfoils[i].Coefficients = ConvertArrayToJuggedArray(coefficients)[i];
                 }
                 // Re-generate the coordinates for airfoil previewing.
                 UpdateAirfoilPreviews();
@@ -230,16 +231,16 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
 
         private void UpdateAirfoilPreviews()
         {
-            PreviewCoordinate1 = General.AirfoilPreview.GetPreviewPointList(synthesizedAirfoils[0].SynthesizedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
-            PreviewCoordinate2 = General.AirfoilPreview.GetPreviewPointList(synthesizedAirfoils[1].SynthesizedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
-            PreviewCoordinate3 = General.AirfoilPreview.GetPreviewPointList(synthesizedAirfoils[2].SynthesizedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
-            PreviewCoordinate4 = General.AirfoilPreview.GetPreviewPointList(synthesizedAirfoils[3].SynthesizedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
-            PreviewCoordinate5 = General.AirfoilPreview.GetPreviewPointList(synthesizedAirfoils[4].SynthesizedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
-            PreviewCoordinate6 = General.AirfoilPreview.GetPreviewPointList(synthesizedAirfoils[5].SynthesizedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
-            PreviewCoordinate7 = General.AirfoilPreview.GetPreviewPointList(synthesizedAirfoils[6].SynthesizedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
-            PreviewCoordinate8 = General.AirfoilPreview.GetPreviewPointList(synthesizedAirfoils[7].SynthesizedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
-            PreviewCoordinate9 = General.AirfoilPreview.GetPreviewPointList(synthesizedAirfoils[8].SynthesizedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
-            PreviewCoordinate10 = General.AirfoilPreview.GetPreviewPointList(synthesizedAirfoils[9].SynthesizedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+            PreviewCoordinate1 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[0].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+            PreviewCoordinate2 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[1].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+            PreviewCoordinate3 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[2].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+            PreviewCoordinate4 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[3].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+            PreviewCoordinate5 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[4].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+            PreviewCoordinate6 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[5].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+            PreviewCoordinate7 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[6].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+            PreviewCoordinate8 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[7].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+            PreviewCoordinate9 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[8].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+            PreviewCoordinate10 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[9].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
         }
 
         private T[][]ConvertArrayToJuggedArray<T>(T[,] array)

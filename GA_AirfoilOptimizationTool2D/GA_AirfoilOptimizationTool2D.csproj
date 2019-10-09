@@ -71,6 +71,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Airfoil\IAirfoilGroupManager.cs" />
+    <Compile Include="Airfoil\Representation\AirfoilCombiner.cs" />
     <Compile Include="FCoefManager\CoefficientManager.xaml.cs">
       <DependentUpon>CoefficientManager.xaml</DependentUpon>
     </Compile>

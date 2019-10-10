@@ -103,7 +103,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         {
             InitializeComponent();
 
-            _importedCoordinate = coordinate;
+            _importedCoordinate = RefineCoordinate(coordinate);
 
             // Interpolate Airfoil with three dimensional Spline.
             airfoilInterpolation();
@@ -244,7 +244,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
                 resizedCoordinateArray[i, 0] = UpperCoordinate[UpperCoordinate.Length - i - 1].X;
                 resizedCoordinateArray[i, 1] = UpperCoordinate[UpperCoordinate.Length - i - 1].Z;
             }
-            for (int i = UpperCoordinate.Length; i < UpperCoordinate.Length + LowerCoordinate.Length - 1; i++)
+            for (int i = UpperCoordinate.Length; i < UpperCoordinate.Length + LowerCoordinate.Length; i++)
             {
                 resizedCoordinateArray[i, 0] = LowerCoordinate[i - UpperCoordinate.Length].X;
                 resizedCoordinateArray[i, 1] = LowerCoordinate[i - UpperCoordinate.Length].Z;
@@ -254,26 +254,47 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             return resizedCoordinate;
         }
 
+        /// <summary>
+        /// This method returns a object of AirfoilCoordinate removed continuously duplicated value.
+        /// </summary>
+        /// <param name="coordinate"></param>
+        /// <returns></returns>
         private AirfoilCoordinate RefineCoordinate(AirfoilCoordinate coordinate)
         {
             var refined = new List<Double[]>();
             AirfoilCoordinate.Coordinate newValue;
-            AirfoilCoordinate.Coordinate oldValue = coordinate[0];
+            AirfoilCoordinate.Coordinate oldValue;
+
+            // Null check
+            if (coordinate == null)
+            {
+                return null;
+            }
+
+            oldValue = null;
             for (int i = 0; i < coordinate.Length; i++)
             {
                 newValue = coordinate[i];
-                if (!(newValue.X == oldValue.X && newValue.Z == oldValue.Z))
+                if (oldValue == null || !(newValue.X == oldValue.X && newValue.Z == oldValue.Z))
                 {
                     var temp = new Double[] { newValue.X, newValue.Z };
                     refined.Add(temp);
+                    // Set previous Coordinate
+                    oldValue = coordinate[i];
                 }
             }
 
             // Convert List to two dimensional Double Type Array
-
+            var refinedCoordinateArray = new Double[refined.Count, 2];
+            for (int i = 0; i < refined.Count; i++)
+            {
+                refinedCoordinateArray[i, 0] = refined[i][0];
+                refinedCoordinateArray[i, 1] = refined[i][1];
+            }
 
             AirfoilCoordinate refinedCoordinate = new AirfoilCoordinate();
-            refinedCoordinate
+            refinedCoordinate.Import(refinedCoordinateArray);
+            return refinedCoordinate;
         }
     }
 }

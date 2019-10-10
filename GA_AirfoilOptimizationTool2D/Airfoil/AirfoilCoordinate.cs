@@ -60,7 +60,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         {
             var index = (int)GetMinimumIndex(CoordinateList, 0);
 
-            Double[,] temp = new Double[index + 1, 2];
+            Double[,] temp = new Double[CoordinateList.Count - index + 1, 2];
             for (int i = index; i < CoordinateList.Count; ++i)
             {
                 temp[i - index, 0] = CoordinateList[i][0];

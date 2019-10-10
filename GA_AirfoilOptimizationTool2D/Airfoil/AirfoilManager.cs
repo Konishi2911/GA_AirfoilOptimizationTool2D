@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace GA_AirfoilOptimizationTool2D.Airfoil
 {
@@ -240,8 +241,8 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             Double[,] resizedCoordinateArray = new double[UpperCoordinate.Length + LowerCoordinate.Length, 2];
             for (int i = 0; i < UpperCoordinate.Length; i++)
             {
-                resizedCoordinateArray[i, 0] = UpperCoordinate[i].X;
-                resizedCoordinateArray[i, 1] = UpperCoordinate[i].Z;
+                resizedCoordinateArray[i, 0] = UpperCoordinate[UpperCoordinate.Length - i - 1].X;
+                resizedCoordinateArray[i, 1] = UpperCoordinate[UpperCoordinate.Length - i - 1].Z;
             }
             for (int i = UpperCoordinate.Length; i < UpperCoordinate.Length + LowerCoordinate.Length - 1; i++)
             {
@@ -251,6 +252,28 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             resizedCoordinate.Import(resizedCoordinateArray);
 
             return resizedCoordinate;
+        }
+
+        private AirfoilCoordinate RefineCoordinate(AirfoilCoordinate coordinate)
+        {
+            var refined = new List<Double[]>();
+            AirfoilCoordinate.Coordinate newValue;
+            AirfoilCoordinate.Coordinate oldValue = coordinate[0];
+            for (int i = 0; i < coordinate.Length; i++)
+            {
+                newValue = coordinate[i];
+                if (!(newValue.X == oldValue.X && newValue.Z == oldValue.Z))
+                {
+                    var temp = new Double[] { newValue.X, newValue.Z };
+                    refined.Add(temp);
+                }
+            }
+
+            // Convert List to two dimensional Double Type Array
+
+
+            AirfoilCoordinate refinedCoordinate = new AirfoilCoordinate();
+            refinedCoordinate
         }
     }
 }

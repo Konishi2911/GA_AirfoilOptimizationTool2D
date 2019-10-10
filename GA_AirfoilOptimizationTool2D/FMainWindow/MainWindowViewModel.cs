@@ -51,21 +51,23 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         #region Event CallBacks
         private void SourceChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (coefficients == null)
-            {
-                return;
-            }
+            // Null Check
+            if (OptimizingConfiguration.Instance.BasisAirfoils == null) return;
+            if (OptimizingConfiguration.Instance.CoefficientOfCombination == null) return;
 
-            if (e.PropertyName == nameof(OptimizingConfiguration.BasisAirfoils))
+            if (e.PropertyName == nameof(OptimizingConfiguration.BasisAirfoils) || e.PropertyName == nameof(OptimizingConfiguration.CoefficientOfCombination))
             {
                 // Update baseAirfoil
                 this.basisAirfoils = Models.BasisAirfoils.Convert(OptimizingConfiguration.Instance.BasisAirfoils);
+
+                // Update coefficients
+                this.coefficients = OptimizingConfiguration.Instance.CoefficientOfCombination.Clone() as Double[,];
 
                 // Re-synthesize Airfoil
                 for (int i = 0; i < NumberOfChildren; i++)
                 {
                     combinedAirfoils[i].BasisAirfoils = basisAirfoils.AirfoilGroup.ToArray();
-                    combinedAirfoils[i].Coefficients = ConvertArrayToJuggedArray(coefficients)[i];
+                    combinedAirfoils[i].Coefficients = GetRowArray(coefficients, i);
                 }
                 // Re-generate the coordinates for airfoil previewing.
                 UpdateAirfoilPreviews();
@@ -259,6 +261,23 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             }
 
             return jArray;
+        }
+        private T[] GetRowArray<T>(T[,] array, int columnNumber)
+        {
+            var length = array.GetLength(0);
+            var width = array.GetLength(1);
+
+            var rArray = new T[width][];
+
+            for (int i = 0; i < width; i++)
+            {
+                rArray[i] = new T[length];
+                for (int j = 0; j < length; j++)
+                {
+                    rArray[i][j] = array[j, i];
+                }
+            }
+            return rArray[columnNumber];
         }
     }
 }

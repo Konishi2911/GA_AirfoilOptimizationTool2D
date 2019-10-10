@@ -68,11 +68,11 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Representation
             // Null Check
             if (_coefficient == null)
             {
-                throw new ArgumentNullException("Coefficient is NULL.");
+                return;
             }
             if (_basisAirfoils == null)
             {
-                throw new ArgumentNullException("Basis Airfoil is NULL.");
+                return;
             }
 
             // Format Check
@@ -82,17 +82,17 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Representation
             }
 
             var numberOfBasisAirfoils = _basisAirfoils.Length;
-            Double[,] combinedAirfoilCoordinate = new Double[numberOfBasisAirfoils, 2];
+            Double[,] combinedAirfoilCoordinate = new Double[NUMBER_OF_DIVISION * 2, 2];
             AirfoilCoordinate combinedAirfoil = new AirfoilCoordinate();
 
-            for (int i = 0; i < NUMBER_OF_DIVISION; i++)
+            for (int i = 0; i < 2 * NUMBER_OF_DIVISION; i++)
             {
                 for (int j = 0; j < numberOfBasisAirfoils; j++)
                 {
                     var basisAirfoil = BasisAirfoils[j].GetResizedAirfoil(NUMBER_OF_DIVISION);
 
                     combinedAirfoilCoordinate[i, 0] = basisAirfoil[i].X;
-                    combinedAirfoilCoordinate[i, 0] += Coefficients[j] * basisAirfoil[i].Z;
+                    combinedAirfoilCoordinate[i, 1] += Coefficients[j] * basisAirfoil[i].Z;
                 }
             }
             combinedAirfoil.Import(combinedAirfoilCoordinate);

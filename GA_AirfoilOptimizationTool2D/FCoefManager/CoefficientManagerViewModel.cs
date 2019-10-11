@@ -13,6 +13,9 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager
         private int numberOfBasisAirfoils;
         private ObservableCollection<Models.EachCoefficients> _coefficients;
 
+        /// <summary>
+        /// Storing and Managing coefficient of combinations.
+        /// </summary>
         private Models.CoefficientOfConbination coefficientOfCombination;
 
 
@@ -37,7 +40,7 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager
         #region EventCallBacks
         private void This_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            // NumberOFBasisAirfoils
+            // NumberOFBasisAirfoils are changed
             if (e.PropertyName == nameof(this.NumberOfBasisAirfoils))
             {
                 if (coefficientOfCombination.NumberOfBasisAirfoils != this.NumberOfBasisAirfoils)
@@ -91,7 +94,8 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager
             coefficientOfCombination.CoefficientCollectionSizeUpdated += this.CoefficientCollectionSizeUpdated;
             //
 
-            NumberOfBasisAirfoils = OptimizingConfiguration.Instance.BasisAirfoils.NumberOfBasisAirfoils; 
+            Coefficients = coefficientOfCombination.Coefficients;
+            NumberOfBasisAirfoils = coefficientOfCombination.NumberOfBasisAirfoils;
         }
     }
 }

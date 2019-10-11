@@ -16,8 +16,29 @@ namespace GA_AirfoilOptimizationTool2D
         /// <summary>
         /// This Class is Singleton
         /// </summary>
-        private OptimizingConfiguration() { }
+        private OptimizingConfiguration()
+        {
+            // Assign Event
+            PropertyChanged += This_PropertyChanged;
+        }
         public static OptimizingConfiguration Instance { get; private set; } = new OptimizingConfiguration();
+
+        #region Event Callbacks
+        private void This_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(this.BasisAirfoils))
+            {
+                if (CoefficientOfCombination == null)
+                {
+                    return;
+                }
+                if (BasisAirfoils.NumberOfAirfoils > CoefficientOfCombination.GetLength(0))
+                {
+                    AddCoefficient();
+                }
+            }
+        }
+        #endregion
 
         public Airfoil.IAirfoilGroupManager BasisAirfoils
         {
@@ -39,6 +60,17 @@ namespace GA_AirfoilOptimizationTool2D
                 System.Diagnostics.Debug.Print("Fired");
             }
 
+        }
+
+        private void AddCoefficient()
+        {
+            var length = CoefficientOfCombination.GetLength(0);
+            var width = CoefficientOfCombination.GetLength(1);
+
+            var newCoefficientCollection = new Double[length + 1, width];
+
+            Array.Copy(CoefficientOfCombination, newCoefficientCollection, length * width);
+            CoefficientOfCombination = newCoefficientCollection;
         }
     }
 }

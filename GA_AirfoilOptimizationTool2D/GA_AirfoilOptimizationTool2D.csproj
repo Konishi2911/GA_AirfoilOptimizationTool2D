@@ -88,6 +88,7 @@
     <Compile Include="FMainWindow\Models\BasisAirfoils.cs" />
     <Compile Include="FOptConfig\Actions\ApplyWindowAction.cs" />
     <Compile Include="FOptConfig\Actions\CloseWindowAction.cs" />
+    <Compile Include="GeneralConstants.cs" />
     <Compile Include="General\AirfoilPreview.cs" />
     <Compile Include="General\Converter\PointCollectionConverter.cs" />
     <Compile Include="General\DelegateCommand.cs" />

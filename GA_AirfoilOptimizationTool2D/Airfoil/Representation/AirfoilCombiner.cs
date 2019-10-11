@@ -10,6 +10,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Representation
     /// <summary>
     /// This class provides some functions such as the function to combine basis airfoils for generating new airfoil.
     /// </summary>
+    /// <exception cref="FormatException"/>
     public class AirfoilCombiner :General.ModelBase
     {
         private const int NUMBER_OF_DIVISION = 100;
@@ -22,6 +23,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Representation
         /// <summary>
         /// The Coefficients of combination
         /// </summary>
+        ///     /// <exception cref="FormatException">If the count of Coefficients and BasisAirfoils are not be matched, this exception thrown.</exception>
         public Double[] Coefficients
         {
             get => _coefficient;
@@ -34,6 +36,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Representation
         /// <summary>
         /// Basis Airfoils
         /// </summary>
+        ///     /// <exception cref="FormatException">If the count of Coefficients and BasisAirfoils are not be matched, this exception thrown.</exception>
         public Airfoil.AirfoilManager[] BasisAirfoils
         {
             get => _basisAirfoils;
@@ -61,6 +64,24 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Representation
         {
             // Assign Event Callbacks
             this.PropertyChanged += This_PropertyChanged;
+        }
+
+        /// <summary>
+        /// This method updates BasisAirfoils and Coefficients Collection.
+        /// </summary>
+        /// <param name="coefficient"></param>
+        /// <param name="basis"></param>
+        /// <exception cref="FormatException"></exception>
+        public void UpdateBaseSource(Double[] coefficient, AirfoilManager[] basis)
+        {
+            try
+            {
+                this.BasisAirfoils = basis;
+            }
+            // It ignore the exception because Coefficient collection is not changed yet.
+            catch (FormatException) { }
+
+            this.Coefficients = coefficient;
         }
 
         private void CombineAirfoil()

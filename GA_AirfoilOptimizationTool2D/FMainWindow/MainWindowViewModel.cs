@@ -66,8 +66,11 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
                 // Re-synthesize Airfoil
                 for (int i = 0; i < NumberOfChildren; i++)
                 {
-                    combinedAirfoils[i].BasisAirfoils = basisAirfoils.AirfoilGroup.ToArray();
-                    combinedAirfoils[i].Coefficients = GetRowArray(coefficients, i);
+                    var basis = basisAirfoils.AirfoilGroup.ToArray();
+                    var coef = GetRowArray(coefficients, i);
+
+                    // Update Source and Re-Combinate Airfoil.
+                    combinedAirfoils[i].UpdateBaseSource(coef, basis);
                 }
                 // Re-generate the coordinates for airfoil previewing.
                 UpdateAirfoilPreviews();

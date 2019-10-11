@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GA_AirfoilOptimizationTool2D.FCoefManager.Models
 {
@@ -49,6 +45,26 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager.Models
 
             this.PropertyChanged += This_PropertyChanged;
             Coefficients.CollectionChanged += Coordinates_CollectionChanged;
+            OptimizingConfiguration.Instance.PropertyChanged += Source_PropertyChanged;
+
+            // If the Coefficient of combination in the source is not empty, push it to the coefficients in this class.
+            if (OptimizingConfiguration.Instance.CoefficientOfCombination != null)
+            {
+                foreach (var item in ConvertDoubleArrayToObservable(OptimizingConfiguration.Instance.CoefficientOfCombination))
+                {
+                    Coefficients.Add(item);
+                }
+            }
+            // If the basisAirfoils in the source is not empty, create new coefficient collection that size is the number of basisAirfoils in the source.
+            else if (OptimizingConfiguration.Instance.BasisAirfoils != null)
+            {
+                setCoefficientLength(OptimizingConfiguration.Instance.BasisAirfoils.NumberOfBasisAirfoils);
+            }
+            // If both the coefficient collection and basisAirfoils are empty, it create new coefficient collection that size is zero. 
+            else
+            {
+
+            }
         }
 
         #region EventCallBacks
@@ -57,7 +73,16 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager.Models
             // Number of Basis Airfoil Changed
             if (e.PropertyName == nameof(this.NumberOfBasisAirfoils))
             {
-                setCoordinateLength(NumberOfBasisAirfoils);
+                //setCoordinateLength(NumberOfBasisAirfoils);
+            }
+        }
+        private void Source_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            // Coefficient Collection Changed
+            if (e.PropertyName == nameof(OptimizingConfiguration.CoefficientOfCombination))
+            {
+                // Copy the coefficient collection from OptimizingConfiguration
+                Coefficients = ConvertDoubleArrayToObservable(OptimizingConfiguration.Instance.CoefficientOfCombination);
             }
         }
         private void Coordinates_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -86,7 +111,7 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager.Models
         }
         #endregion
 
-        private void setCoordinateLength(int length)
+        private void setCoefficientLength(int length)
         {
             // If number of airfoils are diminished.
             if (length < _coefficients.Count)
@@ -106,7 +131,7 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager.Models
             }
         }
         /// <summary>
-        /// This method returns Two-Dimensional Double type array, which is new object.
+        /// This method returns Two-Dimensional Double type array that is coefficients, which is new object.
         /// </summary>
         private Double[,] GetDoubleArray()
         {
@@ -121,6 +146,45 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager.Models
                 }
             }
             return temp;
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="array"></param>
+        /// <returns></returns>
+        /// <exception cref="FormatException"/>
+        private ObservableCollection<EachCoefficients> ConvertDoubleArrayToObservable(Double[,] array)
+        {
+            var length = array.GetLength(0);
+            var width = array.GetLength(1);
+
+            // Format Check
+            if (width != GeneralConstants.NUMBER_OF_AIRFOILS_OF_GENERATION)
+            {
+                throw new FormatException();
+            }
+
+            var oCollection = new ObservableCollection<EachCoefficients>();
+            for (int i = 0; i < length; i++)
+            {
+                oCollection.Add(new EachCoefficients()
+                {
+                    Airfoil1 = array[i, 0],
+                    Airfoil2 = array[i, 1],
+                    Airfoil3 = array[i, 2],
+                    Airfoil4 = array[i, 3],
+                    Airfoil5 = array[i, 4],
+                    Airfoil6 = array[i, 5],
+                    Airfoil7 = array[i, 6],
+                    Airfoil8 = array[i, 7],
+                    Airfoil9 = array[i, 8],
+                    Airfoil10 = array[i, 9],
+                });
+            }
+
+            return oCollection;
         }
     }
 }

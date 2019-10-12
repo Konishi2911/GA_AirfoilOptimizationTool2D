@@ -57,11 +57,14 @@ namespace GA_AirfoilOptimizationTool2D
                 _coefficientOfCombination = value;
                 OnPropertyChanged(nameof(CoefficientOfCombination));
 
-                System.Diagnostics.Debug.Print("Fired");
+                System.Diagnostics.Debug.Print("OptimizingConfiguration.CoefficientOfCombination");
             }
 
         }
 
+        /// <summary>
+        /// Add a new row element of the corfficient at the last of the CoefficientCollection
+        /// </summary>
         private void AddCoefficient()
         {
             var length = CoefficientOfCombination.GetLength(0);
@@ -70,7 +73,9 @@ namespace GA_AirfoilOptimizationTool2D
             var newCoefficientCollection = new Double[length + 1, width];
 
             Array.Copy(CoefficientOfCombination, newCoefficientCollection, length * width);
-            CoefficientOfCombination = newCoefficientCollection;
+
+            // Update coefficientCollection directly (without Event firing).
+            _coefficientOfCombination = newCoefficientCollection;
         }
     }
 }

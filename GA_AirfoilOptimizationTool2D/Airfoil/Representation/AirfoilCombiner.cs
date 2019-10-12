@@ -13,7 +13,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Representation
     /// <exception cref="FormatException"/>
     public class AirfoilCombiner :General.ModelBase
     {
-        private const int NUMBER_OF_DIVISION = 100;
+        private const int NUMBER_OF_DIVISION = GeneralConstants.NUMBER_OF_DIVISION;
 
         private Double[] _coefficient;
         private Airfoil.AirfoilManager[] _basisAirfoils;
@@ -84,6 +84,19 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Representation
             this.Coefficients = coefficient;
         }
 
+        private AirfoilCoordinate[] ResizeAirfoil(int numberOfBasisAirfoils)
+        {
+            AirfoilCoordinate[] basisAirfoil = new AirfoilCoordinate[numberOfBasisAirfoils];
+            List<Task> tasks = new List<Task>();
+            for (int i = 0; i < numberOfBasisAirfoils; i++)
+            {
+                var x = i;
+                tasks.Add(Task.Run(() => basisAirfoil[x] = BasisAirfoils[x].GetResizedAirfoil(NUMBER_OF_DIVISION)));
+            }
+            Task.WaitAll(tasks.ToArray());
+
+            return basisAirfoil;
+        }
         private void CombineAirfoil()
         {
             // Null Check
@@ -106,14 +119,16 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Representation
             Double[,] combinedAirfoilCoordinate = new Double[NUMBER_OF_DIVISION * 2, 2];
             AirfoilCoordinate combinedAirfoil = new AirfoilCoordinate();
 
+            AirfoilCoordinate[] basisAirfoil = new AirfoilCoordinate[numberOfBasisAirfoils];
+
+            basisAirfoil = ResizeAirfoil(numberOfBasisAirfoils);
+
             for (int i = 0; i < 2 * NUMBER_OF_DIVISION; i++)
             {
                 for (int j = 0; j < numberOfBasisAirfoils; j++)
                 {
-                    var basisAirfoil = BasisAirfoils[j].GetResizedAirfoil(NUMBER_OF_DIVISION);
-
-                    combinedAirfoilCoordinate[i, 0] = basisAirfoil[i].X;
-                    combinedAirfoilCoordinate[i, 1] += Coefficients[j] * basisAirfoil[i].Z;
+                    combinedAirfoilCoordinate[i, 0] = basisAirfoil[j][i].X;
+                    combinedAirfoilCoordinate[i, 1] += Coefficients[j] * basisAirfoil[j][i].Z;
                 }
             }
             combinedAirfoil.Import(combinedAirfoilCoordinate);
@@ -127,6 +142,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Representation
             {
                 // Re-combine Airfoils
                 CombineAirfoil();
+                //Task.Run(CombineAirfoil).Wait();
             }
         }
     }

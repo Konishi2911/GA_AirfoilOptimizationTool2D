@@ -11,7 +11,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
     {
         #region Fields
         private const int NumberOfControlPoint = 400;
-        private const int NumberOfDivision = 100;
+        private const int NumberOfDivision = GeneralConstants.NUMBER_OF_DIVISION;
 
         private String airfoilName;
 
@@ -224,7 +224,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             return Math.Sqrt(X[0] * X[0] + X[1] * X[1]);
         }
 
-        public AirfoilCoordinate GetResizedAirfoil(in int x_splits)
+        public AirfoilCoordinate GetResizedAirfoil(int x_splits)
         {
             AirfoilCoordinate upperCoordinate = new AirfoilCoordinate();
             AirfoilCoordinate lowerCoordinate = new AirfoilCoordinate();

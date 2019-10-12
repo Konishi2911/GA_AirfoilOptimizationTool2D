@@ -84,6 +84,11 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Representation
             this.Coefficients = coefficient;
         }
 
+        /// <summary>
+        /// This method provides re-dividing the airfoil coordinate using parallel processing 
+        /// </summary>
+        /// <param name="numberOfBasisAirfoils"></param>
+        /// <returns></returns>
         private AirfoilCoordinate[] ResizeAirfoil(int numberOfBasisAirfoils)
         {
             AirfoilCoordinate[] basisAirfoil = new AirfoilCoordinate[numberOfBasisAirfoils];
@@ -97,6 +102,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Representation
 
             return basisAirfoil;
         }
+
         private void CombineAirfoil()
         {
             // Null Check
@@ -141,8 +147,8 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Representation
             if (e.PropertyName == nameof(this.BasisAirfoils) || e.PropertyName == nameof(this.Coefficients))
             {
                 // Re-combine Airfoils
-                CombineAirfoil();
-                //Task.Run(CombineAirfoil).Wait();
+                //CombineAirfoil();
+                Task.Run(CombineAirfoil).Wait();
             }
         }
     }

@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace GA_AirfoilOptimizationTool2D.FMainWindow
 {
-    class MainWindowViewModel : General.ViewModelBase 
+    class MainWindowViewModel : General.ViewModelBase
     {
         private const int NumberOfChildren = 10;
 
@@ -20,7 +20,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         public MainWindowViewModel()
         {
             // Allocate Event CallBack Functions
-            OptimizingConfiguration.Instance.PropertyChanged += SourceChanged;
+            OptimizingConfiguration.Instance.SourceDataChanged += SourceChanged;
             //
 
             openOptConfigDialog = new Action(OpenOptimizingConfigurationDialog);
@@ -49,32 +49,23 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         public Func<bool> isOptConfigEnabled;
 
         #region Event CallBacks
-        private void SourceChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void SourceChanged(object sender, EventArgs e)
         {
             // Null Check
             if (OptimizingConfiguration.Instance.BasisAirfoils == null) return;
             if (OptimizingConfiguration.Instance.CoefficientOfCombination == null) return;
 
-            if (e.PropertyName == nameof(OptimizingConfiguration.BasisAirfoils) || e.PropertyName == nameof(OptimizingConfiguration.CoefficientOfCombination))
-            {
-                // Update baseAirfoil
-                this.basisAirfoils = Models.BasisAirfoils.Convert(OptimizingConfiguration.Instance.BasisAirfoils);
+            // Update baseAirfoil
+            this.basisAirfoils = Models.BasisAirfoils.Convert(OptimizingConfiguration.Instance.BasisAirfoils);
 
-                // Update coefficients
-                this.coefficients = OptimizingConfiguration.Instance.CoefficientOfCombination.Clone() as Double[,];
+            // Update coefficients
+            this.coefficients = OptimizingConfiguration.Instance.CoefficientOfCombination.Clone() as Double[,];
 
-                // Re-synthesize Airfoil
-                for (int i = 0; i < NumberOfChildren; i++)
-                {
-                    var basis = basisAirfoils.AirfoilGroup.ToArray();
-                    var coef = GetRowArray(coefficients, i);
+            // Re-combinate Airfoil
+            this.combinedAirfoils = OptimizingConfiguration.Instance.CombinedAirfoils.GetCombinedAirfoilsArray();
 
-                    // Update Source and Re-Combinate Airfoil.
-                    combinedAirfoils[i].UpdateBaseSource(coef, basis);
-                }
-                // Re-generate the coordinates for airfoil previewing.
-                UpdateAirfoilPreviews();
-            }
+            // Re-generate the coordinates for airfoil previewing.
+            UpdateAirfoilPreviews();
         }
         #endregion
 
@@ -248,7 +239,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             PreviewCoordinate10 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[9].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
         }
 
-        private T[][]ConvertArrayToJuggedArray<T>(T[,] array)
+        private T[][] ConvertArrayToJuggedArray<T>(T[,] array)
         {
             var length = array.GetLength(0);
             var width = array.GetLength(1);

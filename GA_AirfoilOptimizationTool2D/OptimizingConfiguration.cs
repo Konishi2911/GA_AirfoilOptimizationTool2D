@@ -10,32 +10,49 @@ namespace GA_AirfoilOptimizationTool2D
 {
     public class OptimizingConfiguration : General.ModelBase
     {
+        private const int numberOfSameGenerations = 10;
+
         private Airfoil.IAirfoilGroupManager _basisAirfoils;
+        private Airfoil.CombinedAirfoilsGroupManager _combinedAirfoils;
         private Double[,] _coefficientOfCombination;
+
+        public event EventHandler SourceDataChanged;
 
         /// <summary>
         /// This Class is Singleton
         /// </summary>
         private OptimizingConfiguration()
         {
+            // Instantiate
+            CombinedAirfoils = new Airfoil.CombinedAirfoilsGroupManager(numberOfSameGenerations);
+
             // Assign Event
-            PropertyChanged += This_PropertyChanged;
+            this.PropertyChanged += This_PropertyChanged;
         }
         public static OptimizingConfiguration Instance { get; private set; } = new OptimizingConfiguration();
 
         #region Event Callbacks
         private void This_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(this.BasisAirfoils))
+            if (e.PropertyName == nameof(this.BasisAirfoils) || e.PropertyName == nameof(this.CoefficientOfCombination))
             {
                 if (CoefficientOfCombination == null)
                 {
                     return;
                 }
+
+                // If number of basis airfoils are greater than number of coefficient of combination
                 if (BasisAirfoils.NumberOfAirfoils > CoefficientOfCombination.GetLength(0))
                 {
+                    // Add new row of coefficient at the last of CoefficientOfCombination.
                     AddCoefficient();
                 }
+
+                // Re-Generate the combined airfoils
+                CombinedAirfoils.CombineAirfoils(FMainWindow.Models.BasisAirfoils.Convert(BasisAirfoils), CoefficientOfCombination);
+
+                // Fire the event updated SourceData are ready
+                SourceDataChanged?.Invoke(this, new EventArgs());
             }
         }
         #endregion
@@ -47,6 +64,15 @@ namespace GA_AirfoilOptimizationTool2D
             {
                 _basisAirfoils = value;
                 OnPropertyChanged(nameof(BasisAirfoils));
+            }
+        }
+        public Airfoil.CombinedAirfoilsGroupManager CombinedAirfoils
+        {
+            get => _combinedAirfoils;
+            set
+            {
+                _combinedAirfoils = value;
+                OnPropertyChanged(nameof(CombinedAirfoils));
             }
         }
         public Double[,] CoefficientOfCombination

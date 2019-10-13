@@ -86,6 +86,7 @@
     <Compile Include="FMainWindow\Messenger\OptConfigDialogMessenger.cs" />
     <Compile Include="FMainWindow\Models\AirfoilSynthesizer.cs" />
     <Compile Include="FMainWindow\Models\BasisAirfoils.cs" />
+    <Compile Include="Airfoil\CombinedAirfoilsGroupManager.cs" />
     <Compile Include="FOptConfig\Actions\ApplyWindowAction.cs" />
     <Compile Include="FOptConfig\Actions\CloseWindowAction.cs" />
     <Compile Include="GeneralConstants.cs" />

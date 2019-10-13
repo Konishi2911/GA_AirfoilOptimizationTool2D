@@ -74,14 +74,10 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Representation
         /// <exception cref="FormatException"></exception>
         public void UpdateBaseSource(Double[] coefficient, AirfoilManager[] basis)
         {
-            try
-            {
-                this.BasisAirfoils = basis;
-            }
-            // It ignore the exception because Coefficient collection is not changed yet.
-            catch (FormatException) { }
+            this._basisAirfoils = basis;
+            this._coefficient = coefficient;
 
-            this.Coefficients = coefficient;
+            CombineAirfoil();
         }
 
         /// <summary>
@@ -147,8 +143,8 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Representation
             if (e.PropertyName == nameof(this.BasisAirfoils) || e.PropertyName == nameof(this.Coefficients))
             {
                 // Re-combine Airfoils
-                //CombineAirfoil();
-                Task.Run(CombineAirfoil).Wait();
+                CombineAirfoil();
+                //Task.Run(CombineAirfoil).Wait();
             }
         }
     }

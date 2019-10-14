@@ -5,7 +5,7 @@ using System.ComponentModel;
 
 namespace GA_AirfoilOptimizationTool2D.FCoefManager.Models
 {
-    class CoefficientOfConbination : General.ModelBase
+    class CoefficientOfConbinationManager : General.ModelBase
     {
         private int numberOfBasisAirfoil;
         private ObservableCollection<EachCoefficients> _coefficients;
@@ -29,7 +29,7 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager.Models
             {
                 return _coefficients;
             }
-            set
+            private set
             {
                 _coefficients = value;
                 OnPropertyChanged(nameof(Coefficients));
@@ -38,8 +38,7 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager.Models
         #endregion 
 
         public event NotifyCollectionChangedEventHandler CoefficientCollectionSizeUpdated;
-
-        public CoefficientOfConbination()
+        public CoefficientOfConbinationManager()
         {
             Coefficients = new ObservableCollection<EachCoefficients>();
 
@@ -67,6 +66,31 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager.Models
             }
         }
 
+        public void UpdateCoefficients(ObservableCollection<EachCoefficients> reference)
+        {
+            // Adjust Coefficients Count to be same count as reference.
+            if (Coefficients.Count != reference.Count)
+            {
+                setCoefficientLength(reference.Count);
+            }
+
+            for (int i = 0; i < reference.Count; i++)
+            {
+                // Copy coefficients only from OptimizingConfiguration.
+                if (Coefficients[i].Airfoil1 != reference[i].Airfoil1) Coefficients[i].Airfoil1 = reference[i].Airfoil1;
+                if (Coefficients[i].Airfoil2 != reference[i].Airfoil2) Coefficients[i].Airfoil2 = reference[i].Airfoil2;
+                if (Coefficients[i].Airfoil3 != reference[i].Airfoil3) Coefficients[i].Airfoil3 = reference[i].Airfoil3;
+                if (Coefficients[i].Airfoil4 != reference[i].Airfoil4) Coefficients[i].Airfoil4 = reference[i].Airfoil4;
+                if (Coefficients[i].Airfoil5 != reference[i].Airfoil5) Coefficients[i].Airfoil5 = reference[i].Airfoil5;
+                if (Coefficients[i].Airfoil6 != reference[i].Airfoil6) Coefficients[i].Airfoil6 = reference[i].Airfoil6;
+                if (Coefficients[i].Airfoil7 != reference[i].Airfoil7) Coefficients[i].Airfoil7 = reference[i].Airfoil7;
+                if (Coefficients[i].Airfoil8 != reference[i].Airfoil8) Coefficients[i].Airfoil8 = reference[i].Airfoil8;
+                if (Coefficients[i].Airfoil9 != reference[i].Airfoil9) Coefficients[i].Airfoil9 = reference[i].Airfoil9;
+                if (Coefficients[i].Airfoil10 != reference[i].Airfoil10) Coefficients[i].Airfoil10 = reference[i].Airfoil10;
+            }
+
+        }
+
         #region EventCallBacks
         private void This_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -82,7 +106,7 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager.Models
             if (e.PropertyName == nameof(OptimizingConfiguration.CoefficientOfCombination))
             {
                 // Copy the coefficient collection from OptimizingConfiguration
-                Coefficients = ConvertDoubleArrayToObservable(OptimizingConfiguration.Instance.CoefficientOfCombination);
+                UpdateCoefficients(ConvertDoubleArrayToObservable(OptimizingConfiguration.Instance.CoefficientOfCombination));
             }
         }
         private void Coordinates_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -113,10 +137,11 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager.Models
 
         private void setCoefficientLength(int length)
         {
+            var count = _coefficients.Count;
             // If number of airfoils are diminished.
             if (length < _coefficients.Count)
             {
-                for (int i = 0; i <= _coefficients.Count - length; i++)
+                for (int i = 0; i < count - length; i++)
                 {
                     _coefficients.RemoveAt(_coefficients.Count - 1);
                 }
@@ -124,7 +149,7 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager.Models
             // If number of airfoils are increased.
             else
             {
-                for (int i = 0; i <= length - _coefficients.Count; i++)
+                for (int i = 0; i < length - count; i++)
                 {
                     _coefficients.Add(new EachCoefficients());
                 }

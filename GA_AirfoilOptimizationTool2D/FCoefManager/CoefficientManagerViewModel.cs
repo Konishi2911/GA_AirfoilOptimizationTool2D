@@ -16,9 +16,11 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager
         /// <summary>
         /// Storing and Managing coefficient of combinations.
         /// </summary>
-        private Models.CoefficientOfConbination coefficientOfCombination;
+        private Models.CoefficientOfConbinationManager coefficientOfCombination;
 
-
+        /// <summary>
+        /// Bind to the DataGrid
+        /// </summary>
         public ObservableCollection<Models.EachCoefficients> Coefficients
         {
             get { return _coefficients; }
@@ -79,13 +81,23 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager
                 }
             }
         }
+
+        /// <summary>
+        /// If DataGrid are changed by user input, this event are fired.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void This_DataGridValueChanged(object sender, PropertyChangedEventArgs e)
+        {
+            coefficientOfCombination.UpdateCoefficients(this.Coefficients);
+        }
         #endregion
 
         public CoefficientManagerViewModel()
         {
             // Instantiate
             Coefficients = new ObservableCollection<Models.EachCoefficients>();
-            coefficientOfCombination = new Models.CoefficientOfConbination();
+            coefficientOfCombination = new Models.CoefficientOfConbinationManager();
             //
 
             // Assign Event Call Backs
@@ -94,8 +106,39 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager
             coefficientOfCombination.CoefficientCollectionSizeUpdated += this.CoefficientCollectionSizeUpdated;
             //
 
-            Coefficients = coefficientOfCombination.Coefficients;
+            InitializeCoefficients(coefficientOfCombination.Coefficients);
             NumberOfBasisAirfoils = coefficientOfCombination.NumberOfBasisAirfoils;
+        }
+
+        /// <summary>
+        /// Initialize the collection Coefficients
+        /// </summary>
+        /// <param name="reference"></param>
+        private void InitializeCoefficients(in ObservableCollection<Models.EachCoefficients> reference)
+        {
+            var count = reference.Count;
+
+            foreach (var item in reference)
+            {
+                // Copy coefficients only from OptimizingConfiguration.
+                Models.EachCoefficients element = new Models.EachCoefficients()
+                {
+                    Airfoil1 = item.Airfoil1,
+                    Airfoil2 = item.Airfoil2,
+                    Airfoil3 = item.Airfoil3,
+                    Airfoil4 = item.Airfoil4,
+                    Airfoil5 = item.Airfoil5,
+                    Airfoil6 = item.Airfoil6,
+                    Airfoil7 = item.Airfoil7,
+                    Airfoil8 = item.Airfoil8,
+                    Airfoil9 = item.Airfoil9,
+                    Airfoil10 = item.Airfoil10,
+                };
+                // Assign Event callback
+                element.PropertyChanged += This_DataGridValueChanged;
+
+                Coefficients.Add(element);
+            }
         }
     }
 }

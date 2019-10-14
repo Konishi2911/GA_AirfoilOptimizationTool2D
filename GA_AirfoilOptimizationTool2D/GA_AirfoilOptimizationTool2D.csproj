@@ -76,7 +76,7 @@
       <DependentUpon>CoefficientManager.xaml</DependentUpon>
     </Compile>
     <Compile Include="FCoefManager\CoefficientManagerViewModel.cs" />
-    <Compile Include="FCoefManager\Models\CoefficientOfConbination.cs" />
+    <Compile Include="FCoefManager\Models\CoefficientOfConbinationManager.cs" />
     <Compile Include="FCoefManager\Models\EachCoefficients.cs" />
     <Compile Include="FMainWindow\Actions\ShowCoefManagerAction.cs" />
     <Compile Include="FMainWindow\Actions\ShowOptConfigDialogAction.cs" />
@@ -164,6 +164,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include=".editorconfig" />
     <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

@@ -71,6 +71,14 @@
                         local:SizeObserver.Observe="True"
                         local:SizeObserver.ObservedHeight="{Binding Path=PreviewWindowHeight, Mode=OneWayToSource}"
                         local:SizeObserver.ObservedWidth="{Binding Path=PreviewWindowWidth, Mode=OneWayToSource}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SizeChanged">
+                            <i:InvokeCommandAction Command="{Binding Path=UpdatePreviewWindows}"/>
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="MouseDown">
+                            <i:InvokeCommandAction Command="{Binding Path=SetSpecifications}" CommandParameter="0"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                     <Canvas.Background>
                         <SolidColorBrush Color="Black" Opacity="0"/>
                     </Canvas.Background>
@@ -82,6 +90,11 @@
                         local:SizeObserver.Observe="True"
                         local:SizeObserver.ObservedHeight="{Binding Path=PreviewWindowHeight, Mode=OneWayToSource}"
                         local:SizeObserver.ObservedWidth="{Binding Path=PreviewWindowWidth, Mode=OneWayToSource}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDown">
+                            <i:InvokeCommandAction Command="{Binding Path=SetSpecifications}" CommandParameter="1"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                     <Canvas.Background>
                         <SolidColorBrush Color="Black" Opacity="0"/>
                     </Canvas.Background>
@@ -93,6 +106,11 @@
                         local:SizeObserver.Observe="True"
                         local:SizeObserver.ObservedHeight="{Binding Path=PreviewWindowHeight, Mode=OneWayToSource}"
                         local:SizeObserver.ObservedWidth="{Binding Path=PreviewWindowWidth, Mode=OneWayToSource}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDown">
+                            <i:InvokeCommandAction Command="{Binding Path=SetSpecifications}" CommandParameter="2"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                     <Canvas.Background>
                         <SolidColorBrush Color="Black" Opacity="0"/>
                     </Canvas.Background>
@@ -104,6 +122,11 @@
                         local:SizeObserver.Observe="True"
                         local:SizeObserver.ObservedHeight="{Binding Path=PreviewWindowHeight, Mode=OneWayToSource}"
                         local:SizeObserver.ObservedWidth="{Binding Path=PreviewWindowWidth, Mode=OneWayToSource}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDown">
+                            <i:InvokeCommandAction Command="{Binding Path=SetSpecifications}" CommandParameter="3"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                     <Canvas.Background>
                         <SolidColorBrush Color="Black" Opacity="0"/>
                     </Canvas.Background>
@@ -115,6 +138,11 @@
                         local:SizeObserver.Observe="True"
                         local:SizeObserver.ObservedHeight="{Binding Path=PreviewWindowHeight, Mode=OneWayToSource}"
                         local:SizeObserver.ObservedWidth="{Binding Path=PreviewWindowWidth, Mode=OneWayToSource}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDown">
+                            <i:InvokeCommandAction Command="{Binding Path=SetSpecifications}" CommandParameter="4"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                     <Canvas.Background>
                         <SolidColorBrush Color="Black" Opacity="0"/>
                     </Canvas.Background>
@@ -126,6 +154,11 @@
                         local:SizeObserver.Observe="True"
                         local:SizeObserver.ObservedHeight="{Binding Path=PreviewWindowHeight, Mode=OneWayToSource}"
                         local:SizeObserver.ObservedWidth="{Binding Path=PreviewWindowWidth, Mode=OneWayToSource}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDown">
+                            <i:InvokeCommandAction Command="{Binding Path=SetSpecifications}" CommandParameter="5"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                     <Canvas.Background>
                         <SolidColorBrush Color="Black" Opacity="0"/>
                     </Canvas.Background>
@@ -137,6 +170,11 @@
                         local:SizeObserver.Observe="True"
                         local:SizeObserver.ObservedHeight="{Binding Path=PreviewWindowHeight, Mode=OneWayToSource}"
                         local:SizeObserver.ObservedWidth="{Binding Path=PreviewWindowWidth, Mode=OneWayToSource}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDown">
+                            <i:InvokeCommandAction Command="{Binding Path=SetSpecifications}" CommandParameter="6"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                     <Canvas.Background>
                         <SolidColorBrush Color="Black" Opacity="0"/>
                     </Canvas.Background>
@@ -148,6 +186,11 @@
                         local:SizeObserver.Observe="True"
                         local:SizeObserver.ObservedHeight="{Binding Path=PreviewWindowHeight, Mode=OneWayToSource}"
                         local:SizeObserver.ObservedWidth="{Binding Path=PreviewWindowWidth, Mode=OneWayToSource}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDown">
+                            <i:InvokeCommandAction Command="{Binding Path=SetSpecifications}" CommandParameter="7"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                     <Canvas.Background>
                         <SolidColorBrush Color="Black" Opacity="0"/>
                     </Canvas.Background>
@@ -159,6 +202,11 @@
                         local:SizeObserver.Observe="True"
                         local:SizeObserver.ObservedHeight="{Binding Path=PreviewWindowHeight, Mode=OneWayToSource}"
                         local:SizeObserver.ObservedWidth="{Binding Path=PreviewWindowWidth, Mode=OneWayToSource}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDown">
+                            <i:InvokeCommandAction Command="{Binding Path=SetSpecifications}" CommandParameter="8"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                     <Canvas.Background>
                         <SolidColorBrush Color="Black" Opacity="0"/>
                     </Canvas.Background>
@@ -170,6 +218,11 @@
                         local:SizeObserver.Observe="True"
                         local:SizeObserver.ObservedHeight="{Binding Path=PreviewWindowHeight, Mode=OneWayToSource}"
                         local:SizeObserver.ObservedWidth="{Binding Path=PreviewWindowWidth, Mode=OneWayToSource}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDown">
+                            <i:InvokeCommandAction Command="{Binding Path=SetSpecifications}" CommandParameter="9"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                     <Canvas.Background>
                         <SolidColorBrush Color="Black" Opacity="0"/>
                     </Canvas.Background>
@@ -177,7 +230,8 @@
                 </Canvas>
             </Border>
             <TextBox x:Name="GA_LogBox" TextWrapping="Wrap" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Margin="5" VerticalScrollBarVisibility="Auto"/>
-            <DataGrid x:Name="specDataGrid" Margin="5" Grid.Column="4" Grid.Row="3" CanUserResizeColumns="False" CanUserSortColumns="False" CanUserReorderColumns="False" HeadersVisibility="None" ColumnWidth="*"/>
+            <DataGrid x:Name="specDataGrid" Margin="5" Grid.Column="4" Grid.Row="3" CanUserResizeColumns="False" CanUserSortColumns="False" CanUserReorderColumns="False" HeadersVisibility="None" ColumnWidth="*"
+                      ItemsSource="{Binding Path=AirfoilSpecifications}"/>
         </Grid>
         <StatusBar Margin="0" Height="25" VerticalAlignment="Bottom"/>
     </Grid>

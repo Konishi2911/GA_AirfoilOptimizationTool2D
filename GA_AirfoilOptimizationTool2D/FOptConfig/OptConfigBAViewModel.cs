@@ -24,11 +24,7 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
         private Action airfoilSelectionMethod;
         private Func<bool> isSelectable;
         // ========================================
-        
 
-        #region Binding Data
-        // Binding Data of Airfoil Selection ComboBox =================================================================================
-        public System.Collections.ObjectModel.ObservableCollection<AirfoilSelectorViewModel> LoadedAirfoils { get; private set; }
         public AirfoilSelectorViewModel SelectedAirfoil
         {
             get
@@ -47,6 +43,10 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
                 CoordinateList = General.AirfoilPreview.GetPreviewPointList(SelectedAirfoil.SelectedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
             }
         }
+
+        #region Binding Data
+        // Binding Data of Airfoil Selection ComboBox =================================================================================
+        public System.Collections.ObjectModel.ObservableCollection<AirfoilSelectorViewModel> LoadedAirfoils { get; private set; }
 
         // Binding Data of Airfoil Specification DataGrid ============================================================================================
         public System.Data.DataTable AirfoilSpecifications

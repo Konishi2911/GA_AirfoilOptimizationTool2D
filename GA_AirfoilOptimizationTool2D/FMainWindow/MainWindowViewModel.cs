@@ -10,9 +10,12 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         private Models.BasisAirfoils basisAirfoils;
         private General.DelegateCommand showOprConfigDialog;
         private General.DelegateCommand showCoefficientManager;
+        private General.DelegateCommand updatePreviewWindow;
+        private General.ParamDelegateCommand<String> setSpecifications;
         private Airfoil.Representation.AirfoilCombiner[] combinedAirfoils;
         private Double[,] coefficients;
         private ObservableCollection<System.Windows.Point>[] previewCoordinates;
+        private System.Data.DataTable airfoilSpecifications;
 
         /// <summary>
         /// Constructor
@@ -25,9 +28,13 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
 
             openOptConfigDialog = new Action(OpenOptimizingConfigurationDialog);
             isOptConfigEnabled = new Func<bool>(IsOptConfigDialogEnabled);
+
             // Assign the delegate Command
             showOprConfigDialog = new General.DelegateCommand(openOptConfigDialog, isOptConfigEnabled);
             showCoefficientManager = new General.DelegateCommand(OpenCoefficientManager, IsCoefManagerEnabled);
+            updatePreviewWindow = new General.DelegateCommand(UpdateAirfoilPreviews, () => true);
+            setSpecifications = new General.ParamDelegateCommand<String>(DisplaySpecifications, () => true);
+            
             //
 
             // Instantiate Fields
@@ -193,9 +200,24 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
 
         public Double PreviewWindowWidth { get; set; }
         public Double PreviewWindowHeight { get; set; }
+
+        // Binding Data of Airfoil Specification DataGrid ============================================================================================
+        public System.Data.DataTable AirfoilSpecifications
+        {
+            get
+            {
+                return airfoilSpecifications;
+            }
+            private set
+            {
+                airfoilSpecifications = value;
+                OnPropertyChanged(nameof(AirfoilSpecifications));
+            }
+        }
         #endregion
 
         #region DelegateCommand CallBacks
+        // Open Optimizing Configuration Window
         public void OpenOptimizingConfigurationDialog()
         {
             // Issue the Messenger displaying OptConfig.
@@ -205,7 +227,9 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         {
             return true;
         }
+        //
 
+        // Show Coefficient Manager
         public void OpenCoefficientManager()
         {
             // Issue the Messenger displaying Coefficient Manager.
@@ -215,7 +239,35 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         {
             return (OptimizingConfiguration.Instance.BasisAirfoils != null);
         }
+        //
+
+        // Re-Draw the preview windows
+        public void ReDrawPreviewWindow()
+        {
+            UpdateAirfoilPreviews();
+        }
+        //
+
+        // Display the Airfoil Specifications
+        public  void DisplaySpecifications(String windowNumber)
+        {
+            if (combinedAirfoils != null)
+            {
+                // Null check
+                foreach (var item in combinedAirfoils)
+                {
+                    if (item.CombinedAirfoil == null)
+                    {
+                        return;
+                    }
+                }
+                
+                // Create Specifications Table
+                AirfoilSpecifications = CreateTable(combinedAirfoils[Convert.ToInt32(windowNumber)].CombinedAirfoil);
+            }
+        }
         #endregion
+
         public General.DelegateCommand ShowOptConfigDialog
         {
             get { return showOprConfigDialog; }
@@ -223,6 +275,14 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         public General.DelegateCommand ShowCoefficientManager
         {
             get { return showCoefficientManager; }
+        }
+        public General.DelegateCommand UpdatePreviewWindows
+        {
+            get => updatePreviewWindow;
+        }
+        public General.ParamDelegateCommand<String> SetSpecifications
+        {
+            get => setSpecifications;
         }
 
         private void UpdateAirfoilPreviews()
@@ -272,6 +332,22 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
                 }
             }
             return rArray[columnNumber];
+        }
+
+        private System.Data.DataTable CreateTable(Airfoil.AirfoilManager airfoil)
+        {
+            var specifications = new System.Data.DataTable();
+
+            specifications.Columns.Add();
+            specifications.Columns.Add();
+
+            specifications.Rows.Add("Airfoil Name", airfoil.AirfoilName);
+            specifications.Rows.Add("Chord Length", airfoil.ChordLength);
+            specifications.Rows.Add("Max Thickness", airfoil.MaximumThickness);
+            specifications.Rows.Add("Max Camber", airfoil.MaximumCamber);
+            specifications.Rows.Add("L.E. Radius", airfoil.LeadingEdgeRadius);
+
+            return specifications;
         }
     }
 }

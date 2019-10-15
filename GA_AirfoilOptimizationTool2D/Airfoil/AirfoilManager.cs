@@ -33,7 +33,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             {
                 return airfoilName;
             }
-            private set
+            set
             {
                 airfoilName = value;
             }

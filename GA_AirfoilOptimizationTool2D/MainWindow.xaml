@@ -35,8 +35,8 @@
         </Grid.ColumnDefinitions>
         <Menu VerticalAlignment="Top" Height="20">
             <MenuItem Header=" File (_F)">
-                <MenuItem Header=" Load File"/>
-                <MenuItem Header="Load Airfoil"/>
+                <MenuItem Header="Open"/>
+                <MenuItem Header="Save"/>
                 <MenuItem Header="Export CSV"/>
                 <MenuItem Header="Prefarence"/>
             </MenuItem>

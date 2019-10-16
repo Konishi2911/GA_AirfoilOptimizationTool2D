@@ -11,12 +11,15 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
     {
         #region Fields
         private int numberOfBaseAirfoils;
+        private int numberOfGenerations;
         private List<Airfoil.AirfoilManager> baseAirfoils;
+        private List<Airfoil.AirfoilManager> combinedAirfoils;
         #endregion
 
         public WorkingFileIO()
         {
             baseAirfoils = new List<Airfoil.AirfoilManager>();
+            combinedAirfoils = new List<Airfoil.AirfoilManager>();
         }
 
         /// <summary>
@@ -56,9 +59,8 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
             String PreviousSubIndexName = null;
 
             String currentAirfoilName = null;
-            Airfoil.AirfoilManager currentAirfoils = new Airfoil.AirfoilManager();
-            Airfoil.AirfoilCoordinate currentCoordinate = new Airfoil.AirfoilCoordinate();
             List<Double[]> coordinateArray = new List<double[]>();
+            List<Double[]> coefficientArray = new List<double[]>();
 
             // Scroll Working File
             for (int i = 0; i < numberOfLines; i++)
@@ -95,23 +97,19 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
                 {
                     numberOfBaseAirfoils = int.Parse(FileStringLines[i]);
                 }
+                else if (IndexName == "NUMBER_OF_GENERATIONS")
+                {
+                    numberOfGenerations = int.Parse(FileStringLines[i]);
+                }
                 else if (IndexName == "BASE_AIRFOILS")
                 {
+                    // Finalize Procedure
                     if (SubIndexName == "END")
                     {
                         if (PreviousSubIndexName == "COORDINATE")
                         {
-                            // Convert Coordinate List to Coordinate Array
-                            double[,] tempArray = ConvertListToDoubleArray(coordinateArray);
-                            // Import currentCoordinate Array
-                            currentCoordinate.Import(tempArray);
-
-                            // Create current airfoil manager
-                            currentAirfoils = new Airfoil.AirfoilManager(currentCoordinate);
-                            currentAirfoils.AirfoilName = currentAirfoilName;
-
-                            // Add currentAirfoil to basisAirfoils
-                            baseAirfoils.Add(currentAirfoils);
+                            // Add current Airfoils to baseAirfoil List
+                            AddAirfoilToList(currentAirfoilName, coordinateArray, ref baseAirfoils);
                         }
 
                     }
@@ -126,7 +124,68 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
                         coordinateArray.Add(new double[2] { double.Parse(coordinateStr[0]), double.Parse(coordinateStr[1]) });
                     }
                 }
+                else if (IndexName == "COMBINED_AIRFOIL")
+                {
+                    // Finalize Procedure
+                    if (SubIndexName == "END")
+                    {
+                        if (PreviousSubIndexName == "COORDINATE")
+                        {
+                            // Add currentAirfoil to coordinateAirfoils List
+                            AddAirfoilToList(currentAirfoilName, coordinateArray, ref combinedAirfoils);
+                        }
+
+                    }
+                    else if (SubIndexName == "NAME")
+                    {
+                        // Set Airfoils Name
+                        currentAirfoilName = FileStringLines[i];
+                    }
+                    else if (SubIndexName == "COORDINATE")
+                    {
+                        var coordinateStr = FileStringLines[i].Split(',');
+                        coordinateArray.Add(new double[2] { double.Parse(coordinateStr[0]), double.Parse(coordinateStr[1]) });
+                    }
+                }
+                else if (IndexName == "COEFFICIENT_OF_COMBINATION")
+                {
+                    var coefficientStr = FileStringLines[i].Split(',');
+                    var numberOfSameGeneration = coefficientStr.Length;
+                    var coefficientRow = new double[numberOfSameGeneration];
+
+                    for (int j = 0; j < numberOfSameGeneration; j++)
+                    {
+                        coefficientRow[j] = Double.Parse(coefficientStr[j]);
+                    }
+
+                    coefficientArray.Add(coefficientRow);
+                }
             }
+        }
+
+        /// <summary>
+        /// Add the airfoil passed as a parameter to the List passed as a reference parameter.
+        /// </summary>
+        /// <param name="currentAirfoilName">The name of an Airfoil to add</param>
+        /// <param name="coordinateArray"> The coordinate Array of an Airfoil to add</param>
+        /// <param name="airfoilList">The reference of the airfoilList where coordinateArray is added</param>
+        private void AddAirfoilToList(in string currentAirfoilName, in List<double[]> coordinateArray, ref List<Airfoil.AirfoilManager> airfoilList)
+        {
+            Airfoil.AirfoilCoordinate currentCoordinate = new Airfoil.AirfoilCoordinate();
+
+            // Convert Coordinate List to Coordinate Array
+            double[,] tempArray = ConvertListToDoubleArray(coordinateArray);
+            // Import currentCoordinate Array
+            currentCoordinate.Import(tempArray);
+
+            // Create current airfoil manager
+            Airfoil.AirfoilManager currentAirfoils = new Airfoil.AirfoilManager(currentCoordinate)
+            {
+                AirfoilName = currentAirfoilName
+            };
+
+            // Add currentAirfoil to basisAirfoils
+            airfoilList.Add(currentAirfoils);
         }
 
         private static double[,] ConvertListToDoubleArray(in List<double[]> coordinateArray)

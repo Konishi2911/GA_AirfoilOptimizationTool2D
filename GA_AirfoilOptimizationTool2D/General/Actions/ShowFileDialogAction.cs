@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interactivity;
 
-namespace GA_AirfoilOptimizationTool2D.FOptConfig.Actions
+namespace GA_AirfoilOptimizationTool2D.General.Actions
 {
     class ShowFileDialogAction : TriggerAction<DependencyObject>
     {
@@ -16,7 +16,7 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig.Actions
             Microsoft.Win32.OpenFileDialog _ofd = new Microsoft.Win32.OpenFileDialog();
 
             // Verify the event parameters
-            var openFileDialogArgs = parameter as Messenger.OpenFileMessenger.OpenFileEventArgs;
+            var openFileDialogArgs = parameter as General.Messenger.OpenFileMessenger.OpenFileEventArgs;
             if (openFileDialogArgs == null)
             {
                 return;

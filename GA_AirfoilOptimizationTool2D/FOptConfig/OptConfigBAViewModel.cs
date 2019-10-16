@@ -185,12 +185,11 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
         // DelegateCommand Action ==========================================================================
         private void AirfoilSelectionMethod()
         {
-            Microsoft.Win32.OpenFileDialog _ofd = new Microsoft.Win32.OpenFileDialog();
             Models.AirfoilCsvAnalyzer airfoilCsvAnalyzer = Models.AirfoilCsvAnalyzer.GetInstance();
             String _airfoil_path;
 
             // Issue the Messenger displaying OpenFileDialog
-            _airfoil_path = FOptConfig.Messenger.OpenFileMessenger.Show();
+            _airfoil_path = General.Messenger.OpenFileMessenger.Show("CSV File (*.csv)|*.csv");
 
             if (_airfoil_path == null)
             {

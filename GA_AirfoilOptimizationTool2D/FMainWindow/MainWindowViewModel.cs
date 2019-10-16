@@ -8,6 +8,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         private const int NumberOfChildren = 10;
 
         private Models.BasisAirfoils basisAirfoils;
+        private General.DelegateCommand openWorkingFile;
         private General.DelegateCommand showOprConfigDialog;
         private General.DelegateCommand showCoefficientManager;
         private General.DelegateCommand updatePreviewWindow;
@@ -30,6 +31,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             isOptConfigEnabled = new Func<bool>(IsOptConfigDialogEnabled);
 
             // Assign the delegate Command
+            openWorkingFile = new General.DelegateCommand(OpenWorkingFile, () => true);
             showOprConfigDialog = new General.DelegateCommand(openOptConfigDialog, isOptConfigEnabled);
             showCoefficientManager = new General.DelegateCommand(OpenCoefficientManager, IsCoefManagerEnabled);
             updatePreviewWindow = new General.DelegateCommand(UpdateAirfoilPreviews, () => true);
@@ -217,6 +219,15 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         #endregion
 
         #region DelegateCommand CallBacks
+        // Open Working File
+        public void OpenWorkingFile()
+        {
+            FWorkingFileIO.WorkingFileIO workingFileIO = new FWorkingFileIO.WorkingFileIO();
+            String wFilePath = General.Messenger.OpenFileMessenger.Show("WorkingFile (*.wrk)|*.wrk");
+
+            workingFileIO.OpenFile(wFilePath);
+        }
+
         // Open Optimizing Configuration Window
         public void OpenOptimizingConfigurationDialog()
         {
@@ -268,6 +279,11 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         }
         #endregion
 
+        #region CommandProperties
+        public General.DelegateCommand OpenWorkingFileCommand
+        {
+            get => openWorkingFile;
+        }
         public General.DelegateCommand ShowOptConfigDialog
         {
             get { return showOprConfigDialog; }
@@ -284,6 +300,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         {
             get => setSpecifications;
         }
+        #endregion
 
         private void UpdateAirfoilPreviews()
         {

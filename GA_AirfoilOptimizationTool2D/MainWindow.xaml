@@ -10,6 +10,8 @@
         xmlns:main="clr-namespace:GA_AirfoilOptimizationTool2D.FMainWindow"
         xmlns:tr="clr-namespace:GA_AirfoilOptimizationTool2D.FMainWindow.Events"
         xmlns:ac="clr-namespace:GA_AirfoilOptimizationTool2D.FMainWindow.Actions"
+        xmlns:gtr="clr-namespace:GA_AirfoilOptimizationTool2D.General.Event"
+        xmlns:gac="clr-namespace:GA_AirfoilOptimizationTool2D.General.Actions"
         mc:Ignorable="d"
         Title="Airfoil Optimization Tools 2D" Height="900" Width="1600">
     <Window.DataContext>
@@ -21,9 +23,14 @@
     </Window.Resources>
 
     <i:Interaction.Triggers>
+        <gtr:OpenFileDialogTrigger>
+            <gac:ShowFileDialogAction/>
+        </gtr:OpenFileDialogTrigger>
+        
         <tr:OptConfigDialogTrigger>
             <ac:ShowOptConfigDialogAction/>
         </tr:OptConfigDialogTrigger>
+        
         <tr:CoefManagerTrigger>
             <ac:ShowCoefManagerAction/>
         </tr:CoefManagerTrigger>
@@ -35,7 +42,7 @@
         </Grid.ColumnDefinitions>
         <Menu VerticalAlignment="Top" Height="20">
             <MenuItem Header=" File (_F)">
-                <MenuItem Header="Open"/>
+                <MenuItem Header="Open" Command="{Binding Path=OpenWorkingFileCommand}"/>
                 <MenuItem Header="Save"/>
                 <MenuItem Header="Export CSV"/>
                 <MenuItem Header="Prefarence"/>

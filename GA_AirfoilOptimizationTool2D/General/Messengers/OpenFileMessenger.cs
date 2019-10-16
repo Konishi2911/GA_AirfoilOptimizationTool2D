@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GA_AirfoilOptimizationTool2D.FOptConfig.Messenger
+namespace GA_AirfoilOptimizationTool2D.General.Messenger
 {
     /// <summary>
     /// This Class is singleton.
@@ -42,20 +42,20 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig.Messenger
             public Action<String> OpenFileDialogNotifyResult { get; set; }
         }
 
-        public static String Show()
+        public static String Show(String fileTypeFilter)
         {
             String filePath = null;
 
             Instance.ShowOpenFileDialog?.Invoke(Instance, new OpenFileMessenger.OpenFileEventArgs()
             {
-                Filter = "CSV File (*.csv)|*.csv",
+                Filter = fileTypeFilter,
 
                 //Receive the result by Callback
                 OpenFileDialogNotifyResult = result =>
                 {
                     filePath = result;
                 }
-            });
+            }) ;
 
             return filePath;
         }

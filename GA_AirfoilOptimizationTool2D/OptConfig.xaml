@@ -7,8 +7,9 @@
         xmlns:opt="clr-namespace:GA_AirfoilOptimizationTool2D.FOptConfig"
         xmlns:conv="clr-namespace:GA_AirfoilOptimizationTool2D.General.Converter"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:tr="clr-namespace:GA_AirfoilOptimizationTool2D.FOptConfig.Event"
         xmlns:ac="clr-namespace:GA_AirfoilOptimizationTool2D.FOptConfig.Actions"
+        xmlns:gtr="clr-namespace:GA_AirfoilOptimizationTool2D.General.Event"
+        xmlns:gac="clr-namespace:GA_AirfoilOptimizationTool2D.General.Actions"
         mc:Ignorable="d"
         Title="OptConfig" Height="450" Width="800">
     <Window.DataContext>
@@ -20,9 +21,9 @@
     </Window.Resources>
 
     <i:Interaction.Triggers>
-        <tr:OpenFileDialogTrigger>
-            <ac:ShowFileDialogAction/>
-        </tr:OpenFileDialogTrigger>
+        <gtr:OpenFileDialogTrigger>
+            <gac:ShowFileDialogAction/>
+        </gtr:OpenFileDialogTrigger>
     </i:Interaction.Triggers>
 
     <Grid>

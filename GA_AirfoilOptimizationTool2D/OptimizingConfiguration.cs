@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GA_AirfoilOptimizationTool2D
 {
@@ -88,6 +83,44 @@ namespace GA_AirfoilOptimizationTool2D
 
         }
 
+        public void SetSource(Airfoil.IAirfoilGroupManager baseAirfoils, Double[,] coefficients)
+        {
+            this._basisAirfoils = baseAirfoils;
+            this._coefficientOfCombination = coefficients;
+
+            if (baseAirfoils != null && coefficients != null)
+            {
+                // If number of basis airfoils are greater than number of coefficient of combination
+                if (BasisAirfoils.NumberOfAirfoils > CoefficientOfCombination.GetLength(0))
+                {
+                    // Add new row of coefficient at the last of CoefficientOfCombination.
+                    AddCoefficient(BasisAirfoils.NumberOfAirfoils - CoefficientOfCombination.GetLength(0));
+                }
+
+                // Re-Generate the combined airfoils
+                CombinedAirfoils.CombineAirfoils(FMainWindow.Models.BasisAirfoils.Convert(BasisAirfoils), CoefficientOfCombination);
+
+                // Fire the event updated SourceData are ready
+                SourceDataChanged?.Invoke(this, new EventArgs());
+            }
+            else if (baseAirfoils == null && coefficients != null)
+            {
+
+            }
+            else if (baseAirfoils != null && coefficients == null)
+            {
+                // Add new row of coefficient at the last of CoefficientOfCombination.
+                _coefficientOfCombination = new double[0,10];
+                AddCoefficient(BasisAirfoils.NumberOfAirfoils);
+
+                // Re-Generate the combined airfoils
+                CombinedAirfoils.CombineAirfoils(FMainWindow.Models.BasisAirfoils.Convert(BasisAirfoils), CoefficientOfCombination);
+
+                // Fire the event updated SourceData are ready
+                SourceDataChanged?.Invoke(this, new EventArgs());
+            }
+        }
+
         /// <summary>
         /// Add a new row element of the corfficient at the last of the CoefficientCollection
         /// </summary>
@@ -102,6 +135,17 @@ namespace GA_AirfoilOptimizationTool2D
 
             // Update coefficientCollection directly (without Event firing).
             _coefficientOfCombination = newCoefficientCollection;
+        }
+        /// <summary>
+        /// Add the number of coefficients specifiedbu the argument
+        /// </summary>
+        /// <param name="count"></param>
+        private void AddCoefficient(int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                AddCoefficient();
+            }
         }
     }
 }

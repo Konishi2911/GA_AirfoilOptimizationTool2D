@@ -76,6 +76,18 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             // Re-generate the coordinates for airfoil previewing.
             UpdateAirfoilPreviews();
         }
+
+        private void WorkingFileImported(object sender, FWorkingFileIO.WorkingFileIO.OpeningFileFinishedEventArgs e)
+        {
+            Models.BasisAirfoils baseAirfoilsGroup = new Models.BasisAirfoils();
+
+            foreach (var item in e.BaseAirfoils)
+            {
+                baseAirfoilsGroup.Add(item);
+            }
+
+            OptimizingConfiguration.Instance.SetSource(baseAirfoilsGroup, e.CoefficientOfCombination);
+        }
         #endregion
 
         #region Binding Properties
@@ -224,6 +236,9 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         {
             FWorkingFileIO.WorkingFileIO workingFileIO = new FWorkingFileIO.WorkingFileIO();
             String wFilePath = General.Messenger.OpenFileMessenger.Show("WorkingFile (*.wrk)|*.wrk");
+
+            //Assign event callbacks
+            workingFileIO.NotifyOpeningFileFinished += WorkingFileImported;
 
             workingFileIO.OpenFile(wFilePath);
         }

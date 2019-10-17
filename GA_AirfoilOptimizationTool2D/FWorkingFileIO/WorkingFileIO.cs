@@ -10,11 +10,24 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
     public class WorkingFileIO
     {
         #region Fields
+        private int numberOfSameGeneration;
         private int numberOfBaseAirfoils;
         private int numberOfGenerations;
         private List<Airfoil.AirfoilManager> baseAirfoils;
         private List<Airfoil.AirfoilManager> combinedAirfoils;
+        private Double[,] coefficientOfCombination;
         #endregion
+        public delegate void OpeningFileFinishedEventHandler(object sender, OpeningFileFinishedEventArgs e);
+        public event OpeningFileFinishedEventHandler NotifyOpeningFileFinished;
+        public class OpeningFileFinishedEventArgs : EventArgs
+        {
+            public int NumberOfSameGeneration { get; set; }
+            public int NumberOfBaseAirfoils { get; set; }
+            public int NumberOfGenerations { get; set; }
+            public List<Airfoil.AirfoilManager> BaseAirfoils { get; set; }
+            public List<Airfoil.AirfoilManager> CombinedAirfoils { get; set; }
+            public Double[,] CoefficientOfCombination { get; set; }
+        }
 
         public WorkingFileIO()
         {
@@ -34,6 +47,18 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
                 openedFileString = await reader.ReadToEndAsync();
             }
             AnalyzeFile(openedFileString);
+
+            // Notify Opening the file finished.
+            var e = new OpeningFileFinishedEventArgs() 
+            { 
+                NumberOfSameGeneration = this.numberOfSameGeneration,
+                BaseAirfoils = this.baseAirfoils, 
+                CoefficientOfCombination = this.coefficientOfCombination, 
+                CombinedAirfoils = this.combinedAirfoils, 
+                NumberOfBaseAirfoils = this.numberOfBaseAirfoils, 
+                NumberOfGenerations = this.numberOfGenerations 
+            };
+            NotifyOpeningFileFinished?.Invoke(this, e);
         }
         /// <summary>
         /// Save current state and airfois data as a working file to the designated file path that is passed as a parameter.
@@ -93,6 +118,10 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
                 {
 
                 }
+                else if (IndexName == "NUMBER_OF_SAME_GENERATION")
+                {
+                    numberOfSameGeneration = int.Parse(FileStringLines[i]);
+                }
                 else if (IndexName == "NUMBER_OF_BASE_AIRFOILS")
                 {
                     numberOfBaseAirfoils = int.Parse(FileStringLines[i]);
@@ -110,29 +139,8 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
                         {
                             // Add current Airfoils to baseAirfoil List
                             AddAirfoilToList(currentAirfoilName, coordinateArray, ref baseAirfoils);
-                        }
-
-                    }
-                    else if (SubIndexName == "NAME")
-                    {
-                        // Set Airfoils Name
-                        currentAirfoilName = FileStringLines[i];
-                    }
-                    else if (SubIndexName == "COORDINATE")
-                    {
-                        var coordinateStr = FileStringLines[i].Split(',');
-                        coordinateArray.Add(new double[2] { double.Parse(coordinateStr[0]), double.Parse(coordinateStr[1]) });
-                    }
-                }
-                else if (IndexName == "COMBINED_AIRFOIL")
-                {
-                    // Finalize Procedure
-                    if (SubIndexName == "END")
-                    {
-                        if (PreviousSubIndexName == "COORDINATE")
-                        {
-                            // Add currentAirfoil to coordinateAirfoils List
-                            AddAirfoilToList(currentAirfoilName, coordinateArray, ref combinedAirfoils);
+                            currentAirfoilName = "";
+                            coordinateArray.Clear();
                         }
 
                     }

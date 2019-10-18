@@ -66,7 +66,16 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
         /// <param name="path">The File Path to Store the working file</param>
         private void SaveFile(String path)
         {
+        }
+        #region Scripts
+        private String CreateFile()
+        {
+            const String IndexTag = "## ";
+            const String SubIndexTag = "### ";
+            const String EndTag = "END";
+            String writingFile = null;
 
+            writingFile += IndexTag + "NUMBER_OF_BASE_AIRFOIL";
         }
         /// <summary>
         /// Analyze the opened working file that type is String to classify it into each parameter.
@@ -170,7 +179,6 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
                 }
             }
         }
-
         /// <summary>
         /// Add the airfoil passed as a parameter to the List passed as a reference parameter.
         /// </summary>
@@ -207,5 +215,6 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
 
             return tempArray;
         }
+        #endregion
     }
 }

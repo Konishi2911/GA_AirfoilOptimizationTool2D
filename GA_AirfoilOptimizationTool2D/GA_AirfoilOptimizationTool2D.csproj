@@ -93,6 +93,7 @@
     <Compile Include="GeneralConstants.cs" />
     <Compile Include="General\AirfoilPreview.cs" />
     <Compile Include="General\Converter\PointCollectionConverter.cs" />
+    <Compile Include="General\CsvManager.cs" />
     <Compile Include="General\DelegateCommand.cs" />
     <Compile Include="General\ParamDelegateCommand.cs" />
     <Compile Include="OptimizingConfiguration.cs" />

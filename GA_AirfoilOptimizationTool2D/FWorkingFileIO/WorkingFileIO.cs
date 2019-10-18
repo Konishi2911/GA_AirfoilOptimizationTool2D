@@ -66,16 +66,53 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
         /// <param name="path">The File Path to Store the working file</param>
         private void SaveFile(String path)
         {
-        }
-        #region Scripts
-        private String CreateFile()
-        {
-            const String IndexTag = "## ";
-            const String SubIndexTag = "### ";
-            const String EndTag = "END";
-            String writingFile = null;
+            const String NewLine = "\r\n";
 
-            writingFile += IndexTag + "NUMBER_OF_BASE_AIRFOIL";
+            String writingString = null;
+
+            writingString += CreateIndex("NUMBER_OF_SAME_GENERATION");
+            writingString += GeneralConstants.NUMBER_OF_AIRFOILS_OF_GENERATION.ToString() + NewLine;
+            writingString += EndPart();
+
+            writingString += CreateIndex("NUMBER_OF_BASE_AIRFOILS");
+            writingString += OptimizingConfiguration.Instance.BasisAirfoils.NumberOfAirfoils.ToString();
+            writingString += EndPart();
+
+            writingString += CreateIndex("BASE_AIRFOIL");
+            foreach (var item in OptimizingConfiguration.Instance.BasisAirfoils.AirfoilGroup)
+            {
+                writingString += CreateSubIndex("NAME");
+                writingString += item.AirfoilName + NewLine;
+                writingString += EndSubPart();
+
+                writingString += CreateSubIndex("COORDINATE");
+                writingString += General.CsvManager.CreateCSV(item.ImportedCoordinate.ToDouleArray());
+                writingString += EndSubPart();
+            }
+
+
+
+            using (var writer = new StreamWriter(path, false, System.Text.Encoding.UTF8))
+            {
+                writer.WriteAsync(writingString);
+            }
+        }
+
+        private String CreateIndex(String indexName)
+        {
+            return "## " + indexName + "\r\n";
+        }
+        private String CreateSubIndex(String indexName)
+        {
+            return "### " + indexName + "\r\n";
+        }
+        private String EndPart()
+        {
+            return "## END" + "\r\n";
+        }
+        private String EndSubPart()
+        {
+            return "### END" + "\r\n";
         }
         /// <summary>
         /// Analyze the opened working file that type is String to classify it into each parameter.
@@ -179,6 +216,7 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
                 }
             }
         }
+
         /// <summary>
         /// Add the airfoil passed as a parameter to the List passed as a reference parameter.
         /// </summary>
@@ -215,6 +253,5 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
 
             return tempArray;
         }
-        #endregion
     }
 }

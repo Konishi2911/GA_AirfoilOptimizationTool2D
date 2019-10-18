@@ -38,6 +38,11 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
                 airfoilName = value;
             }
         }
+        public Airfoil.AirfoilCoordinate ImportedCoordinate
+        {
+            get => _importedCoordinate;
+        }
+
         public Airfoil.AirfoilCoordinate InterpolatedCoordinate
         {
             get

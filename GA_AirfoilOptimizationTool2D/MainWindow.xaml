@@ -26,6 +26,10 @@
         <gtr:OpenFileDialogTrigger>
             <gac:ShowFileDialogAction/>
         </gtr:OpenFileDialogTrigger>
+
+        <gtr:SaveFileDialogTrigger>
+            <gac:ShowSaveDialogAction/>
+        </gtr:SaveFileDialogTrigger>
         
         <tr:OptConfigDialogTrigger>
             <ac:ShowOptConfigDialogAction/>
@@ -43,7 +47,7 @@
         <Menu VerticalAlignment="Top" Height="20">
             <MenuItem Header=" File (_F)">
                 <MenuItem Header="Open" Command="{Binding Path=OpenWorkingFileCommand}"/>
-                <MenuItem Header="Save"/>
+                <MenuItem Header="Save" Command="{Binding Path=SaveWorkingFileCommand}"/>
                 <MenuItem Header="Export CSV"/>
                 <MenuItem Header="Prefarence"/>
             </MenuItem>

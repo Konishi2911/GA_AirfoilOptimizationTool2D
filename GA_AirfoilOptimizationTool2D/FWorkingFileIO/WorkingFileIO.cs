@@ -49,14 +49,14 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
             AnalyzeFile(openedFileString);
 
             // Notify Opening the file finished.
-            var e = new OpeningFileFinishedEventArgs() 
-            { 
+            var e = new OpeningFileFinishedEventArgs()
+            {
                 NumberOfSameGeneration = this.numberOfSameGeneration,
-                BaseAirfoils = this.baseAirfoils, 
-                CoefficientOfCombination = this.coefficientOfCombination, 
-                CombinedAirfoils = this.combinedAirfoils, 
-                NumberOfBaseAirfoils = this.numberOfBaseAirfoils, 
-                NumberOfGenerations = this.numberOfGenerations 
+                BaseAirfoils = this.baseAirfoils,
+                CoefficientOfCombination = this.coefficientOfCombination,
+                CombinedAirfoils = this.combinedAirfoils,
+                NumberOfBaseAirfoils = this.numberOfBaseAirfoils,
+                NumberOfGenerations = this.numberOfGenerations
             };
             NotifyOpeningFileFinished?.Invoke(this, e);
         }
@@ -64,7 +64,7 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
         /// Save current state and airfois data as a working file to the designated file path that is passed as a parameter.
         /// </summary>
         /// <param name="path">The File Path to Store the working file</param>
-        private void SaveFile(String path)
+        public async void SaveFile(String path)
         {
             const String NewLine = "\r\n";
 
@@ -75,10 +75,10 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
             writingString += EndPart();
 
             writingString += CreateIndex("NUMBER_OF_BASE_AIRFOILS");
-            writingString += OptimizingConfiguration.Instance.BasisAirfoils.NumberOfAirfoils.ToString();
+            writingString += OptimizingConfiguration.Instance.BasisAirfoils.NumberOfAirfoils.ToString() + NewLine;
             writingString += EndPart();
 
-            writingString += CreateIndex("BASE_AIRFOIL");
+            writingString += CreateIndex("BASE_AIRFOILS");
             foreach (var item in OptimizingConfiguration.Instance.BasisAirfoils.AirfoilGroup)
             {
                 writingString += CreateSubIndex("NAME");
@@ -86,15 +86,21 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
                 writingString += EndSubPart();
 
                 writingString += CreateSubIndex("COORDINATE");
-                writingString += General.CsvManager.CreateCSV(item.ImportedCoordinate.ToDouleArray());
+                writingString += General.CsvManager.CreateCSV(item.ImportedCoordinate.ToDouleArray()) + NewLine;
                 writingString += EndSubPart();
             }
+            writingString += EndPart();
+
+            writingString += CreateIndex("COEFFICIENT_OF_COMBINATION");
+            writingString += General.CsvManager.CreateCSV(OptimizingConfiguration.Instance.CoefficientOfCombination) + NewLine;
+            writingString += EndPart();
+
 
 
 
             using (var writer = new StreamWriter(path, false, System.Text.Encoding.UTF8))
             {
-                writer.WriteAsync(writingString);
+                await writer.WriteAsync(writingString);
             }
         }
 
@@ -162,7 +168,10 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
                 // Analyze Body of Text
                 if (IndexName == "END")
                 {
-
+                    if (PreviousIndexName == "COEFFICIENT_OF_COMBINATION")
+                    {
+                        coefficientOfCombination = ConvertListToDoubleArray(coefficientArray);
+                    }
                 }
                 else if (IndexName == "NUMBER_OF_SAME_GENERATION")
                 {
@@ -188,7 +197,6 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
                             currentAirfoilName = "";
                             coordinateArray.Clear();
                         }
-
                     }
                     else if (SubIndexName == "NAME")
                     {
@@ -244,11 +252,16 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
 
         private static double[,] ConvertListToDoubleArray(in List<double[]> coordinateArray)
         {
-            var tempArray = new double[coordinateArray.Count, 2];
-            for (int j = 0; j < coordinateArray.Count; j++)
+            var length = coordinateArray.Count;
+            var width = coordinateArray[0].Length;
+
+            var tempArray = new double[length, width];
+            for (int i = 0; i < length; i++)
             {
-                tempArray[j, 0] = coordinateArray[j][0];
-                tempArray[j, 1] = coordinateArray[j][1];
+                for (int j = 0; j < width; j++)
+                {
+                    tempArray[i, j] = coordinateArray[i][j];
+                }
             }
 
             return tempArray;

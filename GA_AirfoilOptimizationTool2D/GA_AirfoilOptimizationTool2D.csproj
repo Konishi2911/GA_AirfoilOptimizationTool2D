@@ -91,11 +91,14 @@
     <Compile Include="FOptConfig\Actions\CloseWindowAction.cs" />
     <Compile Include="FWorkingFileIO\WorkingFileIO.cs" />
     <Compile Include="GeneralConstants.cs" />
+    <Compile Include="General\Actions\ShowSaveDialogAction.cs" />
     <Compile Include="General\AirfoilPreview.cs" />
     <Compile Include="General\Converter\PointCollectionConverter.cs" />
     <Compile Include="General\CsvManager.cs" />
     <Compile Include="General\DelegateCommand.cs" />
+    <Compile Include="General\Messengers\SaveFileMessenger.cs" />
     <Compile Include="General\ParamDelegateCommand.cs" />
+    <Compile Include="General\Triggers\SaveFileDialogTriger.cs" />
     <Compile Include="OptimizingConfiguration.cs" />
     <Compile Include="SizeObserver.cs" />
     <Page Include="FCoefManager\CoefficientManager.xaml">

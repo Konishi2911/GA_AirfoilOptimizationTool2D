@@ -9,6 +9,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
 
         private Models.BasisAirfoils basisAirfoils;
         private General.DelegateCommand openWorkingFile;
+        private General.DelegateCommand saveWorkingFile;
         private General.DelegateCommand showOprConfigDialog;
         private General.DelegateCommand showCoefficientManager;
         private General.DelegateCommand updatePreviewWindow;
@@ -32,6 +33,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
 
             // Assign the delegate Command
             openWorkingFile = new General.DelegateCommand(OpenWorkingFile, () => true);
+            saveWorkingFile = new General.DelegateCommand(SaveWorkingFile, () => true);
             showOprConfigDialog = new General.DelegateCommand(openOptConfigDialog, isOptConfigEnabled);
             showCoefficientManager = new General.DelegateCommand(OpenCoefficientManager, IsCoefManagerEnabled);
             updatePreviewWindow = new General.DelegateCommand(UpdateAirfoilPreviews, () => true);
@@ -243,6 +245,14 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             workingFileIO.OpenFile(wFilePath);
         }
 
+        public void SaveWorkingFile()
+        {
+            FWorkingFileIO.WorkingFileIO workingFileIO = new FWorkingFileIO.WorkingFileIO();
+            String wFilePath = General.Messenger.SaveFileMessenger.Show("WorkingFile (*.wrk)|*.wrk");
+
+            workingFileIO.SaveFile(wFilePath);
+        }
+
         // Open Optimizing Configuration Window
         public void OpenOptimizingConfigurationDialog()
         {
@@ -298,6 +308,10 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         public General.DelegateCommand OpenWorkingFileCommand
         {
             get => openWorkingFile;
+        }
+        public General.DelegateCommand SaveWorkingFileCommand
+        {
+            get => saveWorkingFile;
         }
         public General.DelegateCommand ShowOptConfigDialog
         {

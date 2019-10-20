@@ -10,6 +10,7 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
         private int numberOfLoadedAirfoils;
         private AirfoilSelectorViewModel selectedAirfoil;
         private OptConfigDelegateCommand airfoilSelection;
+        private OptConfigDelegateCommand updatePreviewWindows;
         private String airfoilSelectionStatus;
         private DataTable airfoilSpecifications;
         private System.Collections.ObjectModel.ObservableCollection<System.Windows.Point> coordinateList;
@@ -40,7 +41,7 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
                 AirfoilSpecifications = CreateTable(SelectedAirfoil.SelectedAirfoil);
 
                 // Update Preview
-                CoordinateList = General.AirfoilPreview.GetPreviewPointList(SelectedAirfoil.SelectedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+                UpdatePreview();
             }
         }
 
@@ -202,6 +203,14 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             // Registrate imported Airfoil to the AirfoilGroupManager.
             ImportedAirfoil.Add(result);
         }
+        private void UpdatePreview()
+        {
+            if (SelectedAirfoil != null && SelectedAirfoil.SelectedAirfoil != null)
+            {
+                // Update Preview
+                CoordinateList = General.AirfoilPreview.GetPreviewPointList(SelectedAirfoil.SelectedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+            }
+        }
         private Boolean IsAirfoilSelectable()
         {
             if (numberOfLoadedAirfoils == numberOfBAirfoils)
@@ -229,6 +238,7 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             airfoilSelectionMethod = new Action(AirfoilSelectionMethod);
             isSelectable = new Func<bool>(IsAirfoilSelectable);
             airfoilSelection = new OptConfigDelegateCommand(airfoilSelectionMethod, isSelectable);
+            updatePreviewWindows = new OptConfigDelegateCommand(UpdatePreview, () => true);
             //
 
             // Read Loaded Airfoil
@@ -343,6 +353,10 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             {
                 return airfoilSelection;
             }
+        }
+        public OptConfigDelegateCommand UpdatePreviewWindows
+        {
+            get => updatePreviewWindows;
         }
 
         public String AirfoilSelectionStatus

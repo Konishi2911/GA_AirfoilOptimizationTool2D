@@ -96,6 +96,11 @@
                                 local:SizeObserver.Observe="True"
                                 local:SizeObserver.ObservedHeight="{Binding Path=PreviewWindowHeight, Mode=OneWayToSource}"
                                 local:SizeObserver.ObservedWidth="{Binding Path=PreviewWindowWidth, Mode=OneWayToSource}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SizeChanged">
+                                    <i:InvokeCommandAction Command="{Binding Path=UpdatePreviewWindows}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                             <Canvas.Background>
                                 <SolidColorBrush Color="Black" Opacity="0"/>
                             </Canvas.Background>

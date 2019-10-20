@@ -242,7 +242,10 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             //Assign event callbacks
             workingFileIO.NotifyOpeningFileFinished += WorkingFileImported;
 
-            workingFileIO.OpenFile(wFilePath);
+            if (wFilePath != null)
+            {
+                workingFileIO.OpenFile(wFilePath);
+            }
         }
 
         public void SaveWorkingFile()
@@ -250,7 +253,10 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             FWorkingFileIO.WorkingFileIO workingFileIO = new FWorkingFileIO.WorkingFileIO();
             String wFilePath = General.Messenger.SaveFileMessenger.Show("WorkingFile (*.wrk)|*.wrk");
 
-            workingFileIO.SaveFile(wFilePath);
+            if (wFilePath != null)
+            {
+                workingFileIO.SaveFile(wFilePath);
+            }
         }
 
         // Open Optimizing Configuration Window
@@ -333,16 +339,19 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
 
         private void UpdateAirfoilPreviews()
         {
-            PreviewCoordinate1 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[0].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
-            PreviewCoordinate2 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[1].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
-            PreviewCoordinate3 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[2].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
-            PreviewCoordinate4 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[3].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
-            PreviewCoordinate5 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[4].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
-            PreviewCoordinate6 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[5].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
-            PreviewCoordinate7 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[6].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
-            PreviewCoordinate8 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[7].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
-            PreviewCoordinate9 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[8].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
-            PreviewCoordinate10 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[9].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+            if (combinedAirfoils[0].CombinedAirfoil != null)
+            {
+                PreviewCoordinate1 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[0].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+                PreviewCoordinate2 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[1].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+                PreviewCoordinate3 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[2].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+                PreviewCoordinate4 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[3].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+                PreviewCoordinate5 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[4].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+                PreviewCoordinate6 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[5].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+                PreviewCoordinate7 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[6].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+                PreviewCoordinate8 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[7].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+                PreviewCoordinate9 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[8].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+                PreviewCoordinate10 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[9].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+            }
         }
 
         private T[][] ConvertArrayToJuggedArray<T>(T[,] array)

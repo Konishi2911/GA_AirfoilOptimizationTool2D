@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace GA_AirfoilOptimizationTool2D.General
 {
-    class ParamDelegateCommand<T> : ICommand
+    public class ParamDelegateCommand<T> : ICommand
     {
         private Action<T> execute;
         private Func<bool> canExecute;

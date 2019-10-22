@@ -78,6 +78,9 @@
     <Compile Include="FCoefManager\CoefficientManagerViewModel.cs" />
     <Compile Include="FCoefManager\Models\CoefficientOfConbinationManager.cs" />
     <Compile Include="FCoefManager\Models\EachCoefficients.cs" />
+    <Compile Include="FGeneticAlgorithm\CrossoverExecutor.cs" />
+    <Compile Include="FGeneticAlgorithm\GAAirfoilsGroup.cs" />
+    <Compile Include="FGeneticAlgorithm\UNDX.cs" />
     <Compile Include="FMainWindow\Actions\ShowCoefManagerAction.cs" />
     <Compile Include="FMainWindow\Actions\ShowOptConfigDialogAction.cs" />
     <Compile Include="FMainWindow\Events\CoefManagerTrigger.cs" />
@@ -85,7 +88,7 @@
     <Compile Include="FMainWindow\Messenger\CoefManagerMessenger.cs" />
     <Compile Include="FMainWindow\Messenger\OptConfigDialogMessenger.cs" />
     <Compile Include="FMainWindow\Models\AirfoilSynthesizer.cs" />
-    <Compile Include="FMainWindow\Models\BasisAirfoils.cs" />
+    <Compile Include="General\BasisAirfoils.cs" />
     <Compile Include="Airfoil\CombinedAirfoilsGroupManager.cs" />
     <Compile Include="FOptConfig\Actions\ApplyWindowAction.cs" />
     <Compile Include="FOptConfig\Actions\CloseWindowAction.cs" />

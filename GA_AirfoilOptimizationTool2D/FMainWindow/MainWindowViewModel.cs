@@ -3,11 +3,11 @@ using System.Collections.ObjectModel;
 
 namespace GA_AirfoilOptimizationTool2D.FMainWindow
 {
-    class MainWindowViewModel : General.ViewModelBase
+    public class MainWindowViewModel : General.ViewModelBase
     {
         private const int NumberOfChildren = 10;
 
-        private Models.BasisAirfoils basisAirfoils;
+        private General.BasisAirfoils basisAirfoils;
         private General.DelegateCommand openWorkingFile;
         private General.DelegateCommand saveWorkingFile;
         private General.DelegateCommand showOprConfigDialog;
@@ -67,7 +67,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             if (OptimizingConfiguration.Instance.CoefficientOfCombination == null) return;
 
             // Update baseAirfoil
-            this.basisAirfoils = Models.BasisAirfoils.Convert(OptimizingConfiguration.Instance.BasisAirfoils);
+            this.basisAirfoils = General.BasisAirfoils.Convert(OptimizingConfiguration.Instance.BasisAirfoils);
 
             // Update coefficients
             this.coefficients = OptimizingConfiguration.Instance.CoefficientOfCombination.Clone() as Double[,];
@@ -81,7 +81,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
 
         private void WorkingFileImported(object sender, FWorkingFileIO.WorkingFileIO.OpeningFileFinishedEventArgs e)
         {
-            Models.BasisAirfoils baseAirfoilsGroup = new Models.BasisAirfoils();
+            General.BasisAirfoils baseAirfoilsGroup = new General.BasisAirfoils();
 
             foreach (var item in e.BaseAirfoils)
             {

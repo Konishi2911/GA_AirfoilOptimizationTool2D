@@ -4,17 +4,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GA_AirfoilOptimizationTool2D.FMainWindow.Models
+namespace GA_AirfoilOptimizationTool2D.General
 {
     public class BasisAirfoils : Airfoil.AirfoilGroupManagerBase
     {
+        private int numberOfBasisAirfoils;
+
+        public int NumberOfBasisAirfoils
+        {
+            get => numberOfBasisAirfoils;
+            set
+            {
+                numberOfBasisAirfoils = value;
+                OnPropertyChanged(nameof(this.NumberOfBasisAirfoils));
+            }
+        }
+
         public static BasisAirfoils Convert(Airfoil.IAirfoilGroupManager airfoilGroup)
         {
             BasisAirfoils temp = new BasisAirfoils
             {
                 AirfoilGroup = airfoilGroup.AirfoilGroup,
                 NumberOfAirfoils = airfoilGroup.NumberOfAirfoils,
-                NumberOfBasisAirfoils = airfoilGroup.NumberOfBasisAirfoils
             };
 
             return temp;

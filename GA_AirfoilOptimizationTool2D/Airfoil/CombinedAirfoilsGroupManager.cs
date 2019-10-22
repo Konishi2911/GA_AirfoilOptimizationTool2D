@@ -30,7 +30,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         /// </summary>
         /// <param name="basisAirfoils"></param>
         /// <param name="coefficients"></param>
-        public void CombineAirfoils(FMainWindow.Models.BasisAirfoils basisAirfoils, Double[,] coefficients)
+        public void CombineAirfoils(General.BasisAirfoils basisAirfoils, Double[,] coefficients)
         {
             List<Task> tasks = new List<Task>();
 

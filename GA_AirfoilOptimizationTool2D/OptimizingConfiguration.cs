@@ -7,7 +7,7 @@ namespace GA_AirfoilOptimizationTool2D
     {
         private const int numberOfSameGenerations = 10;
 
-        private Airfoil.IAirfoilGroupManager _basisAirfoils;
+        private General.BasisAirfoils _basisAirfoils;
         private Airfoil.CombinedAirfoilsGroupManager _combinedAirfoils;
         private Double[,] _coefficientOfCombination;
 
@@ -44,7 +44,7 @@ namespace GA_AirfoilOptimizationTool2D
                 }
 
                 // Re-Generate the combined airfoils
-                CombinedAirfoils.CombineAirfoils(FMainWindow.Models.BasisAirfoils.Convert(BasisAirfoils), CoefficientOfCombination);
+                CombinedAirfoils.CombineAirfoils(General.BasisAirfoils.Convert(BasisAirfoils), CoefficientOfCombination);
 
                 // Fire the event updated SourceData are ready
                 SourceDataChanged?.Invoke(this, new EventArgs());
@@ -52,7 +52,7 @@ namespace GA_AirfoilOptimizationTool2D
         }
         #endregion
 
-        public Airfoil.IAirfoilGroupManager BasisAirfoils
+        public General.BasisAirfoils BasisAirfoils
         {
             get => _basisAirfoils;
             set
@@ -83,7 +83,7 @@ namespace GA_AirfoilOptimizationTool2D
 
         }
 
-        public void SetSource(Airfoil.IAirfoilGroupManager baseAirfoils, Double[,] coefficients)
+        public void SetSource(General.BasisAirfoils baseAirfoils, Double[,] coefficients)
         {
             this._basisAirfoils = baseAirfoils;
             this._coefficientOfCombination = coefficients;
@@ -98,7 +98,7 @@ namespace GA_AirfoilOptimizationTool2D
                 }
 
                 // Re-Generate the combined airfoils
-                CombinedAirfoils.CombineAirfoils(FMainWindow.Models.BasisAirfoils.Convert(BasisAirfoils), CoefficientOfCombination);
+                CombinedAirfoils.CombineAirfoils(General.BasisAirfoils.Convert(BasisAirfoils), CoefficientOfCombination);
 
                 // Fire the event updated SourceData are ready
                 SourceDataChanged?.Invoke(this, new EventArgs());
@@ -114,7 +114,7 @@ namespace GA_AirfoilOptimizationTool2D
                 AddCoefficient(BasisAirfoils.NumberOfAirfoils);
 
                 // Re-Generate the combined airfoils
-                CombinedAirfoils.CombineAirfoils(FMainWindow.Models.BasisAirfoils.Convert(BasisAirfoils), CoefficientOfCombination);
+                CombinedAirfoils.CombineAirfoils(General.BasisAirfoils.Convert(BasisAirfoils), CoefficientOfCombination);
 
                 // Fire the event updated SourceData are ready
                 SourceDataChanged?.Invoke(this, new EventArgs());

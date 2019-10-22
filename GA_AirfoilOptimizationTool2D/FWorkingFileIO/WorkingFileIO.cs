@@ -36,7 +36,7 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
         }
 
         /// <summary>
-        /// Open the working file designated by the file path that is passed as a parameter, analyze them, and store them into the fields in this class.
+        /// Open the working file designated by the file path that is passed as a parameter, analyze them, and store them into the fields in this class. If file analysis is finished, OpeningFileFinishedEvent is fired.
         /// </summary>
         /// <param name="path">The File Path to Open the working file</param>
         public async void OpenFile(String path)

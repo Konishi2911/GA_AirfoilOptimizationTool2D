@@ -62,19 +62,6 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             }
         }
 
-        public int NumberOfBasisAirfoils
-        {
-            get
-            {
-                return numberOfBAirfoil;
-            }
-            set
-            {
-                numberOfBAirfoil = value;
-                OnPropertyChanged(nameof(NumberOfBasisAirfoils));
-            }
-        }
-
         public List<Airfoil.AirfoilManager> AirfoilGroup
         {
             get

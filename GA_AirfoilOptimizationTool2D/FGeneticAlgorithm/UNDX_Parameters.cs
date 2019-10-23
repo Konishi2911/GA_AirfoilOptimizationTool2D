@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
 {
-    class UNDX
+    public class UNDX_Parameters
     {
+        public double Alpha { get; set; }
+        public double Beta { get; set; }
+        public int NumberOfCrossover { get; set; }
     }
 }

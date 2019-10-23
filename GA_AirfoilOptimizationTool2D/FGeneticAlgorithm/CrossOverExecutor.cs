@@ -20,8 +20,14 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
         /// </summary>
         /// <param name="parents"></param>
         /// <returns>Offsprings</returns>
-        private GAAirfoilsGroup UNDX(GAAirfoilsGroup parents)
+        private GAAirfoilsGroup UNDX(GAAirfoilsGroup parents, UNDX_Parameters parameters)
         {
+            // number of crossovers
+            int nCrossover = parameters.NumberOfCrossover;
+            double alpha = parameters.Alpha;
+            double beta = parameters.Beta;
+
+            Airfoil.CombinedAirfoilsGroupManager offsptingAirfoils = new Airfoil.CombinedAirfoilsGroupManager(nCrossover);
             GAAirfoilsGroup offspring = new GAAirfoilsGroup();
             Airfoil.AirfoilManager[] selectedParents = new Airfoil.AirfoilManager[2];
 
@@ -48,6 +54,16 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
             double d2 = (General.Vector.InnerProduct(p3 - p1, p2 - p1) / Math.Pow((p2 - p1).Norm(), 2) * (p2 - p1) - p3).Norm();
             double sigma1 = alpha * d1;
             double sigma2 = beta * d2 / Math.Sqrt(n);
+
+            // Create new parameter vector for offsprings
+            for (int i = 0; i < nCrossover; i++)
+            {
+
+                // Generate Random Number with Normal Dist
+
+                General.Vector offspringParameter = null;
+                offsptingAirfoils.CombineAirfoils()
+            }
 
             return offspring;
         }

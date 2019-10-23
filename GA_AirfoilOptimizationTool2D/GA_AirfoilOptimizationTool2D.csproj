@@ -80,7 +80,7 @@
     <Compile Include="FCoefManager\Models\EachCoefficients.cs" />
     <Compile Include="FGeneticAlgorithm\CrossoverExecutor.cs" />
     <Compile Include="FGeneticAlgorithm\GAAirfoilsGroup.cs" />
-    <Compile Include="FGeneticAlgorithm\UNDX.cs" />
+    <Compile Include="FGeneticAlgorithm\UNDX_Parameters.cs" />
     <Compile Include="FMainWindow\Actions\ShowCoefManagerAction.cs" />
     <Compile Include="FMainWindow\Actions\ShowOptConfigDialogAction.cs" />
     <Compile Include="FMainWindow\Events\CoefManagerTrigger.cs" />

@@ -8,8 +8,16 @@ namespace GA_AirfoilOptimizationTool2D.General
 {
     class RandomNumberGenerator
     {
-        private const int seed;
+        private readonly int seed;
 
         public RandomNumberGenerator(int seed)
+        {
+            this.seed = seed;
+        }
+
+        public double MersenneTwister(seed)
+        {
+
+        }
     }
 }

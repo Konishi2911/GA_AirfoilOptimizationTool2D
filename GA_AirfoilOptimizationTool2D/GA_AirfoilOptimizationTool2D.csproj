@@ -79,7 +79,6 @@
     <Compile Include="FCoefManager\Models\CoefficientOfConbinationManager.cs" />
     <Compile Include="FCoefManager\Models\EachCoefficients.cs" />
     <Compile Include="FGeneticAlgorithm\CrossoverExecutor.cs" />
-    <Compile Include="FGeneticAlgorithm\GAAirfoilsGroup.cs" />
     <Compile Include="FGeneticAlgorithm\Individual.cs" />
     <Compile Include="FGeneticAlgorithm\IndividualsGroup.cs" />
     <Compile Include="FGeneticAlgorithm\UNDX_Parameters.cs" />
@@ -103,6 +102,7 @@
     <Compile Include="General\DelegateCommand.cs" />
     <Compile Include="General\Messengers\SaveFileMessenger.cs" />
     <Compile Include="General\ParamDelegateCommand.cs" />
+    <Compile Include="General\RandomNumberGenerator.cs" />
     <Compile Include="General\Triggers\SaveFileDialogTriger.cs" />
     <Compile Include="OptimizingConfiguration.cs" />
     <Compile Include="SizeObserver.cs" />

@@ -10,6 +10,7 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
     {
         public double Alpha { get; set; }
         public double Beta { get; set; }
-        public int NumberOfCrossover { get; set; }
+        public int NumberOfCrossovers { get; set; }
+        public int NumberOfParameters { get; set; }
     }
 }

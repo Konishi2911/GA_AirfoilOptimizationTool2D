@@ -8,8 +8,16 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
 {
     class IndividualsGroup
     {
-        private Individual individual;
+        private int nIndividuals;
+        private List<Individual> individual;
 
-
+        /// <summary>
+        /// Number of individuals
+        /// </summary>
+        public int NumberOfIndividuals => nIndividuals;
+        /// <summary>
+        /// List of individuals
+        /// </summary>
+        public List<Individual> IndivisualsGroup => individual;
     }
 }

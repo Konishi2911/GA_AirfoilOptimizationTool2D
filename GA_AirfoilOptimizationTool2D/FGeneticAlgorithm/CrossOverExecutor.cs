@@ -24,6 +24,7 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
         {
             // number of crossovers
             int nCrossover = parameters.NumberOfCrossover;
+            int nBasis = parents.NumberOfBasisAirfoils;
             double alpha = parameters.Alpha;
             double beta = parameters.Beta;
 
@@ -50,21 +51,42 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
             }
 
             int n = parents.NumberOfAirfoils;
+
             double d1 = (p2 - p1).Norm();
             double d2 = (General.Vector.InnerProduct(p3 - p1, p2 - p1) / Math.Pow((p2 - p1).Norm(), 2) * (p2 - p1) - p3).Norm();
             double sigma1 = alpha * d1;
             double sigma2 = beta * d2 / Math.Sqrt(n);
 
             // Create new parameter vector for offsprings
+            List<double[]> coefficientList = new List<double[]>();
             for (int i = 0; i < nCrossover; i++)
             {
 
                 // Generate Random Number with Normal Dist
 
                 General.Vector offspringParameter = null;
-                offsptingAirfoils.CombineAirfoils()
+
+                // Processing
+
+                coefficientList.Add(offspringParameter.ToDoubleArray());
             }
 
+            double[,] coefficientArray = new double[parents.NumberOfBasisAirfoils, nCrossover];
+            for (int i = 0; i < nBasis; i++)
+            {
+                for (int j = 0; j < nCrossover; j++)
+                {
+                    coefficientArray[i, j] = coefficientList[j][i];
+                }
+            }
+
+            Airfoil.CombinedAirfoilsGroupManager combinedAirfoils = new Airfoil.CombinedAirfoilsGroupManager(nCrossover);
+            combinedAirfoils.CombineAirfoils(parents.BasisAirfoils, coefficientArray);
+
+            foreach (var item in combinedAirfoils.GetCombinedAirfoilsArray())
+            {
+                offspring.Add(item.CombinedAirfoil);
+            }
             return offspring;
         }
     }

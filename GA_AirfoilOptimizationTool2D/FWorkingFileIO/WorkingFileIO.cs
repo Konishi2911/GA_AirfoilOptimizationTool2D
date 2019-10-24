@@ -51,6 +51,8 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
             // Notify Opening the file finished.
             var e = new OpeningFileFinishedEventArgs()
             {
+
+
                 NumberOfSameGeneration = this.numberOfSameGeneration,
                 BaseAirfoils = this.baseAirfoils,
                 CoefficientOfCombination = this.coefficientOfCombination,

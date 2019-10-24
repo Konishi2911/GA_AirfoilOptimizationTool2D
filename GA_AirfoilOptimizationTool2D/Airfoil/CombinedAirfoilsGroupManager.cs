@@ -18,6 +18,10 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             public Airfoil.Representation.AirfoilCombiner[] combinedAirfoils;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="numOfAirfoils">Number of combined airfoils</param>
         public CombinedAirfoilsGroupManager(int numOfAirfoils)
         {
             this._numberOfAirfoils = numOfAirfoils;

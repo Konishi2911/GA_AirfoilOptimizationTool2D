@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
 {
-    class IndividualsGroup
+    public class IndividualsGroup
     {
         private int nIndividuals;
         private List<Individual> individual;

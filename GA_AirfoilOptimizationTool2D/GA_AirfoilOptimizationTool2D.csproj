@@ -81,6 +81,7 @@
     <Compile Include="FGeneticAlgorithm\CrossoverExecutor.cs" />
     <Compile Include="FGeneticAlgorithm\Individual.cs" />
     <Compile Include="FGeneticAlgorithm\IndividualsGroup.cs" />
+    <Compile Include="FGeneticAlgorithm\UNDX.cs" />
     <Compile Include="FGeneticAlgorithm\UNDX_Parameters.cs" />
     <Compile Include="FMainWindow\Actions\ShowCoefManagerAction.cs" />
     <Compile Include="FMainWindow\Actions\ShowOptConfigDialogAction.cs" />
@@ -102,7 +103,10 @@
     <Compile Include="General\DelegateCommand.cs" />
     <Compile Include="General\Messengers\SaveFileMessenger.cs" />
     <Compile Include="General\ParamDelegateCommand.cs" />
-    <Compile Include="General\RandomNumberGenerator.cs" />
+    <Compile Include="General\RandomNumber\BoxMuller.cs" />
+    <Compile Include="General\RandomNumber\MersenneTwister.cs" />
+    <Compile Include="General\RandomNumber\RandomNumberGenerator.cs" />
+    <Compile Include="General\Statistics\SamplingWithoutReplacement.cs" />
     <Compile Include="General\Triggers\SaveFileDialogTriger.cs" />
     <Compile Include="OptimizingConfiguration.cs" />
     <Compile Include="SizeObserver.cs" />

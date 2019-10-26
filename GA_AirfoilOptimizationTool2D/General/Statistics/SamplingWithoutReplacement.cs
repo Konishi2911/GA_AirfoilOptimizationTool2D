@@ -38,14 +38,14 @@ namespace GA_AirfoilOptimizationTool2D.General.Statistics
             List<uint> sampleVec = new List<uint>();
             for (uint i = 0; i < n; i++)
             {
-                int rand = (int)Math.Floor(randNumMethod() * (n - i));
+                int rand = (int)Math.Floor(randNumMethod() * (total - i));
                 // Select index
                 sampleVec.Add(vec[rand]);
                 // Remove selected index
                 vec.RemoveAt(rand);
             }
 
-            return vec.ToArray();
+            return sampleVec.ToArray();
         }
     }
 }

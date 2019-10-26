@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GA_AirfoilOptimizationTool2D.General
 {
-    class Vector
+    class Vector : IEquatable<Vector>
     {
         private int _size;
         private double[] _vec;
@@ -164,6 +164,20 @@ namespace GA_AirfoilOptimizationTool2D.General
             _vec.CopyTo(temp, 0);
 
             return temp;
+        }
+
+        public bool Equals(Vector vec)
+        {
+            bool result = true;
+
+            if (this.Length == vec.Length)
+            {
+                for (int i = 0; i < vec.Length && result; i++)
+                {
+                    result = this._vec[i] == vec[1];
+                }
+            }
+            return result;
         }
     }
 }

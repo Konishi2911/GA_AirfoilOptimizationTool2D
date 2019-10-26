@@ -34,7 +34,7 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
         /// Execute the crossover with UNDX
         /// </summary>
         /// <param name="parents">Individuals of previous generation</param>
-        /// <returns>Offsprings</returns>
+        /// <returns>If all crossovers are succesful, offsprings are returned, otherwise null is returned.</returns>
         public IndividualsGroup GenerateOffsprings(IndividualsGroup parents)
         {
             Airfoil.CombinedAirfoilsGroupManager offsptingAirfoils = new Airfoil.CombinedAirfoilsGroupManager(nCrossover);
@@ -48,15 +48,20 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
 
             // Create Optimization Parameter Vector
 
-            General.Vector p1 = new General.Vector(nCrossover);
-            General.Vector p2 = new General.Vector(nCrossover);
-            General.Vector p3 = new General.Vector(nCrossover);
+            General.Vector p1 = new General.Vector(nParams);
+            General.Vector p2 = new General.Vector(nParams);
+            General.Vector p3 = new General.Vector(nParams);
 
-            for (int i = 0; i < nCrossover; i++)
+            for (int i = 0; i < nParams; i++)
             {
-                p1[i] = parents.IndivisualsGroup[(int)pIndex[1]].OptParameters[i];
-                p2[i] = parents.IndivisualsGroup[(int)pIndex[2]].OptParameters[i];
-                p3[i] = parents.IndivisualsGroup[(int)pIndex[3]].OptParameters[i];
+                p1[i] = parents.IndivisualsGroup[(int)pIndex[0]].OptParameters[i];
+                p2[i] = parents.IndivisualsGroup[(int)pIndex[1]].OptParameters[i];
+                p3[i] = parents.IndivisualsGroup[(int)pIndex[2]].OptParameters[i];
+            }
+            // If same parameter vector are selected, return null to retry selection.
+            if (p1.Equals(p2) && p1.Equals(p3))
+            {
+                return null;
             }
 
             int n = parents.NumberOfIndividuals;
@@ -71,23 +76,18 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
             General.Vector[] offspringParameter = new General.Vector[nCrossover];
             double[][] offspringParameterArray = new double[nCrossover][];
 
-            // Generate Random Number with Normal Dist
-            // Primary axis
-            var pStdOffspringPts = randomNumberGenerator.NormDistRandNumSeq(nCrossover);
-            // Secondary axis
-            var sStdOffspringPts = randomNumberGenerator.NormDistRandNumSeq(nCrossover);
-
-            double[] pOffspringPts = new double[nCrossover];
-            double[] sOffspringPts = new double[nCrossover];
-
+            // Create Offspring's parameter vector
             for (int i = 0; i < nCrossover; i++)
             {
-                pOffspringPts[i] = pStdOffspringPts[i] * sigma1;
-                sOffspringPts[i] = sStdOffspringPts[i] * sigma2;
+                var StdOffspringPts = randomNumberGenerator.NormDistRandNumSeq(nParams);
+                offspringParameter[i] = new General.Vector(StdOffspringPts);
 
-                offspringParameter[i] = ;
+                var e1 = 1 / (p2 - p1).Norm() * (p2 - p1);
+                var pAxisComp = General.Vector.InnerProduct(offspringParameter[i], e1);
 
-                // Processing
+                offspringParameter[i] -= pAxisComp * e1;
+                offspringParameter[i] = sigma2 * offspringParameter[i];
+                offspringParameter[i] += sigma1 * pAxisComp * e1;
 
                 offspringParameterArray[i] = offspringParameter[i].ToDoubleArray();
             }
@@ -96,7 +96,7 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
             double fitness = (double)evaluatingMethod?.Invoke(offspringParameterArray);
             for (int i = 0; i < nCrossover; i++)
             {
-                offspring.IndivisualsGroup.Add(new Individual(offspringParameter[i].ToDoubleArray(), fitness));
+                offspring.AddIndivisual(new Individual(offspringParameter[i].ToDoubleArray(), fitness));
             }
             return offspring;
         }

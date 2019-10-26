@@ -79,6 +79,7 @@
     <Compile Include="FCoefManager\Models\CoefficientOfConbinationManager.cs" />
     <Compile Include="FCoefManager\Models\EachCoefficients.cs" />
     <Compile Include="FGeneticAlgorithm\CrossoverExecutor.cs" />
+    <Compile Include="FGeneticAlgorithm\FittnessEvaluator.cs" />
     <Compile Include="FGeneticAlgorithm\Individual.cs" />
     <Compile Include="FGeneticAlgorithm\IndividualsGroup.cs" />
     <Compile Include="FGeneticAlgorithm\UNDX.cs" />

@@ -9,7 +9,12 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
     public class IndividualsGroup
     {
         private int nIndividuals;
-        private List<Individual> individual;
+        private List<Individual> individuals;
+
+        public IndividualsGroup()
+        {
+            individuals = new List<Individual>();
+        }
 
         /// <summary>
         /// Number of individuals
@@ -18,6 +23,12 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
         /// <summary>
         /// List of individuals
         /// </summary>
-        public List<Individual> IndivisualsGroup => individual;
+        public List<Individual> IndivisualsGroup => individuals;
+
+        public void AddIndivisual(Individual individual)
+        {
+            individuals.Add(individual);
+            ++nIndividuals;
+        }
     }
 }

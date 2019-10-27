@@ -24,6 +24,10 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         private Double maximumThickness;
         private Double maximumCamber;
         private Double leadingEdgeRadius;
+
+        private Characteristics.AngleBasedCharacteristics liftProfile;
+        private Characteristics.AngleBasedCharacteristics dragProfile;
+        private Characteristics.AngleBasedCharacteristics momentProfile;
         #endregion
 
         #region Properties

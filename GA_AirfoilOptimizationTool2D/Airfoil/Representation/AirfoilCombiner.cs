@@ -27,7 +27,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Representation
         public Double[] Coefficients
         {
             get => _coefficient;
-            set
+            private set
             {
                 _coefficient = value;
                 OnPropertyChanged(nameof(Coefficients));
@@ -40,7 +40,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Representation
         public Airfoil.AirfoilManager[] BasisAirfoils
         {
             get => _basisAirfoils;
-            set
+            private set
             {
                 _basisAirfoils = value;
                 OnPropertyChanged(nameof(BasisAirfoils));

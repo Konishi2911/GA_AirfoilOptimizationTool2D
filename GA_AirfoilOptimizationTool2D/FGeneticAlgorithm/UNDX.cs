@@ -19,14 +19,13 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
         public delegate double EvaluationMethod(double[][] optParameters);
         EvaluationMethod evaluatingMethod;
 
-        public UNDX(UNDX_Parameters parameters, EvaluationMethod evaluatingMethod)
+        public UNDX(UNDX_Parameters parameters)
         {
             nCrossover = parameters.NumberOfCrossovers;
             nParams = parameters.NumberOfParameters;
             alpha = parameters.Alpha;
             beta = parameters.Beta;
 
-            this.evaluatingMethod = evaluatingMethod;
             numberGenerator = new General.RandomNumber.RandomNumberGenerator();
         }
 
@@ -35,10 +34,9 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
         /// </summary>
         /// <param name="parents">Individuals of previous generation</param>
         /// <returns>If all crossovers are succesful, offsprings are returned, otherwise null is returned.</returns>
-        public IndividualsGroup GenerateOffsprings(IndividualsGroup parents)
+        public double[][] ExecuteCrossover(IndividualsGroup parents)
         {
             Airfoil.CombinedAirfoilsGroupManager offsptingAirfoils = new Airfoil.CombinedAirfoilsGroupManager(nCrossover);
-            IndividualsGroup offspring = new IndividualsGroup();
             Airfoil.AirfoilManager[] selectedParents = new Airfoil.AirfoilManager[2];
             General.RandomNumber.RandomNumberGenerator randomNumberGenerator = new General.RandomNumber.RandomNumberGenerator();
             General.Statistics.SamplingWithoutReplacement sampling = new General.Statistics.SamplingWithoutReplacement();
@@ -91,14 +89,7 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
 
                 offspringParameterArray[i] = offspringParameter[i].ToDoubleArray();
             }
-
-            // Evaluate generated offspring
-            double fitness = (double)evaluatingMethod?.Invoke(offspringParameterArray);
-            for (int i = 0; i < nCrossover; i++)
-            {
-                offspring.AddIndivisual(new Individual(offspringParameter[i].ToDoubleArray(), fitness));
-            }
-            return offspring;
+            return offspringParameterArray;
         }
 
     }

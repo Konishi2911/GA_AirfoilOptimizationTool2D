@@ -20,7 +20,7 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm.Tests
 
             var expect = 0.8;
 
-            var result = undx.GenerateOffsprings(individualsGroup);
+            var result = undx.ExecuteCrossover(individualsGroup);
 
             Console.WriteLine(result.NumberOfIndividuals);
         }

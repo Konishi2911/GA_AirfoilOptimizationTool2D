@@ -61,6 +61,9 @@ namespace GA_AirfoilOptimizationTool2D
                 OnPropertyChanged(nameof(BasisAirfoils));
             }
         }
+        /// <summary>
+        /// This airfoils are displayed on preview windows in the Main window
+        /// </summary>
         public Airfoil.CombinedAirfoilsGroupManager CombinedAirfoils
         {
             get => _combinedAirfoils;

@@ -97,11 +97,13 @@
     <Compile Include="FGeneticAlgorithm\GenerationalChange.cs" />
     <Compile Include="FGeneticAlgorithm\Individual.cs" />
     <Compile Include="FGeneticAlgorithm\IndividualsGroup.cs" />
+    <Compile Include="FGeneticAlgorithm\MGG.cs" />
     <Compile Include="FGeneticAlgorithm\UNDX.cs" />
     <Compile Include="FGeneticAlgorithm\UNDX_Parameters.cs" />
     <Compile Include="FInputAirfoilCharacteristics\CharacteristicsImporter.xaml.cs">
       <DependentUpon>CharacteristicsImporter.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FInputAirfoilCharacteristics\CharacteristicsImporterViewModel.cs" />
     <Compile Include="FMainWindow\Actions\ShowCoefManagerAction.cs" />
     <Compile Include="FMainWindow\Actions\ShowOptConfigDialogAction.cs" />
     <Compile Include="FMainWindow\Events\CoefManagerTrigger.cs" />

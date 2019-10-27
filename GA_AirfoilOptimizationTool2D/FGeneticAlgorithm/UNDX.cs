@@ -19,6 +19,8 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
         public delegate double EvaluationMethod(double[][] optParameters);
         EvaluationMethod evaluatingMethod;
 
+        public int[] ParentsIndex { get; private set; }
+
         public UNDX(UNDX_Parameters parameters)
         {
             nCrossover = parameters.NumberOfCrossovers;
@@ -26,6 +28,7 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
             alpha = parameters.Alpha;
             beta = parameters.Beta;
 
+            ParentsIndex = new int[2];
             numberGenerator = new General.RandomNumber.RandomNumberGenerator();
         }
 
@@ -43,6 +46,8 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
 
             // Random Airfoil Selection
             uint[] pIndex = sampling.GetIndex(3, (uint)parents.NumberOfIndividuals);
+            ParentsIndex[0] = (int)pIndex[0];
+            ParentsIndex[1] = (int)pIndex[1];
 
             // Create Optimization Parameter Vector
 
@@ -68,7 +73,7 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
             double d2 = (General.Vector.InnerProduct(p3 - p1, p2 - p1) / Math.Pow((p2 - p1).Norm(), 2) * (p2 - p1) - p3).Norm();
             double sigma1 = alpha * d1;
             double sigma2 = beta * d2 / Math.Sqrt(n);
-            General.Vector m = (1 / 2) * (p1 + p2);
+            General.Vector m = (1.0 / 2.0) * (p1 + p2);
 
             // Create new parameter vector for offsprings
             General.Vector[] offspringParameter = new General.Vector[nCrossover];
@@ -86,6 +91,7 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
                 offspringParameter[i] -= pAxisComp * e1;
                 offspringParameter[i] = sigma2 * offspringParameter[i];
                 offspringParameter[i] += sigma1 * pAxisComp * e1;
+                offspringParameter[i] = offspringParameter[i] + m;
 
                 offspringParameterArray[i] = offspringParameter[i].ToDoubleArray();
             }

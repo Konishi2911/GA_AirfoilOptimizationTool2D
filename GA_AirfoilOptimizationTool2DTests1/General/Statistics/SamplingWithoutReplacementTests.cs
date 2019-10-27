@@ -22,10 +22,21 @@ namespace GA_AirfoilOptimizationTool2D.General.Statistics.Tests
 
             var result = sampling.GetIndex(n, total);
 
+
             for (int i = 0; i < result.Length; i++)
             {
                 Console.WriteLine(result[i]);
             }
+
+            bool isEqual = false;
+            for (int i = 0; i < result.Length; i++)
+            {
+                for (int k = i + 1; k < result.Length; k++)
+                {
+                    isEqual |= result[i] == result[k];
+                }
+            }
+            Assert.IsFalse(isEqual);
             Assert.AreEqual(expected, result.Length);
         }
     }

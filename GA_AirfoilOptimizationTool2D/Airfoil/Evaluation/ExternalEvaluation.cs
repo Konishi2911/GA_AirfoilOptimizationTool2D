@@ -6,17 +6,21 @@
     public class ExternalEvaluation
     {
         private CombinedAirfoilsGroupManager combinedAirfoilsGroup;
-        public ExternalEvaluation()
-        {
+        private General.BasisAirfoils basisAirfoils;
 
+        public ExternalEvaluation(General.BasisAirfoils basisAirfoils)
+        {
+            this.basisAirfoils = basisAirfoils;
         }
 
-        public double[] EvaluateAirfoils(double[][] optParams, General.BasisAirfoils basisAirfoils)
+        public double[] EvaluateAirfoils(double[][] optParams)
         {
             double[] fitness = new double[basisAirfoils.NumberOfAirfoils];
 
             var combinedAirfoilsGroup = AssignParameters(optParams, basisAirfoils);
             var coordinateCSV = CreateCSV(combinedAirfoilsGroup);
+
+
 
             return fitness;
         }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GA_AirfoilOptimizationTool2D.General.RandomNumber
 {
-    class RandomNumberGenerator
+    public class RandomNumberGenerator
     {
         private readonly uint seed;
         private MersenneTwister mersenneTwister;
@@ -36,7 +36,7 @@ namespace GA_AirfoilOptimizationTool2D.General.RandomNumber
             double[] sequence = new double[n];
             for (int i = 0; i < n; i++)
             {
-                sequence[i] = UniformRndNum();
+                sequence[i] = NormDistRandNum();
             }
             return sequence;
         }

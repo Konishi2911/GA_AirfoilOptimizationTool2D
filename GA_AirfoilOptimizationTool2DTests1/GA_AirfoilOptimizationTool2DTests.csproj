@@ -56,7 +56,9 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="FGeneticAlgorithm\GenerationalChangeTests.cs" />
     <Compile Include="FGeneticAlgorithm\UNDXTests.cs" />
+    <Compile Include="General\RandomNumber\RandomNumberGeneratorTests.cs" />
     <Compile Include="General\Statistics\SamplingWithoutReplacementTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

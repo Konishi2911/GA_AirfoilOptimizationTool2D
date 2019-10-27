@@ -12,6 +12,8 @@
         xmlns:ac="clr-namespace:GA_AirfoilOptimizationTool2D.FMainWindow.Actions"
         xmlns:gtr="clr-namespace:GA_AirfoilOptimizationTool2D.General.Event"
         xmlns:gac="clr-namespace:GA_AirfoilOptimizationTool2D.General.Actions"
+        xmlns:chtr="clr-namespace:GA_AirfoilOptimizationTool2D.FInputAirfoilCharacteristics.Triggers"
+        xmlns:chac="clr-namespace:GA_AirfoilOptimizationTool2D.FInputAirfoilCharacteristics.Actions"
         mc:Ignorable="d"
         Title="Airfoil Optimization Tools 2D" Height="900" Width="1600">
     <Window.DataContext>
@@ -38,6 +40,10 @@
         <tr:CoefManagerTrigger>
             <ac:ShowCoefManagerAction/>
         </tr:CoefManagerTrigger>
+
+        <chtr:CharacteristicsImporterTrigger>
+            <chac:CharacteristicsImporterAction/>
+        </chtr:CharacteristicsImporterTrigger>
     </i:Interaction.Triggers>
 
     <Grid>

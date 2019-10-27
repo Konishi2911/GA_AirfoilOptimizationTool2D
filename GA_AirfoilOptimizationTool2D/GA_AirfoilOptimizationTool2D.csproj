@@ -85,6 +85,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Airfoil\Characteristics\AngleBasedCharacteristics.cs" />
     <Compile Include="Airfoil\Evaluation\ExternalEvaluation.cs" />
     <Compile Include="Airfoil\IAirfoilGroupManager.cs" />
     <Compile Include="Airfoil\Representation\AirfoilCombiner.cs" />
@@ -100,10 +101,13 @@
     <Compile Include="FGeneticAlgorithm\MGG.cs" />
     <Compile Include="FGeneticAlgorithm\UNDX.cs" />
     <Compile Include="FGeneticAlgorithm\UNDX_Parameters.cs" />
+    <Compile Include="FInputAirfoilCharacteristics\Actions\CharacteristicsImporterAction.cs" />
     <Compile Include="FInputAirfoilCharacteristics\CharacteristicsImporter.xaml.cs">
       <DependentUpon>CharacteristicsImporter.xaml</DependentUpon>
     </Compile>
     <Compile Include="FInputAirfoilCharacteristics\CharacteristicsImporterViewModel.cs" />
+    <Compile Include="FInputAirfoilCharacteristics\Messenger\CharacteristicsImporterMessenger.cs" />
+    <Compile Include="FInputAirfoilCharacteristics\Triggers\CharacteristicsImporterTrigger.cs" />
     <Compile Include="FMainWindow\Actions\ShowCoefManagerAction.cs" />
     <Compile Include="FMainWindow\Actions\ShowOptConfigDialogAction.cs" />
     <Compile Include="FMainWindow\Events\CoefManagerTrigger.cs" />

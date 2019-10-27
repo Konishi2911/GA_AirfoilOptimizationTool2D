@@ -14,7 +14,7 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm.Tests
         [TestMethod()]
         public void ExecuteGenerationChangeTest()
         {
-            GenerationalChange generationalChange = new GenerationalChange(evaluationTest);
+            GenerationalChange generationalChange = new GenerationalChange(evaluationTest, GenerationalChange.GenerationChangeModel.UNDX_MGG);
             IndividualsGroup parents = new IndividualsGroup();
             for (int i = 0; i < 3; i++)
             {

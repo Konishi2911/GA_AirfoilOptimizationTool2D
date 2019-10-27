@@ -4,13 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GA_AirfoilOptimizationTool2D"
+        xmlns:ac ="clr-namespace:GA_AirfoilOptimizationTool2D.FInputAirfoilCharacteristics.Actions"
+        xmlns:tr="clr-namespace:GA_AirfoilOptimizationTool2D.FInputAirfoilCharacteristics.Triggers"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
         Title="CharacteristicsImporter" Height="406" Width="627">
+
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="22*"/>
-            <RowDefinition Height="103*"/>
-        </Grid.RowDefinitions>
         <Grid Margin="5" Grid.RowSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>

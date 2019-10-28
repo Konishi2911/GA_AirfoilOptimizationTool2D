@@ -5,11 +5,13 @@ namespace GA_AirfoilOptimizationTool2D
 {
     public class OptimizingConfiguration : General.ModelBase
     {
-        private const int numberOfSameGenerations = 10;
+        #region Fields
+        private const int numberOfSameGenerations = GeneralConstants.NUMBER_OF_AIRFOILS_OF_GENERATION;
 
         private General.BasisAirfoils _basisAirfoils;
         private Airfoil.CombinedAirfoilsGroupManager _combinedAirfoils;
         private Double[,] _coefficientOfCombination;
+        #endregion
 
         public event EventHandler SourceDataChanged;
 

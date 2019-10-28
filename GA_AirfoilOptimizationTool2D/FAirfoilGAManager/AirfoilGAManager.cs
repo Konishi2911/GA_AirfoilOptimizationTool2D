@@ -23,7 +23,11 @@
         {
             parentAirfoils = parents;
 
-            generationChangeExecutor = new FGeneticAlgorithm.GenerationalChange()
+            generationChangeExecutor = new FGeneticAlgorithm.GenerationalChange
+                (
+                AirfoilsEvaluationMethod, 
+                FGeneticAlgorithm.GenerationalChange.GenerationChangeModel.UNDX_MGG
+                );
         }
 
         /// <summary>

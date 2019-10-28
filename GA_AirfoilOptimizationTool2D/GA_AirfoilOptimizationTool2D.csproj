@@ -91,6 +91,7 @@
     <Compile Include="Airfoil\Representation\AirfoilCombiner.cs" />
     <Compile Include="FAirfoilGAManager\AirfoilGAManager.cs" />
     <Compile Include="FAirfoilGAManager\ExternalAirfoilEvaluation.cs" />
+    <Compile Include="FAirfoilGAManager\OffspringAirfoilsStorage.cs" />
     <Compile Include="FCoefManager\CoefficientManager.xaml.cs">
       <DependentUpon>CoefficientManager.xaml</DependentUpon>
     </Compile>

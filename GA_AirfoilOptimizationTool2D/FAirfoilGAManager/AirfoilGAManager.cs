@@ -8,6 +8,7 @@
         private Airfoil.CombinedAirfoilsGroupManager offspringAirfoils;
         private ExternalAirfoilEvaluation airfoilEvaluation;
         private AirfoilCrossover crossoverExecutor;
+        private AirfoilSelection selectionExecutor;
         #endregion
 
         #region Classes
@@ -18,14 +19,34 @@
         {
             // Instantiate
             airfoilEvaluation = new ExternalAirfoilEvaluation();
-            crossoverExecutor = new AirfoilCrossover();
+            crossoverExecutor = new AirfoilCrossover(AirfoilCrossover.CrossoverOperator.UNDX);
         }
 
-        public void StartOptimization(Airfoil.CombinedAirfoilsGroupManager parents)
+
+        public void StartCrossover(Airfoil.CombinedAirfoilsGroupManager parents)
         {
             parentAirfoils = parents;
-            crossoverExecutor.ExecuteCrossover()
+
+            // Execute Crossover
+            crossoverExecutor.ExecuteCrossover(parentAirfoils);
+
+            // Read Offsprings' optimization parameters
+            var optParams = crossoverExecutor.OptimizationParamters;
+
+            // Create Offspring Airfoils
+            Airfoil.CombinedAirfoilsGroupManager offspringAirfoilsCombiner = new Airfoil.CombinedAirfoilsGroupManager(optParams.Length);
+            offspringAirfoilsCombiner.CombineAirfoils(basisAirfoils, ConvertJuggedArrayToArray(optParams));
+
+            // Register Created Offspring airfoils into OptimizingConfiguration
+            OptimizingConfiguration.Instance.OffspringAirfoilsCandidates = offspringAirfoilsCombiner;
         }
+
+        public void StartSelection(Airfoil.CombinedAirfoilsGroupManager offsprings)
+        {
+            // Executes selection to extract airfoil from offsprings
+            selectionExecutor.ExecuteSelection(offsprings);
+        }
+
         private Airfoil.CombinedAirfoilsGroupManager CreateOffspringAirfoils(double[][] optParams)
         {
             Airfoil.CombinedAirfoilsGroupManager offsprings = new Airfoil.CombinedAirfoilsGroupManager(optParams.Length);

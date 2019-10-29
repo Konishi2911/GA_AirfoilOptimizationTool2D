@@ -73,7 +73,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             this.coefficients = OptimizingConfiguration.Instance.CoefficientOfCombination.Clone() as Double[,];
 
             // Re-combinate Airfoil
-            this.combinedAirfoils = OptimizingConfiguration.Instance.CombinedAirfoils.GetCombinedAirfoilsArray();
+            this.combinedAirfoils = OptimizingConfiguration.Instance.CurrentAirfoilsPopulation.GetCombinedAirfoilsArray();
 
             // Re-generate the coordinates for airfoil previewing.
             UpdateAirfoilPreviews();

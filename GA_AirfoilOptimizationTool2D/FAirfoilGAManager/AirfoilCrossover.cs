@@ -13,6 +13,8 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
         private FGeneticAlgorithm.UNDX_Parameters undxParameters;
         private CrossoverOperator crossoverOperator;
 
+        public double[][] OptimizationParamters => optParameters;
+
         public AirfoilCrossover(CrossoverOperator crossoverOperator)
         {
             this.crossoverOperator = crossoverOperator;

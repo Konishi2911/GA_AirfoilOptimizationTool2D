@@ -11,10 +11,11 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
         private int[] parentsIndex;
         private double[][] optParameters;
         private FGeneticAlgorithm.UNDX_Parameters undxParameters;
-        private FGeneticAlgorithm.UNDX undxExecutor;
+        private CrossoverOperator crossoverOperator;
 
-        public AirfoilCrossover()
+        public AirfoilCrossover(CrossoverOperator crossoverOperator)
         {
+            this.crossoverOperator = crossoverOperator;
         }
 
         public enum CrossoverOperator
@@ -26,18 +27,23 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
         {
             var parentsIndividuals = CreateIndividuals(parentAirfoils);
 
-            // Configure UNDX
-            undxParameters = new FGeneticAlgorithm.UNDX_Parameters()
+            // UNDX Crossover
+            if (crossoverOperator == CrossoverOperator.UNDX)
             {
-                Alpha = 0.5,
-                Beta = 0.35,
-                NumberOfCrossovers = 10,
-                NumberOfParameters = parentsIndividuals.IndivisualsGroup[0].OptParameters.Length
-            };
-            undxExecutor = new FGeneticAlgorithm.UNDX(undxParameters);
-            
-            // Execute crossover with UNDX
-            optParameters = undxExecutor.ExecuteCrossover(parentsIndividuals);
+                // Configure UNDX
+                undxParameters = new FGeneticAlgorithm.UNDX_Parameters()
+                {
+                    Alpha = 0.5,
+                    Beta = 0.35,
+                    NumberOfCrossovers = 10,
+                    NumberOfParameters = parentsIndividuals.IndivisualsGroup[0].OptParameters.Length
+                };
+                var undxExecutor = new FGeneticAlgorithm.UNDX(undxParameters);
+
+                // Execute crossover with UNDX
+                optParameters = undxExecutor.ExecuteCrossover(parentsIndividuals);
+            }
+
         }
 
         private FGeneticAlgorithm.IndividualsGroup CreateIndividuals(Airfoil.CombinedAirfoilsGroupManager airfoilsGroup)

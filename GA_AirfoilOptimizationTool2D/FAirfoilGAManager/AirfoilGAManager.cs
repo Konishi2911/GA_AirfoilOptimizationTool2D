@@ -7,6 +7,7 @@
         private Airfoil.CombinedAirfoilsGroupManager parentAirfoils;
         private Airfoil.CombinedAirfoilsGroupManager offspringAirfoils;
         private ExternalAirfoilEvaluation airfoilEvaluation;
+        private AirfoilCrossover crossoverExecutor;
         #endregion
 
         #region Classes
@@ -17,29 +18,13 @@
         {
             // Instantiate
             airfoilEvaluation = new ExternalAirfoilEvaluation();
+            crossoverExecutor = new AirfoilCrossover();
         }
 
         public void StartOptimization(Airfoil.CombinedAirfoilsGroupManager parents)
         {
             parentAirfoils = parents;
-
-            generationChangeExecutor = new FGeneticAlgorithm.GenerationalChange
-                (
-                AirfoilsEvaluationMethod, 
-                FGeneticAlgorithm.GenerationalChange.GenerationChangeModel.UNDX_MGG
-                );
-        }
-
-        /// <summary>
-        /// The fitness of each airfoil are calculated by external evaluation method
-        /// </summary>
-        /// <param name="optimizatinoParameters"></param>
-        /// <returns></returns>
-        private double[] AirfoilsEvaluationMethod(double[][] optimizatinoParameters)
-        {
-            offspringAirfoils = CreateOffspringAirfoils(optimizatinoParameters);
-            airfoilEvaluation.StartEvaluation();
-
+            crossoverExecutor.ExecuteCrossover()
         }
         private Airfoil.CombinedAirfoilsGroupManager CreateOffspringAirfoils(double[][] optParams)
         {

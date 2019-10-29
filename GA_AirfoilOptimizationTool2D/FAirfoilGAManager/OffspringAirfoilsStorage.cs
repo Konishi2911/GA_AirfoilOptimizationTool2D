@@ -9,6 +9,7 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
     class OffspringAirfoilsStorage
     {
         #region Fields
+        private bool isUnderEvaluation;
         private Airfoil.CombinedAirfoilsGroupManager offspringAirfoils;
         #endregion
 

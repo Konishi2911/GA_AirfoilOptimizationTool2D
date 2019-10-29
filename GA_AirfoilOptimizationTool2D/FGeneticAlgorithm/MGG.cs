@@ -8,6 +8,11 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
         {
         }
 
+        /// <summary>
+        /// Selected Individuals are returned
+        /// </summary>
+        /// <param name="targetIndividuals"></param>
+        /// <returns></returns>
         public IndividualsGroup ExecuteSelection(IndividualsGroup targetIndividuals)
         {
             IndividualsGroup selectedIndividuals = new IndividualsGroup();

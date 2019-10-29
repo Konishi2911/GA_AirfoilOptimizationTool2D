@@ -52,7 +52,7 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
 
             // Execute Crossove with UNDX
             var parameters = undxExecutor.ExecuteCrossover(parents);
-            var parentsIndex = undxExecutor.ParentsIndex;
+            var parentsIndex = undxExecutor.ParentsIndex;  
 
             // Calculate Characteristics
             var fitnesses = evaluationMethod(parameters);

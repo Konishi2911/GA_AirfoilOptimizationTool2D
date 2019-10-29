@@ -89,6 +89,7 @@
     <Compile Include="Airfoil\Evaluation\ExternalEvaluation.cs" />
     <Compile Include="Airfoil\IAirfoilGroupManager.cs" />
     <Compile Include="Airfoil\Representation\AirfoilCombiner.cs" />
+    <Compile Include="FAirfoilGAManager\AirfoilCrossover.cs" />
     <Compile Include="FAirfoilGAManager\AirfoilGAManager.cs" />
     <Compile Include="FAirfoilGAManager\ExternalAirfoilEvaluation.cs" />
     <Compile Include="FAirfoilGAManager\OffspringAirfoilsStorage.cs" />

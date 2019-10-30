@@ -14,6 +14,7 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
         private CrossoverOperator crossoverOperator;
 
         public double[][] OptimizationParamters => optParameters;
+        public int[] ParentsIndex => parentsIndex;
 
         public AirfoilCrossover(CrossoverOperator crossoverOperator)
         {

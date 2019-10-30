@@ -5,7 +5,9 @@
         #region Field
         private General.BasisAirfoils basisAirfoils;
         private Airfoil.CombinedAirfoilsGroupManager parentAirfoils;
-        private Airfoil.CombinedAirfoilsGroupManager offspringAirfoils;
+        private int[] parentsIndex;
+        private Airfoil.CombinedAirfoilGroup offspringAirfoils;
+        private Airfoil.CombinedAirfoilGroup nextGenerations;
         private ExternalAirfoilEvaluation airfoilEvaluation;
         private AirfoilCrossover crossoverExecutor;
         private AirfoilSelection selectionExecutor;
@@ -20,6 +22,7 @@
             // Instantiate
             airfoilEvaluation = new ExternalAirfoilEvaluation();
             crossoverExecutor = new AirfoilCrossover(AirfoilCrossover.CrossoverOperator.UNDX);
+            selectionExecutor = new AirfoilSelection(AirfoilSelection.SelectionModel.MGG);
         }
 
 
@@ -32,6 +35,9 @@
 
             // Read Offsprings' optimization parameters
             var optParams = crossoverExecutor.OptimizationParamters;
+
+            // Assign Selected Parents Index
+            parentsIndex = crossoverExecutor.ParentsIndex;
 
             // Create Offspring Airfoils
             Airfoil.CombinedAirfoilsGroupManager offspringAirfoilsCombiner = new Airfoil.CombinedAirfoilsGroupManager(optParams.Length);
@@ -46,9 +52,28 @@
             // Executes selection to extract airfoil from offsprings
             selectionExecutor.ExecuteSelection(offsprings);
 
-            // 
-            selectionExecutor
+            // Extract selected offsprings
+            var selectedAirfoils = selectionExecutor.SelectedAirfoils;
+            foreach (var item in selectedAirfoils)
+            {
+                offspringAirfoils.Add(item.CombinedAirfoil);
+            }
 
+            // Create next Generation
+            int k = 0;
+            var previousGen = parentAirfoils.GetCombinedAirfoilsArray();
+            for (int i = 0; i < previousGen.Length; i++)
+            {
+                if (IsEqual(i, parentsIndex))
+                {
+                    nextGenerations.Add(selectedAirfoils[k].CombinedAirfoil);
+                    ++k;
+                }
+                else
+                {
+                    nextGenerations.Add(previousGen[i].CombinedAirfoil);
+                }
+            }
         }
 
         private Airfoil.CombinedAirfoilsGroupManager CreateOffspringAirfoils(double[][] optParams)
@@ -93,6 +118,16 @@
             }
 
             return array;
+        }
+
+        private bool IsEqual(int value, int[] array)
+        {
+            bool checker = false;
+            foreach (var item in array)
+            {
+                checker |= item == value;
+            }
+            return checker;
         }
     }
 }

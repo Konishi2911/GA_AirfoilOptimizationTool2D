@@ -13,11 +13,13 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         private General.DelegateCommand showOprConfigDialog;
         private General.DelegateCommand showCoefficientManager;
         private General.DelegateCommand updatePreviewWindow;
+        private General.DelegateCommand startGAOptimization;
         private General.ParamDelegateCommand<String> setSpecifications;
         private Airfoil.Representation.AirfoilCombiner[] combinedAirfoils;
         private Double[,] coefficients;
         private ObservableCollection<System.Windows.Point>[] previewCoordinates;
         private System.Data.DataTable airfoilSpecifications;
+        private FAirfoilGAManager.AirfoilGAManager airfoilGAManager;
 
         /// <summary>
         /// Constructor
@@ -37,8 +39,9 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             showOprConfigDialog = new General.DelegateCommand(openOptConfigDialog, isOptConfigEnabled);
             showCoefficientManager = new General.DelegateCommand(OpenCoefficientManager, IsCoefManagerEnabled);
             updatePreviewWindow = new General.DelegateCommand(UpdateAirfoilPreviews, () => true);
+            startGAOptimization = new General.DelegateCommand(StartGeneticOptimization, IsGAExecutable);
             setSpecifications = new General.ParamDelegateCommand<String>(DisplaySpecifications, () => true);
-            
+
             //
 
             // Instantiate Fields
@@ -290,8 +293,21 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         }
         //
 
+        // Start Optimization with Genetic Algorithm
+        public void StartGeneticOptimization()
+        {
+            airfoilGAManager = new FAirfoilGAManager.AirfoilGAManager();
+            airfoilGAManager.StartCrossover(OptimizingConfiguration.Instance.CurrentAirfoilsPopulation);
+        }
+        public bool IsGAExecutable()
+        {
+            bool nullCheck = OptimizingConfiguration.Instance.CurrentAirfoilsPopulation != null;
+            bool lengthCheck = OptimizingConfiguration.Instance.CurrentAirfoilsPopulation.GetCombinedAirfoilsArray().Length == GeneralConstants.NUMBER_OF_AIRFOILS_OF_GENERATION;
+            return nullCheck && lengthCheck;
+        }
+
         // Display the Airfoil Specifications
-        public  void DisplaySpecifications(String windowNumber)
+        public void DisplaySpecifications(String windowNumber)
         {
             if (combinedAirfoils != null)
             {
@@ -303,7 +319,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
                         return;
                     }
                 }
-                
+
                 // Create Specifications Table
                 AirfoilSpecifications = CreateTable(combinedAirfoils[Convert.ToInt32(windowNumber)].CombinedAirfoil);
             }
@@ -330,6 +346,10 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         public General.DelegateCommand UpdatePreviewWindows
         {
             get => updatePreviewWindow;
+        }
+        public General.DelegateCommand StartGAOptimization
+        {
+            get => startGAOptimization;
         }
         public General.ParamDelegateCommand<String> SetSpecifications
         {
@@ -388,7 +408,6 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             }
             return rArray[columnNumber];
         }
-
         private System.Data.DataTable CreateTable(Airfoil.AirfoilManager airfoil)
         {
             var specifications = new System.Data.DataTable();

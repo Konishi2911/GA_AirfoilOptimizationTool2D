@@ -147,6 +147,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Airfoil\Characteristics\AngleBasedCharacteristics.cs" />
+    <Compile Include="Airfoil\CombinedAirfoilGroup.cs" />
     <Compile Include="Airfoil\Evaluation\ExternalEvaluation.cs" />
     <Compile Include="Airfoil\IAirfoilGroupManager.cs" />
     <Compile Include="Airfoil\Representation\AirfoilCombiner.cs" />

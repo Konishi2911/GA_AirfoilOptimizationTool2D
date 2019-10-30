@@ -60,7 +60,7 @@
             <MenuItem Header="Edit (_E)"/>
             <MenuItem Header="GeneticAlgorithm (_G)">
                 <MenuItem Header="Generating Configuration"/>
-                <MenuItem Header="Start Genetic Optimization"/>
+                <MenuItem Header="Start Genetic Optimization" Command="{Binding Path=StartGAOptimization}"/>
                 <MenuItem Header="Airfoil Specifications Manager"/>
             </MenuItem>
             <MenuItem Header="Option (_O)">

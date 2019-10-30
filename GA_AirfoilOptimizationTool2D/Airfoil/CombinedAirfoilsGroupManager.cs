@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace GA_AirfoilOptimizationTool2D.Airfoil
 {
+    /// <summary>
+    /// This class will be removed. Not be recomended to use.
+    /// </summary>
     public class CombinedAirfoilsGroupManager
     {
         private Airfoil.Representation.AirfoilCombiner[] _combinedAirfoils;

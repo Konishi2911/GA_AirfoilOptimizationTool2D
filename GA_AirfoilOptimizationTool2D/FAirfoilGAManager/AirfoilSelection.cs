@@ -8,11 +8,15 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
 {
     public class AirfoilSelection
     {
-        private int[] parentsIndex;
-        private double[][] optParameters;
-        private FGeneticAlgorithm.UNDX_Parameters undxParameters;
+        #region Fields
         private SelectionModel selectionModel;
-        private FGeneticAlgorithm.IndividualsGroup selectedAirfoils;
+        private FGeneticAlgorithm.IndividualsGroup selectedIndividuals;
+        private List<Airfoil.Representation.AirfoilCombiner> selectedAirfoils;
+        #endregion
+
+        #region Properties
+        public List<Airfoil.Representation.AirfoilCombiner> SelectedAirfoils => selectedAirfoils;
+        #endregion
 
         public AirfoilSelection(SelectionModel crossoverOperator)
         {
@@ -24,9 +28,9 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
             MGG
         }
 
-        public void ExecuteSelection(Airfoil.CombinedAirfoilsGroupManager parentAirfoils)
+        public void ExecuteSelection(Airfoil.CombinedAirfoilsGroupManager offspringAirfoils)
         {
-            var parentsIndividuals = CreateIndividuals(parentAirfoils);
+            var parentsIndividuals = CreateIndividuals(offspringAirfoils);
 
             // MGG Selection
             if (selectionModel == SelectionModel.MGG)
@@ -34,7 +38,15 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
                 var mggExecutor = new FGeneticAlgorithm.MGG();
 
                 // Execute selection with MGG
-                selectedAirfoils  = mggExecutor.ExecuteSelection(parentsIndividuals);
+                selectedIndividuals  = mggExecutor.ExecuteSelection(parentsIndividuals);
+                var selectedIndex = mggExecutor.SelectedIndividualsIndex;
+
+                // Store selected Airfoils' characteristics
+                selectedAirfoils = new List<Airfoil.Representation.AirfoilCombiner>();
+                for (int i = 0; i < selectedIndex.Length; i++)
+                {
+                    SelectedAirfoils.Add(offspringAirfoils.GetCombinedAirfoilsArray()[i]);
+                }
             }
         }
 

@@ -45,6 +45,10 @@
         {
             // Executes selection to extract airfoil from offsprings
             selectionExecutor.ExecuteSelection(offsprings);
+
+            // 
+            selectionExecutor
+
         }
 
         private Airfoil.CombinedAirfoilsGroupManager CreateOffspringAirfoils(double[][] optParams)

@@ -4,8 +4,11 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
 {
     public class MGG
     {
+        public int[] SelectedIndividualsIndex { get; set; }
+
         public MGG()
         {
+            SelectedIndividualsIndex = new int[2];
         }
 
         /// <summary>
@@ -16,6 +19,12 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
         public IndividualsGroup ExecuteSelection(IndividualsGroup targetIndividuals)
         {
             IndividualsGroup selectedIndividuals = new IndividualsGroup();
+
+            var elite = EliteSelection(targetIndividuals);
+            var roulette = RouletteSelection(targetIndividuals);
+
+            SelectedIndividualsIndex[0] = targetIndividuals.IndexOf(elite);
+            SelectedIndividualsIndex[1] = targetIndividuals.IndexOf(roulette);
 
             selectedIndividuals.AddIndivisual(EliteSelection(targetIndividuals));
             selectedIndividuals.AddIndivisual(RouletteSelection(targetIndividuals));

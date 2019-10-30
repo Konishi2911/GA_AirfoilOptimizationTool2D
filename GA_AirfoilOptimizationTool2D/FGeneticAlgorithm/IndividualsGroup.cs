@@ -30,5 +30,12 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
             individuals.Add(individual);
             ++nIndividuals;
         }
+
+        public int IndexOf(Individual item)
+        {
+            if (item is null)
+                throw new ArgumentNullException(nameof(item));
+            return individuals.IndexOf(item);
+        }
     }
 }

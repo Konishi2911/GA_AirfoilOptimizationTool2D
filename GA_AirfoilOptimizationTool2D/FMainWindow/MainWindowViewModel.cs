@@ -301,7 +301,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         }
         public bool IsGAExecutable()
         {
-            bool nullCheck = OptimizingConfiguration.Instance.CurrentAirfoilsPopulation != null;
+            bool nullCheck = OptimizingConfiguration.Instance.CurrentAirfoilsPopulation != null && !CollectionNullCheck(OptimizingConfiguration.Instance.CurrentAirfoilsPopulation.GetCombinedAirfoilsArray());
             bool lengthCheck = OptimizingConfiguration.Instance.CurrentAirfoilsPopulation.GetCombinedAirfoilsArray().Length == GeneralConstants.NUMBER_OF_AIRFOILS_OF_GENERATION;
             return nullCheck && lengthCheck;
         }
@@ -422,6 +422,21 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             specifications.Rows.Add("L.E. Radius", airfoil.LeadingEdgeRadius);
 
             return specifications;
+        }
+
+        /// <summary>
+        /// If null detected, returns true.
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <returns></returns>
+        private bool CollectionNullCheck(System.Collections.ICollection collection)
+        {
+            bool checker = false;
+            foreach (var item in collection)
+            {
+                checker = item == null;
+            }
+            return checker;
         }
     }
 }

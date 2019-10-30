@@ -20,6 +20,17 @@ namespace GA_AirfoilOptimizationTool2D.General
             }
         }
 
+        public BasisAirfoils() : base()
+        { 
+        }
+        public BasisAirfoils(ICollection<Airfoil.AirfoilManager> airfoils) : this()
+        {
+            foreach (var item in airfoils)
+            {
+                this.AirfoilGroup.Add(item);
+            }
+        }
+
         public static BasisAirfoils Convert(Airfoil.IAirfoilGroupManager airfoilGroup)
         {
             BasisAirfoils temp = new BasisAirfoils

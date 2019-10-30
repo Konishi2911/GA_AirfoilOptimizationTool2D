@@ -45,6 +45,7 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
 
                 // Execute crossover with UNDX
                 optParameters = undxExecutor.ExecuteCrossover(parentsIndividuals);
+                parentsIndex = undxExecutor.ParentsIndex;
             }
 
         }

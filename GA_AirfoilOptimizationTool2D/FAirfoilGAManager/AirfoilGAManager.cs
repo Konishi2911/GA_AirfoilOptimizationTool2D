@@ -29,12 +29,17 @@
         public void StartCrossover(Airfoil.CombinedAirfoilsGroupManager parents)
         {
             parentAirfoils = parents;
+            var parentsAirfoilsArray = parentAirfoils.GetCombinedAirfoilsArray();
+
+            // Initialize Basis airfoils
+            basisAirfoils = new General.BasisAirfoils(parentsAirfoilsArray[0].BasisAirfoils);
 
             // Execute Crossover
             crossoverExecutor.ExecuteCrossover(parentAirfoils);
 
             // Read Offsprings' optimization parameters
             var optParams = crossoverExecutor.OptimizationParamters;
+            optParams = SwapJuggedArray(optParams);
 
             // Assign Selected Parents Index
             parentsIndex = crossoverExecutor.ParentsIndex;
@@ -85,6 +90,35 @@
 
         }
 
+        private T[][] SwapJuggedArray<T>(T[][] jArray)
+        {
+            bool isSameSize = true;
+            // FormatCheck
+            for (int i = 0; i < jArray.Length - 1; i++)
+            {
+                isSameSize &= jArray[i].Length == jArray[i + 1].Length;
+            }
+
+            if (isSameSize == false)
+            {
+                return null;
+            }
+
+            var length = jArray.Length;
+            var width = jArray[0].Length;
+
+            T[][] njArray = new T[width][];
+            for (int i = 0; i < width; i++)
+            {
+                njArray[i] = new T[length];
+                for (int j = 0; j < length; j++)
+                {
+                    njArray[i][j] = jArray[j][i];
+                }
+            }
+            return njArray;
+
+        }
         /// <summary>
         /// If invalid format jArray is passed, null is returned.
         /// </summary>
@@ -97,7 +131,7 @@
             // FormatCheck
             for (int i = 0; i < jArray.Length - 1; i++)
             {
-                isSameSize &= jArray[i] == jArray[i + 1];
+                isSameSize &= jArray[i].Length == jArray[i + 1].Length;
             }
 
             if (isSameSize == false)

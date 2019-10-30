@@ -88,5 +88,22 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             }
             return rArray[columnNumber];
         }
+        private T[] GetColumnArray<T>(T[,] array, int rowNumber)
+        {
+            var length = array.GetLength(0);
+            var width = array.GetLength(1);
+
+            var rArray = new T[width][];
+
+            for (int i = 0; i < length; i++)
+            {
+                rArray[i] = new T[length];
+                for (int j = 0; j < width; j++)
+                {
+                    rArray[i][j] = array[i, j];
+                }
+            }
+            return rArray[rowNumber];
+        }
     }
 }

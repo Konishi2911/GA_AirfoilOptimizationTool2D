@@ -12,7 +12,10 @@ namespace GA_AirfoilOptimizationTool2D
         private Airfoil.CombinedAirfoilsGroupManager _currentAirfoils;
         private Double[,] _coefficientOfCombination;
 
+        private int[] parentsIndex;
         private Airfoil.CombinedAirfoilsGroupManager _offspringAirfoilsCandidates;
+
+        private FAirfoilGAManager.AirfoilGAManager airfoilGAManager;
         #endregion
 
         #region Properties
@@ -57,6 +60,7 @@ namespace GA_AirfoilOptimizationTool2D
             {
                 _offspringAirfoilsCandidates = value;
                 OnPropertyChanged(nameof(OffspringAirfoilsCandidates));
+                OffspringsAirfoilsReady(this, new EventArgs());
             }
         }
         #endregion
@@ -152,6 +156,19 @@ namespace GA_AirfoilOptimizationTool2D
                 // Fire the event updated SourceData are ready
                 SourceDataChanged?.Invoke(this, new EventArgs());
             }
+        }
+
+        public void StartCrossovers()
+        {
+            airfoilGAManager = new FAirfoilGAManager.AirfoilGAManager();
+            airfoilGAManager.StartCrossover(CurrentAirfoilsPopulation);
+
+            parentsIndex = airfoilGAManager.ParentsIndex;
+            OffspringAirfoilsCandidates = airfoilGAManager.OffspringAirfoilCandidates;
+        }
+        public void StartSelection()
+        {
+
         }
 
         /// <summary>

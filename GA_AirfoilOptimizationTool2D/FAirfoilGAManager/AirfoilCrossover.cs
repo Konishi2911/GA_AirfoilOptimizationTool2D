@@ -13,6 +13,7 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
         private FGeneticAlgorithm.UNDX_Parameters undxParameters;
         private CrossoverOperator crossoverOperator;
 
+        public int NumberOfCrossovers => 10;
         public double[][] OptimizationParamters => optParameters;
         public int[] ParentsIndex => parentsIndex;
 
@@ -38,7 +39,7 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
                 {
                     Alpha = 0.5,
                     Beta = 0.35,
-                    NumberOfCrossovers = 10,
+                    NumberOfCrossovers = NumberOfCrossovers,
                     NumberOfParameters = parentsIndividuals.IndivisualsGroup[0].OptParameters.Length
                 };
                 var undxExecutor = new FGeneticAlgorithm.UNDX(undxParameters);

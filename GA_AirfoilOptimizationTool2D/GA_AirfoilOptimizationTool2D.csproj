@@ -181,6 +181,8 @@
     <Compile Include="FMainWindow\Messenger\CoefManagerMessenger.cs" />
     <Compile Include="FMainWindow\Messenger\OptConfigDialogMessenger.cs" />
     <Compile Include="FMainWindow\Models\AirfoilSynthesizer.cs" />
+    <Compile Include="FMainWindow\PreviewWindowMode.cs" />
+    <Compile Include="FMainWindow\PreviewWindowSelecterViewModel.cs" />
     <Compile Include="General\BasisAirfoils.cs" />
     <Compile Include="Airfoil\CombinedAirfoilsGroupManager.cs" />
     <Compile Include="FOptConfig\Actions\ApplyWindowAction.cs" />

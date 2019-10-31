@@ -7,6 +7,8 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
     {
         private const int NumberOfChildren = 10;
 
+        private PreviewWindowMode previewWindowMode;
+
         private General.BasisAirfoils basisAirfoils;
         private General.DelegateCommand openWorkingFile;
         private General.DelegateCommand saveWorkingFile;
@@ -16,10 +18,12 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         private General.DelegateCommand startGAOptimization;
         private General.ParamDelegateCommand<String> setSpecifications;
         private Airfoil.Representation.AirfoilCombiner[] combinedAirfoils;
+        private Airfoil.Representation.AirfoilCombiner[] offspringAirfoilCandidates;
         private Double[,] coefficients;
         private ObservableCollection<System.Windows.Point>[] previewCoordinates;
         private System.Data.DataTable airfoilSpecifications;
-        private FAirfoilGAManager.AirfoilGAManager airfoilGAManager;
+
+        private PreviewWindowSelecterViewModel previewWindowSelecter;
 
         /// <summary>
         /// Constructor
@@ -28,6 +32,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         {
             // Allocate Event CallBack Functions
             OptimizingConfiguration.Instance.SourceDataChanged += SourceChanged;
+            OptimizingConfiguration.Instance.OffspringsAirfoilsReady += OffspringAirfoilsReady;
             //
 
             openOptConfigDialog = new Action(OpenOptimizingConfigurationDialog);
@@ -38,13 +43,13 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             saveWorkingFile = new General.DelegateCommand(SaveWorkingFile, () => true);
             showOprConfigDialog = new General.DelegateCommand(openOptConfigDialog, isOptConfigEnabled);
             showCoefficientManager = new General.DelegateCommand(OpenCoefficientManager, IsCoefManagerEnabled);
-            updatePreviewWindow = new General.DelegateCommand(UpdateAirfoilPreviews, () => true);
+            updatePreviewWindow = new General.DelegateCommand(UpdateCurrentAirfoilsPopulation, () => true);
             startGAOptimization = new General.DelegateCommand(StartGeneticOptimization, IsGAExecutable);
             setSpecifications = new General.ParamDelegateCommand<String>(DisplaySpecifications, () => true);
-
             //
 
             // Instantiate Fields
+            previewWindowMode = PreviewWindowMode.CurrentPopulation;
             combinedAirfoils = new Airfoil.Representation.AirfoilCombiner[NumberOfChildren];
             for (int i = 0; i < NumberOfChildren; i++)
             {
@@ -61,6 +66,22 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
 
         public Action openOptConfigDialog;
         public Func<bool> isOptConfigEnabled;
+
+        #region ComboBox Related
+        public System.Collections.Generic.IEnumerable<PreviewWindowSelecterViewModel> AirfoilPreviewModes { get; private set; }
+        public PreviewWindowSelecterViewModel SelectedAirfoilPreviewMode
+        {
+            get
+            {
+                return this.previewWindowSelecter;
+            }
+            set
+            {
+                this.previewWindowSelecter = value;
+                this.OnPropertyChanged(nameof(SelectedAirfoilPreviewMode));
+            }
+        }
+        #endregion
 
         #region Event CallBacks
         private void SourceChanged(object sender, EventArgs e)
@@ -79,7 +100,19 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             this.combinedAirfoils = OptimizingConfiguration.Instance.CurrentAirfoilsPopulation.GetCombinedAirfoilsArray();
 
             // Re-generate the coordinates for airfoil previewing.
-            UpdateAirfoilPreviews();
+            ReDrawPreviewWindow();
+        }
+        private void OffspringAirfoilsReady(object sender, EventArgs e)
+        {
+            // Pull offspringAirfoils from OptConfig
+            this.offspringAirfoilCandidates = OptimizingConfiguration.Instance.OffspringAirfoilsCandidates.GetCombinedAirfoilsArray();
+
+            // Re-generate the coordinates for airfoil previewing.
+            ReDrawPreviewWindow();
+
+            // Debug Only ============================================
+            UpdateAirfoilPreviews(offspringAirfoilCandidates);
+            // =======================================================
         }
 
         private void WorkingFileImported(object sender, FWorkingFileIO.WorkingFileIO.OpeningFileFinishedEventArgs e)
@@ -289,15 +322,21 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         // Re-Draw the preview windows
         public void ReDrawPreviewWindow()
         {
-            UpdateAirfoilPreviews();
+            if (previewWindowMode == PreviewWindowMode.CurrentPopulation)
+            {
+                UpdateCurrentAirfoilsPopulation();
+            }
+            else if (previewWindowMode == PreviewWindowMode.OffspringCandidates)
+            {
+                UpdateOffspringAirfoilCandidates();
+            }
         }
         //
 
         // Start Optimization with Genetic Algorithm
         public void StartGeneticOptimization()
         {
-            airfoilGAManager = new FAirfoilGAManager.AirfoilGAManager();
-            airfoilGAManager.StartCrossover(OptimizingConfiguration.Instance.CurrentAirfoilsPopulation);
+            OptimizingConfiguration.Instance.StartCrossovers();
         }
         public bool IsGAExecutable()
         {
@@ -357,20 +396,28 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         }
         #endregion
 
-        private void UpdateAirfoilPreviews()
+        private void UpdateCurrentAirfoilsPopulation()
         {
-            if (combinedAirfoils[0].CombinedAirfoil != null)
+            UpdateAirfoilPreviews(combinedAirfoils);
+        }
+        private void UpdateOffspringAirfoilCandidates()
+        {
+            UpdateAirfoilPreviews(offspringAirfoilCandidates);
+        }
+        private void UpdateAirfoilPreviews(Airfoil.Representation.AirfoilCombiner[] source)
+        {
+            if (combinedAirfoils[0].CombinedAirfoil != null && source.Length == 10)
             {
-                PreviewCoordinate1 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[0].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
-                PreviewCoordinate2 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[1].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
-                PreviewCoordinate3 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[2].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
-                PreviewCoordinate4 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[3].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
-                PreviewCoordinate5 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[4].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
-                PreviewCoordinate6 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[5].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
-                PreviewCoordinate7 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[6].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
-                PreviewCoordinate8 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[7].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
-                PreviewCoordinate9 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[8].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
-                PreviewCoordinate10 = General.AirfoilPreview.GetPreviewPointList(combinedAirfoils[9].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+                PreviewCoordinate1 = General.AirfoilPreview.GetPreviewPointList(source[0].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+                PreviewCoordinate2 = General.AirfoilPreview.GetPreviewPointList(source[1].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+                PreviewCoordinate3 = General.AirfoilPreview.GetPreviewPointList(source[2].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+                PreviewCoordinate4 = General.AirfoilPreview.GetPreviewPointList(source[3].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+                PreviewCoordinate5 = General.AirfoilPreview.GetPreviewPointList(source[4].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+                PreviewCoordinate6 = General.AirfoilPreview.GetPreviewPointList(source[5].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+                PreviewCoordinate7 = General.AirfoilPreview.GetPreviewPointList(source[6].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+                PreviewCoordinate8 = General.AirfoilPreview.GetPreviewPointList(source[7].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+                PreviewCoordinate9 = General.AirfoilPreview.GetPreviewPointList(source[8].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
+                PreviewCoordinate10 = General.AirfoilPreview.GetPreviewPointList(source[9].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
             }
         }
 

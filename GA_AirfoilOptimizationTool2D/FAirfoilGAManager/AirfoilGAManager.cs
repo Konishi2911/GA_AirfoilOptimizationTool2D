@@ -6,11 +6,17 @@
         private General.BasisAirfoils basisAirfoils;
         private Airfoil.CombinedAirfoilsGroupManager parentAirfoils;
         private int[] parentsIndex;
+        private Airfoil.CombinedAirfoilsGroupManager offspringAirfoilsCombiner;
         private Airfoil.CombinedAirfoilGroup offspringAirfoils;
         private Airfoil.CombinedAirfoilGroup nextGenerations;
         private ExternalAirfoilEvaluation airfoilEvaluation;
         private AirfoilCrossover crossoverExecutor;
         private AirfoilSelection selectionExecutor;
+        #endregion
+
+        #region Properties
+        public int[] ParentsIndex => parentsIndex;
+        public Airfoil.CombinedAirfoilsGroupManager OffspringAirfoilCandidates => offspringAirfoilsCombiner;
         #endregion
 
         #region Classes
@@ -45,11 +51,8 @@
             parentsIndex = crossoverExecutor.ParentsIndex;
 
             // Create Offspring Airfoils
-            Airfoil.CombinedAirfoilsGroupManager offspringAirfoilsCombiner = new Airfoil.CombinedAirfoilsGroupManager(optParams.Length);
+            offspringAirfoilsCombiner = new Airfoil.CombinedAirfoilsGroupManager(crossoverExecutor.NumberOfCrossovers);
             offspringAirfoilsCombiner.CombineAirfoils(basisAirfoils, ConvertJuggedArrayToArray(optParams));
-
-            // Register Created Offspring airfoils into OptimizingConfiguration
-            OptimizingConfiguration.Instance.OffspringAirfoilsCandidates = offspringAirfoilsCombiner;
         }
 
         public void StartSelection(Airfoil.CombinedAirfoilsGroupManager offsprings)

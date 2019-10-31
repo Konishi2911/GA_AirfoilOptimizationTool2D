@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
 
 namespace GA_AirfoilOptimizationTool2D.FMainWindow
 {
@@ -61,6 +63,9 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             {
                 previewCoordinates[i] = new ObservableCollection<System.Windows.Point>();
             }
+
+            AirfoilPreviewModes = PreviewWindowSelecterViewModel.Create();
+            SelectedAirfoilPreviewMode = this.AirfoilPreviewModes.First();
             //
         }
 
@@ -111,7 +116,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             ReDrawPreviewWindow();
 
             // Debug Only ============================================
-            UpdateAirfoilPreviews(offspringAirfoilCandidates);
+            //UpdateAirfoilPreviews(offspringAirfoilCandidates);
             // =======================================================
         }
 
@@ -125,6 +130,15 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             }
 
             OptimizingConfiguration.Instance.SetSource(baseAirfoilsGroup, e.CoefficientOfCombination);
+        }
+
+        private void This_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(this.SelectedAirfoilPreviewMode))
+            {
+                previewWindowMode = SelectedAirfoilPreviewMode.PreviewMode;
+                ReDrawPreviewWindow();
+            }
         }
         #endregion
 

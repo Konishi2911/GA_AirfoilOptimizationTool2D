@@ -8,7 +8,7 @@
         private int[] parentsIndex;
         private Airfoil.CombinedAirfoilsGroupManager offspringAirfoilsCombiner;
         private Airfoil.CombinedAirfoilGroup offspringAirfoils;
-        private Airfoil.CombinedAirfoilGroup nextGenerations;
+        private Airfoil.CombinedAirfoilsGroupManager nextAirfoilGenerations;
         private ExternalAirfoilEvaluation airfoilEvaluation;
         private AirfoilCrossover crossoverExecutor;
         private AirfoilSelection selectionExecutor;
@@ -17,6 +17,7 @@
         #region Properties
         public int[] ParentsIndex => parentsIndex;
         public Airfoil.CombinedAirfoilsGroupManager OffspringAirfoilCandidates => offspringAirfoilsCombiner;
+        public Airfoil.CombinedAirfoilsGroupManager NextAirfoilGenerations => nextAirfoilGenerations;
         #endregion
 
         #region Classes
@@ -70,6 +71,7 @@
             // Create next Generation
             int k = 0;
             var previousGen = parentAirfoils.GetCombinedAirfoilsArray();
+            var nextGenerations = new Airfoil.CombinedAirfoilGroup();
             for (int i = 0; i < previousGen.Length; i++)
             {
                 if (IsEqual(i, parentsIndex))

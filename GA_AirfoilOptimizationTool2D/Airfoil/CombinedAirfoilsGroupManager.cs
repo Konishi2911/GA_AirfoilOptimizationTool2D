@@ -31,6 +31,12 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             this._combinedAirfoils = new Airfoil.Representation.AirfoilCombiner[_numberOfAirfoils];
         }
 
+        public CombinedAirfoilsGroupManager(Representation.AirfoilCombiner[] elements)
+        {
+            this._numberOfAirfoils = elements.Length;
+            this._combinedAirfoils = elements;
+        }
+
         /// <summary>
         /// This method combines the passed base airfoil with the passed coefficients as aparallel processing. 
         /// If finish the processing, it fires the event combinatedAirfoilUpdated.
@@ -57,6 +63,36 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
                 tasks.Add(Task.Run(() => _combinedAirfoils[x].UpdateBaseSource(coef, basis)));
             }
             Task.WaitAll(tasks.ToArray());
+
+            // Fire the event combinedAirfoilsUpdated
+            CombinedAirfoilsUpdated?.Invoke(this, new CombinedAirfoilsUpdatedEventArgs() { combinedAirfoils = this._combinedAirfoils });
+        }
+
+        public void CombineAirfoils(General.BasisAirfoils basisAirfoils, Double[,] coefficients, bool isAppend)
+        {
+            List<Task> tasks = new List<Task>();
+            Representation.AirfoilCombiner[] tempAirfoils = new Representation.AirfoilCombiner[coefficients.GetLength(1)];
+
+            for (int i = 0; i < _numberOfAirfoils; i++)
+            {
+                // Null Check
+                if (tempAirfoils[i] == null)
+                {
+                    tempAirfoils[i] = new Representation.AirfoilCombiner();
+                }
+
+                var x = i;
+                var basis = basisAirfoils.AirfoilGroup.ToArray();
+                var coef = GetRowArray(coefficients, i);
+
+                // Update Source and Re-Combinate Airfoil.
+                tasks.Add(Task.Run(() => tempAirfoils[x].UpdateBaseSource(coef, basis)));
+            }
+            Task.WaitAll(tasks.ToArray());
+
+            var tempCurrentAirfoils = new List<Representation.AirfoilCombiner>(_combinedAirfoils);
+            tempCurrentAirfoils.AddRange(tempAirfoils);
+            _combinedAirfoils = tempCurrentAirfoils.ToArray();
 
             // Fire the event combinedAirfoilsUpdated
             CombinedAirfoilsUpdated?.Invoke(this, new CombinedAirfoilsUpdatedEventArgs() { combinedAirfoils = this._combinedAirfoils });

@@ -13,6 +13,5 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
     {
         private General.BasisAirfoils basisAirfoils;
         private double[][] coefficientsOfCombination;
-
     }
 }

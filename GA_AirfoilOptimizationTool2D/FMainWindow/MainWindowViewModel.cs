@@ -35,6 +35,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             // Allocate Event CallBack Functions
             OptimizingConfiguration.Instance.SourceDataChanged += SourceChanged;
             OptimizingConfiguration.Instance.OffspringsAirfoilsReady += OffspringAirfoilsReady;
+            this.PropertyChanged += this.This_PropertyChanged;
             //
 
             openOptConfigDialog = new Action(OpenOptimizingConfigurationDialog);
@@ -371,10 +372,23 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
                     {
                         return;
                     }
+
                 }
 
                 // Create Specifications Table
+                UpdateSpecificationSource(windowNumber);
+            }
+        }
+
+        private void UpdateSpecificationSource(string windowNumber)
+        {
+            if (previewWindowMode == PreviewWindowMode.CurrentPopulation)
+            {
                 AirfoilSpecifications = CreateTable(combinedAirfoils[Convert.ToInt32(windowNumber)].CombinedAirfoil);
+            }
+            else if (previewWindowMode == PreviewWindowMode.OffspringCandidates)
+            {
+                AirfoilSpecifications = CreateTable(offspringAirfoilCandidates[Convert.ToInt32(windowNumber)].CombinedAirfoil);
             }
         }
         #endregion

@@ -146,6 +146,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Airfoil\AirfoilCoordinateExporter.cs" />
     <Compile Include="Airfoil\Characteristics\AngleBasedCharacteristics.cs" />
     <Compile Include="Airfoil\CombinedAirfoilGroup.cs" />
     <Compile Include="Airfoil\Evaluation\ExternalEvaluation.cs" />

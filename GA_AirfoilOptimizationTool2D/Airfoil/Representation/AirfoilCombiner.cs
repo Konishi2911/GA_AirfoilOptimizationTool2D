@@ -78,6 +78,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Representation
             this._coefficient = coefficient;
 
             CombineAirfoil();
+            CombinedAirfoil.AirfoilName = "Airfoil";
         }
 
         /// <summary>

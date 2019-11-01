@@ -16,6 +16,10 @@ namespace GA_AirfoilOptimizationTool2D
         private Airfoil.CombinedAirfoilsGroupManager _offspringAirfoilsCandidates;
 
         private FAirfoilGAManager.AirfoilGAManager airfoilGAManager;
+
+        // Temporary
+        private String OffspringsExportDirectory;
+        private int ExportResolution;
         #endregion
 
         #region Properties
@@ -74,6 +78,8 @@ namespace GA_AirfoilOptimizationTool2D
         private OptimizingConfiguration()
         {
             // Instantiate
+            OffspringsExportDirectory = "C:\\Users\\Fluidlab\\Desktop\\Airfoils\\Offsprings";
+
             CurrentAirfoilsPopulation = new Airfoil.CombinedAirfoilsGroupManager(numberOfSameGenerations);
 
             // Assign Event
@@ -165,7 +171,9 @@ namespace GA_AirfoilOptimizationTool2D
 
             parentsIndex = airfoilGAManager.ParentsIndex;
             OffspringAirfoilsCandidates = airfoilGAManager.OffspringAirfoilCandidates;
+            ExportAsCSV();
         }
+
         public void StartSelection()
         {
 
@@ -195,6 +203,20 @@ namespace GA_AirfoilOptimizationTool2D
             for (int i = 0; i < count; i++)
             {
                 AddCoefficient();
+            }
+        }
+
+        private void ExportAsCSV()
+        {
+            var offsprings = OffspringAirfoilsCandidates.GetCombinedAirfoilsArray();
+            Airfoil.AirfoilCoordinateExporter CSVexporter = new Airfoil.AirfoilCoordinateExporter(OffspringsExportDirectory);
+            var i = 1;
+            foreach (var item in offsprings)
+            {
+                var offspringAirfoils = item.CombinedAirfoil;
+                offspringAirfoils.AirfoilName = "Offspring_" + i;
+                CSVexporter.ExportAirfoilCoordinate(item.CombinedAirfoil, ExportResolution);
+                i++;
             }
         }
     }

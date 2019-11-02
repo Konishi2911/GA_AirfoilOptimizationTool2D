@@ -177,12 +177,10 @@ namespace GA_AirfoilOptimizationTool2D
         public void StartSelection()
         {
             airfoilGAManager.StartSelection(OffspringAirfoilsCandidates);
-            var NextGeneration = airfoilGAManager.NextGenerations;
+            var NextGeneration = airfoilGAManager.NextAirfoilGenerations;
+            CurrentAirfoilsPopulation = NextGeneration;
 
-            for (int i = 0; i < NextGeneration.NumberOfAirfoils; i++)
-            {
-                NextGeneration.;
-            }
+            SourceDataChanged?.Invoke(this, new EventArgs());
         }
 
         /// <summary>

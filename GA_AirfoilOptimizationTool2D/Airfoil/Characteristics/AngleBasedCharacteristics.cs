@@ -11,5 +11,15 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
         private int nData;
         private double[][] chr;
         private double[][] interpolatedChr;
+
+        public AngleBasedCharacteristics()
+        {
+            nData = 0;
+        }
+
+        public AngleBasedCharacteristics(double[][] characteristics)
+        {
+            nData = characteristics.GetLength(0);
+        }
     }
 }

@@ -71,6 +71,23 @@
             // Create next Generation
             int k = 0;
             var previousGen = parentAirfoils.GetCombinedAirfoilsArray();
+            Airfoil.CombinedAirfoilsGroupManager nextGenerations = new Airfoil.CombinedAirfoilsGroupManager(previousGen.Length);
+            for (int i = 0; i < previousGen.Length; i++)
+            {
+                if (IsEqual(i, parentsIndex))
+                {
+                    nextGenerations.AddElement(selectedAirfoils[k]);
+                    ++k;
+                }
+                else
+                {
+                    nextGenerations.AddElement(previousGen[i]);
+                }
+            }
+            nextAirfoilGenerations = nextGenerations;
+
+            // newest virsion
+            /*
             var nextGenerations = new Airfoil.CombinedAirfoilGroup();
             for (int i = 0; i < previousGen.Length; i++)
             {
@@ -84,6 +101,7 @@
                     nextGenerations.Add(previousGen[i].CombinedAirfoil);
                 }
             }
+            */
         }
 
         private Airfoil.CombinedAirfoilsGroupManager CreateOffspringAirfoils(double[][] optParams)

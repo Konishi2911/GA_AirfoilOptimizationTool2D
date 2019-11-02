@@ -107,6 +107,19 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             return _combinedAirfoils.Clone() as Representation.AirfoilCombiner[];
         }
 
+        public void AddElement(Representation.AirfoilCombiner element)
+        {
+            List<Representation.AirfoilCombiner> tempAirfoils = new List<Representation.AirfoilCombiner>(_combinedAirfoils);
+            tempAirfoils.Add(element);
+            _combinedAirfoils = tempAirfoils.ToArray();
+
+            // Increment number of airfoils
+            ++this._numberOfAirfoils;
+
+            // Fire the event combinedAirfoilsUpdated
+            CombinedAirfoilsUpdated?.Invoke(this, new CombinedAirfoilsUpdatedEventArgs() { combinedAirfoils = this._combinedAirfoils });
+        }
+
         private T[] GetRowArray<T>(T[,] array, int columnNumber)
         {
             var length = array.GetLength(0);

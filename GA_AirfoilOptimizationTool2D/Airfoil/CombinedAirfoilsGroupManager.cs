@@ -21,6 +21,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             public Airfoil.Representation.AirfoilCombiner[] combinedAirfoils;
         }
 
+        private CombinedAirfoilsGroupManager() { }
         /// <summary>
         /// 
         /// </summary>
@@ -35,6 +36,17 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         {
             this._numberOfAirfoils = elements.Length;
             this._combinedAirfoils = elements;
+        }
+
+        public CombinedAirfoilsGroupManager Clone()
+        {
+            CombinedAirfoilsGroupManager copiedInstance = new CombinedAirfoilsGroupManager
+            {
+                _numberOfAirfoils = this._numberOfAirfoils,
+                _combinedAirfoils = this._combinedAirfoils.Clone() as Representation.AirfoilCombiner[]
+            };
+
+            return copiedInstance;
         }
 
         /// <summary>

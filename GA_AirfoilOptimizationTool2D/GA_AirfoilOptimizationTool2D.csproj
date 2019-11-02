@@ -156,6 +156,10 @@
     <Compile Include="FAirfoilGAManager\AirfoilGAManager.cs" />
     <Compile Include="FAirfoilGAManager\AirfoilSelection.cs" />
     <Compile Include="FAirfoilGAManager\ExternalAirfoilEvaluation.cs" />
+    <Compile Include="FCharacteristicsManager\CharacteristicsManager.xaml.cs">
+      <DependentUpon>CharacteristicsManager.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FCharacteristicsManager\CharacteristicsManagerViewModel.cs" />
     <Compile Include="FCoefManager\CoefficientManager.xaml.cs">
       <DependentUpon>CoefficientManager.xaml</DependentUpon>
     </Compile>
@@ -184,6 +188,7 @@
     <Compile Include="FMainWindow\Models\AirfoilSynthesizer.cs" />
     <Compile Include="FMainWindow\PreviewWindowMode.cs" />
     <Compile Include="FMainWindow\PreviewWindowSelecterViewModel.cs" />
+    <Compile Include="General\ArrayManager.cs" />
     <Compile Include="General\BasisAirfoils.cs" />
     <Compile Include="Airfoil\CombinedAirfoilsGroupManager.cs" />
     <Compile Include="FOptConfig\Actions\ApplyWindowAction.cs" />
@@ -204,6 +209,10 @@
     <Compile Include="General\Triggers\SaveFileDialogTriger.cs" />
     <Compile Include="OptimizingConfiguration.cs" />
     <Compile Include="SizeObserver.cs" />
+    <Page Include="FCharacteristicsManager\CharacteristicsManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="FCoefManager\CoefficientManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

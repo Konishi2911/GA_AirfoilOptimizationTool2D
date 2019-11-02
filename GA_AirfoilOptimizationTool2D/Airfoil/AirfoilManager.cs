@@ -87,6 +87,15 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
                 leadingEdgeRadius = value;
             }
         }
+
+        public Characteristics.AngleBasedCharacteristics LiftProfile
+        {
+            get => liftProfile;
+            set
+            {
+                liftProfile = value;
+            }
+        }
         #endregion
 
         private void InitializeComponent()

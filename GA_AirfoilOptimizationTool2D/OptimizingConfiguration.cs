@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Reflection;
 
 namespace GA_AirfoilOptimizationTool2D
 {
@@ -78,7 +79,10 @@ namespace GA_AirfoilOptimizationTool2D
         private OptimizingConfiguration()
         {
             // Instantiate
-            OffspringsExportDirectory = "C:\\Users\\Fluidlab\\Desktop\\Airfoils\\Offsprings";
+            //OffspringsExportDirectory = "C:\\Users\\Fluidlab\\Desktop\\Airfoils\\Offsprings";
+            Assembly thisAssembry = Assembly.GetEntryAssembly();
+            String entryPath = thisAssembry.Location;
+            OffspringsExportDirectory = "..\\..\\..\\Offsprings";
 
             CurrentAirfoilsPopulation = new Airfoil.CombinedAirfoilsGroupManager(numberOfSameGenerations);
 

@@ -32,5 +32,78 @@ namespace GA_AirfoilOptimizationTool2D.General
 
             return str;
         } 
+
+        public static Double[,] ConvertCsvToArray(String csv)
+        {
+            // Null Check
+            if (csv == null)
+            {
+                return null;
+            }
+            var lineCsv = rowSeparator(csv);
+            return getDoubleArray(lineCsv);
+        }
+
+        private static String[] rowSeparator(String source)
+        {
+            var newLine = new String[] { "\r\n" };
+            return source.Split(newLine, StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        private static Double[,] getDoubleArray(String[] strLine)
+        {
+            var strList = new List<List<String>>();
+            var dataList = new List<List<Double>>();
+            var delimiter = new String[] { "," };
+
+            // Create String type Array
+            foreach (var row in strLine)
+            {
+                var strItems = row.Split(delimiter, StringSplitOptions.RemoveEmptyEntries);
+                strList.Add(new List<String>(strItems));
+            }
+            // -------------------------
+
+            // Convert String type List to Double type List
+            foreach (var row in strList)
+            {
+                var dataRow = new List<Double>();
+                foreach (var item in row)
+                {
+                    dataRow.Add(Convert.ToDouble(item));
+                }
+                dataList.Add(dataRow);
+            }
+            // ---------------------------------------------
+
+            // Convert DataList To DataArray
+            var numberOfRow = dataList.Count;
+            var numberOfColumn = dataList[0].Count;
+            var dataArray = new Double[numberOfRow, numberOfColumn];
+
+            try
+            {
+                for (int i = 0; i < numberOfRow; i++)
+                {
+                    var dataRow = dataList[i].ToArray();
+                    if (dataRow.Length != numberOfColumn)
+                    {
+                        throw new FormatException("Invalid CSV Format");
+                    }
+
+                    for (int j = 0; j < numberOfColumn; j++)
+                    {
+                        dataArray[i, j] = dataRow[j];
+                    }
+                }
+            }
+            catch (FormatException)
+            {
+
+            }
+            // ---------------------------------
+
+            return dataArray;
+        }
     }
 }

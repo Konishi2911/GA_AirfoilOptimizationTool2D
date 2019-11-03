@@ -44,6 +44,10 @@
         <chtr:CharacteristicsImporterTrigger>
             <chac:CharacteristicsImporterAction/>
         </chtr:CharacteristicsImporterTrigger>
+
+        <tr:AirfoilCharacteristicsManagerTrigger>
+            <ac:ShowAirfoilCharacManagerAction/>
+        </tr:AirfoilCharacteristicsManagerTrigger>
     </i:Interaction.Triggers>
 
     <Grid>
@@ -61,7 +65,7 @@
             <MenuItem Header="GeneticAlgorithm (_G)">
                 <MenuItem Header="Generating Configuration"/>
                 <MenuItem Header="Start Genetic Optimization" Command="{Binding Path=StartGAOptimization}"/>
-                <MenuItem Header="Airfoil Specifications Manager"/>
+                <MenuItem Header="Airfoil Characteristics Manager" Command="{Binding Path=OpenCharacManager}"/>
             </MenuItem>
             <MenuItem Header="Option (_O)">
                 <MenuItem Header="Optimizing Configuration" Command="{Binding Path=ShowOptConfigDialog}"/>

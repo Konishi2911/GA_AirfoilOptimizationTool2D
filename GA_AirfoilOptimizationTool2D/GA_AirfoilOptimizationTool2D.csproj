@@ -156,10 +156,12 @@
     <Compile Include="FAirfoilGAManager\AirfoilGAManager.cs" />
     <Compile Include="FAirfoilGAManager\AirfoilSelection.cs" />
     <Compile Include="FAirfoilGAManager\ExternalAirfoilEvaluation.cs" />
+    <Compile Include="FCharacteristicsManager\Actions\ApplyButtonAction.cs" />
     <Compile Include="FCharacteristicsManager\CharacteristicsManager.xaml.cs">
       <DependentUpon>CharacteristicsManager.xaml</DependentUpon>
     </Compile>
     <Compile Include="FCharacteristicsManager\CharacteristicsManagerViewModel.cs" />
+    <Compile Include="FCharacteristicsManager\TargetAirfoilSelectorViewModel.cs" />
     <Compile Include="FCoefManager\CoefficientManager.xaml.cs">
       <DependentUpon>CoefficientManager.xaml</DependentUpon>
     </Compile>
@@ -179,10 +181,13 @@
     <Compile Include="FInputAirfoilCharacteristics\CharacteristicsImporterViewModel.cs" />
     <Compile Include="FInputAirfoilCharacteristics\Messenger\CharacteristicsImporterMessenger.cs" />
     <Compile Include="FInputAirfoilCharacteristics\Triggers\CharacteristicsImporterTrigger.cs" />
+    <Compile Include="FMainWindow\Actions\ShowAirfoilCharacManagerAction.cs" />
     <Compile Include="FMainWindow\Actions\ShowCoefManagerAction.cs" />
     <Compile Include="FMainWindow\Actions\ShowOptConfigDialogAction.cs" />
+    <Compile Include="FMainWindow\Events\AirfoilCharacteristicsManagerTrigger.cs" />
     <Compile Include="FMainWindow\Events\CoefManagerTrigger.cs" />
     <Compile Include="FMainWindow\Events\OptConfigDialogTrigger.cs" />
+    <Compile Include="FMainWindow\Messenger\AirfoilCharacManagerMessenger.cs" />
     <Compile Include="FMainWindow\Messenger\CoefManagerMessenger.cs" />
     <Compile Include="FMainWindow\Messenger\OptConfigDialogMessenger.cs" />
     <Compile Include="FMainWindow\Models\AirfoilSynthesizer.cs" />

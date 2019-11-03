@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:GA_AirfoilOptimizationTool2D"
              xmlns:vm="clr-namespace:GA_AirfoilOptimizationTool2D.FOptConfig"
              xmlns:mvm="clr-namespace:GA_AirfoilOptimizationTool2D.FMainWindow"
+             xmlns:cvm="clr-namespace:GA_AirfoilOptimizationTool2D.FCharacteristicsManager"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <DataTemplate DataType="{x:Type vm:AirfoilRepresentationModeViewModel}">
@@ -13,6 +14,9 @@
             <TextBlock Text="{Binding Label}"/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:AirfoilSelectorViewModel}">
+            <TextBlock Text="{Binding Label}"/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type cvm:TargetAirfoilSelectorViewModel}">
             <TextBlock Text="{Binding Label}"/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type mvm:PreviewWindowSelecterViewModel}">

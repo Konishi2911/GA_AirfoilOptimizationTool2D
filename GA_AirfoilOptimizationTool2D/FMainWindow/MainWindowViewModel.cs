@@ -18,6 +18,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         private General.DelegateCommand showCoefficientManager;
         private General.DelegateCommand updatePreviewWindow;
         private General.DelegateCommand startGAOptimization;
+        private General.DelegateCommand airfoilCharacteristicsManager;
         private General.ParamDelegateCommand<String> setSpecifications;
         private Airfoil.Representation.AirfoilCombiner[] combinedAirfoils;
         private Airfoil.Representation.AirfoilCombiner[] offspringAirfoilCandidates;
@@ -48,6 +49,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             showCoefficientManager = new General.DelegateCommand(OpenCoefficientManager, IsCoefManagerEnabled);
             updatePreviewWindow = new General.DelegateCommand(UpdateCurrentAirfoilsPopulation, () => true);
             startGAOptimization = new General.DelegateCommand(StartGeneticOptimization, IsGAExecutable);
+            airfoilCharacteristicsManager = new General.DelegateCommand(OpenCharacteristicsManager, () => true);
             setSpecifications = new General.ParamDelegateCommand<String>(DisplaySpecifications, () => true);
             //
 
@@ -360,6 +362,11 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             return nullCheck && lengthCheck;
         }
 
+        public void OpenCharacteristicsManager()
+        {
+            Messenger.AirfoilCharacManagerMessenger.Show();
+        }
+
         // Display the Airfoil Specifications
         public void DisplaySpecifications(String windowNumber)
         {
@@ -372,7 +379,6 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
                     {
                         return;
                     }
-
                 }
 
                 // Create Specifications Table
@@ -417,6 +423,10 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         public General.DelegateCommand StartGAOptimization
         {
             get => startGAOptimization;
+        }
+        public General.DelegateCommand OpenCharacManager
+        {
+            get => airfoilCharacteristicsManager;
         }
         public General.ParamDelegateCommand<String> SetSpecifications
         {

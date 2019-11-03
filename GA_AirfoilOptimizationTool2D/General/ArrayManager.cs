@@ -14,9 +14,5 @@ namespace GA_AirfoilOptimizationTool2D.General
         {
             this.targetArray = target;
         }
-        public ArrayManager(T[,] target)
-        {
-            this.
-        }
     }
 }

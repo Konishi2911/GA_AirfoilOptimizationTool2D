@@ -10,8 +10,8 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
     {
         #region Fields
         private int nData;
-        private double[][] chr;
-        private double[][] interpolatedChr;
+        private double[,] chr;
+        private double[,] interpolatedChr;
         private double max;
         private double maxAngle;
         private double min;
@@ -23,6 +23,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
         public Double MaxAngle => maxAngle;
         public Double Min => min;
         public Double MinAngle => minAngle;
+        public Double[,] InterpolatedCharacteristics => interpolatedChr;
         #endregion
 
         public AngleBasedCharacteristics()
@@ -30,24 +31,31 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
             nData = 0;
         }
 
-        private void InitializeCharaceristics(double[][] characteristics)
+        private void InitializeCharaceristics(double[,] characteristics)
         {
             nData = characteristics.GetLength(0);
             this.chr = characteristics;
-            searchMaxCharac(this.chr);
-            searchMinCharac(this.chr);  
+
+            searchMaxCharac(ConvertArrayToJuggedArray(this.chr));
+            searchMinCharac(ConvertArrayToJuggedArray(this.chr));
+            InterpolateCharacteristics();
         }
         public AngleBasedCharacteristics(double[][] characteristics)
         {
-            InitializeCharaceristics(characteristics);
+            InitializeCharaceristics(ConvertJuggedArrayToArray(characteristics));
         }
 
         public AngleBasedCharacteristics(double[,] characteristics)
         {
-            var jArray = ConvertArrayToJuggedArray(characteristics);
-            InitializeCharaceristics(jArray);
+            InitializeCharaceristics(characteristics);
         }
 
+        private void InterpolateCharacteristics()
+        {
+            // Interpoplate profile with 3-dimensional Spline
+            var splinedChr =  General.Interpolation.SplineInterpolation(chr, 200);
+            interpolatedChr = General.Interpolation.LinearInterpolation(splinedChr, 100);
+        }
         private void searchMaxCharac(double[][] reference)
         {
             var max = reference[0][0];
@@ -96,6 +104,34 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
             }
 
             return jArray;
+        }
+        private T[,] ConvertJuggedArrayToArray<T>(T[][] jArray)
+        {
+            bool isSameSize = true;
+            // FormatCheck
+            for (int i = 0; i < jArray.Length - 1; i++)
+            {
+                isSameSize &= jArray[i] == jArray[i + 1];
+            }
+
+            if (isSameSize == false)
+            {
+                return null;
+            }
+
+            var length = jArray.Length;
+            var width = jArray[0].Length;
+            var array = new T[length, width];
+
+            for (int i = 0; i < length; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    array[i, j] = jArray[i][j];
+                }
+            }
+
+            return array;
         }
     }
 }

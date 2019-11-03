@@ -156,6 +156,7 @@
     <Compile Include="FAirfoilGAManager\AirfoilGAManager.cs" />
     <Compile Include="FAirfoilGAManager\AirfoilSelection.cs" />
     <Compile Include="FAirfoilGAManager\ExternalAirfoilEvaluation.cs" />
+    <Compile Include="FAirfoilGAManager\FitnessCalculator.cs" />
     <Compile Include="FCharacteristicsManager\Actions\ApplyButtonAction.cs" />
     <Compile Include="FCharacteristicsManager\CharacteristicsManager.xaml.cs">
       <DependentUpon>CharacteristicsManager.xaml</DependentUpon>

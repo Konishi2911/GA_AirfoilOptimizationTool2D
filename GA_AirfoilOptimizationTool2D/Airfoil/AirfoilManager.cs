@@ -96,6 +96,14 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
                 liftProfile = value;
             }
         }
+        public Characteristics.AngleBasedCharacteristics DragProfile
+        {
+            get => dragProfile;
+            set
+            {
+                dragProfile = value;
+            }
+        }
         #endregion
 
         private void InitializeComponent()

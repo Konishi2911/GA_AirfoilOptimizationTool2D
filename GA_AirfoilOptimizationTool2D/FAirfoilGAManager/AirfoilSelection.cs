@@ -30,6 +30,7 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
 
         public void ExecuteSelection(Airfoil.CombinedAirfoilsGroupManager offspringAirfoils)
         {
+            // Create Indiviuals
             var parentsIndividuals = CreateIndividuals(offspringAirfoils);
 
             // MGG Selection
@@ -57,7 +58,11 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
             var airfoils = airfoilsGroup.GetCombinedAirfoilsArray();
             foreach (var item in airfoils)
             {
-                double fitness = 1.0;
+                //double fitness = 1.0;
+                FitnessCalculator fitnessCalculator = new FitnessCalculator(item.CombinedAirfoil);
+                fitnessCalculator.CalculateFitness();
+                double fitness = fitnessCalculator.Fitness;
+
                 individuals.AddIndivisual(new FGeneticAlgorithm.Individual(item.Coefficients, fitness));
             }
 

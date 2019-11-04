@@ -57,7 +57,7 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager.Models
             // If the basisAirfoils in the source is not empty, create new coefficient collection that size is the number of basisAirfoils in the source.
             else if (OptimizingConfiguration.Instance.BasisAirfoils != null)
             {
-                setCoefficientLength(OptimizingConfiguration.Instance.BasisAirfoils.NumberOfBasisAirfoils);
+                setCoefficientLength(OptimizingConfiguration.Instance.BasisAirfoils.NumberOfAirfoils);
             }
             // If both the coefficient collection and basisAirfoils are empty, it create new coefficient collection that size is zero. 
             else

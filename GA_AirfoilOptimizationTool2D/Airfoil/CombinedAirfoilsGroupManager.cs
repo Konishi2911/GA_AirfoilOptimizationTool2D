@@ -10,10 +10,13 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
     public class CombinedAirfoilsGroupManager
     {
         private Airfoil.Representation.AirfoilCombiner[] _combinedAirfoils;
+        private double[,] _coefficientOfCombination;
         /// <summary>
         /// Number of combined airfoils
         /// </summary>
         private int _numberOfAirfoils;
+
+        public double[,] CoefficientOfCombination => _coefficientOfCombination;
 
         public event EventHandler CombinedAirfoilsUpdated;
         public class CombinedAirfoilsUpdatedEventArgs : EventArgs
@@ -30,13 +33,35 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         {
             this._numberOfAirfoils = numOfAirfoils;
             this._combinedAirfoils = new Airfoil.Representation.AirfoilCombiner[_numberOfAirfoils];
+
+            AssignEvents();
         }
 
         public CombinedAirfoilsGroupManager(Representation.AirfoilCombiner[] elements)
         {
             this._numberOfAirfoils = elements.Length;
             this._combinedAirfoils = elements;
+
+            AssignEvents();
         }
+
+        private void AssignEvents()
+        {
+            CombinedAirfoilsUpdated += UpdateCombiedAirfoilSpecs;
+        }
+
+        #region Event Callbacks
+        private void UpdateCombiedAirfoilSpecs(object senter, EventArgs e)
+        {
+            List<double[]> coefficientsList = new List<double[]>();
+            foreach (var item in _combinedAirfoils)
+            {
+                coefficientsList.Add(item.Coefficients);
+            }
+            var coefficientsJArray = SwapJuggedArray(coefficientsList.ToArray());
+            _coefficientOfCombination = ConvertJuggedArrayToArray(coefficientsJArray);
+        }
+        #endregion
 
         public CombinedAirfoilsGroupManager Clone()
         {
@@ -130,6 +155,70 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
 
             // Fire the event combinedAirfoilsUpdated
             CombinedAirfoilsUpdated?.Invoke(this, new CombinedAirfoilsUpdatedEventArgs() { combinedAirfoils = this._combinedAirfoils });
+        }
+
+        private T[][] SwapJuggedArray<T>(T[][] jArray)
+        {
+            bool isSameSize = true;
+            // FormatCheck
+            for (int i = 0; i < jArray.Length - 1; i++)
+            {
+                isSameSize &= jArray[i].Length == jArray[i + 1].Length;
+            }
+
+            if (isSameSize == false)
+            {
+                return null;
+            }
+
+            var length = jArray.Length;
+            var width = jArray[0].Length;
+
+            T[][] njArray = new T[width][];
+            for (int i = 0; i < width; i++)
+            {
+                njArray[i] = new T[length];
+                for (int j = 0; j < length; j++)
+                {
+                    njArray[i][j] = jArray[j][i];
+                }
+            }
+            return njArray;
+        }
+
+        /// <summary>
+        /// If invalid format jArray is passed, null is returned.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="jArray"></param>
+        /// <returns></returns>
+        private T[,] ConvertJuggedArrayToArray<T>(T[][] jArray)
+        {
+            bool isSameSize = true;
+            // FormatCheck
+            for (int i = 0; i < jArray.Length - 1; i++)
+            {
+                isSameSize &= jArray[i].Length == jArray[i + 1].Length;
+            }
+
+            if (isSameSize == false)
+            {
+                return null;
+            }
+
+            var length = jArray.Length;
+            var width = jArray[0].Length;
+            var array = new T[length, width];
+
+            for (int i = 0; i < length; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    array[i, j] = jArray[i][j];
+                }
+            }
+
+            return array;
         }
 
         private T[] GetRowArray<T>(T[,] array, int columnNumber)

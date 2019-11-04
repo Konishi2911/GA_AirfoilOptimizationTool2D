@@ -1,13 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GA_AirfoilOptimizationTool2D.General
 {
     public static class CsvManager
     {
+        public static String CreateCSV<T>(T[] data, bool isVartical)
+        {
+            T[,] array;
+            if (isVartical == false)
+            {
+                array = new T[1, data.Length];
+                for (int i = 0; i < data.Length; i++)
+                {
+                    array[0, i] = data[i];
+                }
+            }
+            else
+            {
+                array = new T[data.Length, 1];
+                for (int i = 0; i < data.Length; i++)
+                {
+                    array[i, 0] = data[i];
+                }
+            }
+
+            return CreateCSV(array);
+        }
         public static String CreateCSV<T>(T[,] data)
         {
             String str = null;
@@ -31,7 +50,7 @@ namespace GA_AirfoilOptimizationTool2D.General
             }
 
             return str;
-        } 
+        }
 
         public static Double[,] ConvertCsvToArray(String csv)
         {

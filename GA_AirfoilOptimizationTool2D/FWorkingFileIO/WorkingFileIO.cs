@@ -9,6 +9,17 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
     /// </summary>
     public class WorkingFileIO
     {
+        #region Tags
+        private const string NUMBER_OF_SAME_GENERATION = "NUMBER_OF_SAME_GENERATION";
+        private const string NUMBER_OF_BASE_AIRFOIL = "NUMBER_OF_BASE_AIRFOILS";
+        private const string BASE_AIRFOIL = "BASE_AIRFOILS";
+        private const string COEFFICIENT_OF_COMBINATION = "COEFFICIENT_OF_COMBINATION";
+        private const string OFFSPRING_COEFFICIENT = "OFFSPRING_COEFFICIENT";
+        private const string PARENT_INDEX = "PARENT_INDEX";
+
+        private const string NAME = "NAME";
+        private const string COORDINATE = "COORDINATE";
+        #endregion
         #region Fields
         private int numberOfSameGeneration;
         private int numberOfBaseAirfoils;
@@ -16,7 +27,10 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
         private List<Airfoil.AirfoilManager> baseAirfoils;
         private List<Airfoil.AirfoilManager> combinedAirfoils;
         private Double[,] coefficientOfCombination;
+        private int[] parentsIndex;
+        private Double[,] offspringCoefficients;
         #endregion
+
         public delegate void OpeningFileFinishedEventHandler(object sender, OpeningFileFinishedEventArgs e);
         public event OpeningFileFinishedEventHandler NotifyOpeningFileFinished;
         public class OpeningFileFinishedEventArgs : EventArgs
@@ -27,6 +41,8 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
             public List<Airfoil.AirfoilManager> BaseAirfoils { get; set; }
             public List<Airfoil.AirfoilManager> CombinedAirfoils { get; set; }
             public Double[,] CoefficientOfCombination { get; set; }
+            public int[] ParentsIndex { get; set; }
+            public Double[,] OffspringCoefficients { get; set; }
         }
 
         public WorkingFileIO()
@@ -51,11 +67,11 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
             // Notify Opening the file finished.
             var e = new OpeningFileFinishedEventArgs()
             {
-
-
                 NumberOfSameGeneration = this.numberOfSameGeneration,
                 BaseAirfoils = this.baseAirfoils,
                 CoefficientOfCombination = this.coefficientOfCombination,
+                ParentsIndex = this.parentsIndex,
+                OffspringCoefficients = this.offspringCoefficients,
                 CombinedAirfoils = this.combinedAirfoils,
                 NumberOfBaseAirfoils = this.numberOfBaseAirfoils,
                 NumberOfGenerations = this.numberOfGenerations
@@ -97,7 +113,13 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
             writingString += General.CsvManager.CreateCSV(OptimizingConfiguration.Instance.CoefficientOfCombination) + NewLine;
             writingString += EndPart();
 
+            writingString += CreateIndex(PARENT_INDEX);
+            writingString += General.CsvManager.CreateCSV(OptimizingConfiguration.Instance.ParentsIndex, false) + NewLine;
+            writingString += EndPart();
 
+            writingString += CreateIndex(OFFSPRING_COEFFICIENT);
+            writingString += General.CsvManager.CreateCSV(OptimizingConfiguration.Instance.OffspringAirfoilsCandidates.CoefficientOfCombination) + NewLine;
+            writingString += EndPart();
 
 
             using (var writer = new StreamWriter(path, false, System.Text.Encoding.UTF8))
@@ -140,6 +162,7 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
             String currentAirfoilName = null;
             List<Double[]> coordinateArray = new List<double[]>();
             List<Double[]> coefficientArray = new List<double[]>();
+            List<Double[]> offspringCoefArray = new List<double[]>();
 
             // Scroll Working File
             for (int i = 0; i < numberOfLines; i++)
@@ -173,6 +196,10 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
                     if (PreviousIndexName == "COEFFICIENT_OF_COMBINATION")
                     {
                         coefficientOfCombination = ConvertListToDoubleArray(coefficientArray);
+                    }
+                    else if (PreviousIndexName == OFFSPRING_COEFFICIENT)
+                    {
+                        offspringCoefficients = ConvertListToDoubleArray(offspringCoefArray);
                     }
                 }
                 else if (IndexName == "NUMBER_OF_SAME_GENERATION")
@@ -223,6 +250,29 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
                     }
 
                     coefficientArray.Add(coefficientRow);
+                }
+                else if (IndexName == PARENT_INDEX)
+                {
+                    var indexStr = FileStringLines[i].Split(',');
+                    parentsIndex = new int[indexStr.Length];
+                    for (int j = 0; j < indexStr.Length; j++)
+                    {
+                        parentsIndex[j] = int.Parse(indexStr[j]);
+                    }
+
+                }
+                else if (IndexName == OFFSPRING_COEFFICIENT)
+                {
+                    var coefficientStr = FileStringLines[i].Split(',');
+                    var numberOfSameGeneration = coefficientStr.Length;
+                    var coefficientRow = new double[numberOfSameGeneration];
+
+                    for (int j = 0; j < numberOfSameGeneration; j++)
+                    {
+                        coefficientRow[j] = Double.Parse(coefficientStr[j]);
+                    }
+
+                    offspringCoefArray.Add(coefficientRow);
                 }
             }
         }

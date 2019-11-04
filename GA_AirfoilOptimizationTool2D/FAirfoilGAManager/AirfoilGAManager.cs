@@ -32,6 +32,16 @@
             selectionExecutor = new AirfoilSelection(AirfoilSelection.SelectionModel.MGG);
         }
 
+        /// <summary>
+        /// Initialize without crossover procedure
+        /// </summary>
+        /// <param name="parentsIndex"></param>
+        public AirfoilGAManager(int[] parentsIndex, Airfoil.CombinedAirfoilsGroupManager parentAirfoils) : this()
+        {
+            this.parentsIndex = parentsIndex;
+            this.parentAirfoils = parentAirfoils;
+        }
+
 
         public void StartCrossover(Airfoil.CombinedAirfoilsGroupManager parents)
         {
@@ -63,6 +73,7 @@
 
             // Extract selected offsprings
             var selectedAirfoils = selectionExecutor.SelectedAirfoils;
+            offspringAirfoils = new Airfoil.CombinedAirfoilGroup();
             foreach (var item in selectedAirfoils)
             {
                 offspringAirfoils.Add(item.CombinedAirfoil);
@@ -71,7 +82,7 @@
             // Create next Generation
             int k = 0;
             var previousGen = parentAirfoils.GetCombinedAirfoilsArray();
-            Airfoil.CombinedAirfoilsGroupManager nextGenerations = new Airfoil.CombinedAirfoilsGroupManager(previousGen.Length);
+            Airfoil.CombinedAirfoilsGroupManager nextGenerations = new Airfoil.CombinedAirfoilsGroupManager(0);
             for (int i = 0; i < previousGen.Length; i++)
             {
                 if (IsEqual(i, parentsIndex))

@@ -74,5 +74,10 @@ namespace GA_AirfoilOptimizationTool2D
         {
 
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

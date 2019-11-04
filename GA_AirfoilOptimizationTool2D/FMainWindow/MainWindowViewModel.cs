@@ -18,9 +18,10 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         private General.DelegateCommand showCoefficientManager;
         private General.DelegateCommand updatePreviewWindow;
         private General.DelegateCommand startGAOptimization;
+        private General.DelegateCommand resumeGAOptimization;
         private General.DelegateCommand airfoilCharacteristicsManager;
         private General.ParamDelegateCommand<String> setSpecifications;
-        private Airfoil.Representation.AirfoilCombiner[] combinedAirfoils;
+        private Airfoil.Representation.AirfoilCombiner[] currentPopulations;
         private Airfoil.Representation.AirfoilCombiner[] offspringAirfoilCandidates;
         private Double[,] coefficients;
         private ObservableCollection<System.Windows.Point>[] previewCoordinates;
@@ -49,16 +50,17 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             showCoefficientManager = new General.DelegateCommand(OpenCoefficientManager, IsCoefManagerEnabled);
             updatePreviewWindow = new General.DelegateCommand(UpdateCurrentAirfoilsPopulation, () => true);
             startGAOptimization = new General.DelegateCommand(StartGeneticOptimization, IsGAExecutable);
+            resumeGAOptimization = new General.DelegateCommand(ResumeGeneticOptimization, IsGASelectionAvailable);
             airfoilCharacteristicsManager = new General.DelegateCommand(OpenCharacteristicsManager, () => true);
             setSpecifications = new General.ParamDelegateCommand<String>(DisplaySpecifications, () => true);
             //
 
             // Instantiate Fields
             previewWindowMode = PreviewWindowMode.CurrentPopulation;
-            combinedAirfoils = new Airfoil.Representation.AirfoilCombiner[NumberOfChildren];
+            currentPopulations = new Airfoil.Representation.AirfoilCombiner[NumberOfChildren];
             for (int i = 0; i < NumberOfChildren; i++)
             {
-                combinedAirfoils[i] = new Airfoil.Representation.AirfoilCombiner();
+                currentPopulations[i] = new Airfoil.Representation.AirfoilCombiner();
             }
 
             previewCoordinates = new ObservableCollection<System.Windows.Point>[NumberOfChildren];
@@ -105,7 +107,9 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             this.coefficients = OptimizingConfiguration.Instance.CoefficientOfCombination.Clone() as Double[,];
 
             // Re-combinate Airfoil
-            this.combinedAirfoils = OptimizingConfiguration.Instance.CurrentAirfoilsPopulation.GetCombinedAirfoilsArray();
+            this.currentPopulations = OptimizingConfiguration.Instance.CurrentAirfoilsPopulation?.GetCombinedAirfoilsArray();
+            // Re-set current offsprings
+            this.offspringAirfoilCandidates = OptimizingConfiguration.Instance.OffspringAirfoilsCandidates?.GetCombinedAirfoilsArray();
 
             // Re-generate the coordinates for airfoil previewing.
             ReDrawPreviewWindow();
@@ -132,7 +136,14 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
                 baseAirfoilsGroup.Add(item);
             }
 
+            // Set Current Population
             OptimizingConfiguration.Instance.SetSource(baseAirfoilsGroup, e.CoefficientOfCombination);
+
+            // Set Optimization Halfway
+            OptimizingConfiguration.Instance.ParentsIndex = e.ParentsIndex;
+
+            // Set Current Offspring candidates
+            OptimizingConfiguration.Instance.SetOffspringCadidates(baseAirfoilsGroup, e.OffspringCoefficients);
         }
 
         private void This_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -285,7 +296,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         }
         #endregion
 
-        #region DelegateCommand CallBacks
+        #region DelegateCommand Actions
         // Open Working File
         public void OpenWorkingFile()
         {
@@ -362,6 +373,15 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             return nullCheck && lengthCheck;
         }
 
+        public void ResumeGeneticOptimization()
+        {
+            OptimizingConfiguration.Instance.StartSelection();
+        }
+        public bool IsGASelectionAvailable()
+        {
+            return OptimizingConfiguration.Instance.OffspringAirfoilsReady;
+        }
+
         public void OpenCharacteristicsManager()
         {
             Messenger.AirfoilCharacManagerMessenger.Show();
@@ -370,10 +390,10 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         // Display the Airfoil Specifications
         public void DisplaySpecifications(String windowNumber)
         {
-            if (combinedAirfoils != null)
+            if (currentPopulations != null)
             {
                 // Null check
-                foreach (var item in combinedAirfoils)
+                foreach (var item in currentPopulations)
                 {
                     if (item.CombinedAirfoil == null)
                     {
@@ -390,7 +410,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         {
             if (previewWindowMode == PreviewWindowMode.CurrentPopulation)
             {
-                AirfoilSpecifications = CreateTable(combinedAirfoils[Convert.ToInt32(windowNumber)].CombinedAirfoil);
+                AirfoilSpecifications = CreateTable(currentPopulations[Convert.ToInt32(windowNumber)].CombinedAirfoil);
             }
             else if (previewWindowMode == PreviewWindowMode.OffspringCandidates)
             {
@@ -420,10 +440,9 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         {
             get => updatePreviewWindow;
         }
-        public General.DelegateCommand StartGAOptimization
-        {
-            get => startGAOptimization;
-        }
+        public General.DelegateCommand StartGAOptimization => startGAOptimization;
+        public General.DelegateCommand ResumeGAOptimization => resumeGAOptimization;
+
         public General.DelegateCommand OpenCharacManager
         {
             get => airfoilCharacteristicsManager;
@@ -436,7 +455,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
 
         private void UpdateCurrentAirfoilsPopulation()
         {
-            UpdateAirfoilPreviews(combinedAirfoils);
+            UpdateAirfoilPreviews(currentPopulations);
         }
         private void UpdateOffspringAirfoilCandidates()
         {
@@ -444,7 +463,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         }
         private void UpdateAirfoilPreviews(Airfoil.Representation.AirfoilCombiner[] source)
         {
-            if (combinedAirfoils[0].CombinedAirfoil != null && source.Length == 10)
+            if (source[0].CombinedAirfoil != null && source.Length == 10)
             {
                 PreviewCoordinate1 = General.AirfoilPreview.GetPreviewPointList(source[0].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);
                 PreviewCoordinate2 = General.AirfoilPreview.GetPreviewPointList(source[1].CombinedAirfoil, PreviewWindowHeight, PreviewWindowWidth);

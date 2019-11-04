@@ -50,6 +50,23 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
             InitializeCharaceristics(characteristics);
         }
 
+        public static double GetMaxValue(double[,] characteristics)
+        {
+            int maxIndex;
+            double max = 0.0;
+            searchMax(ConvertArrayToJuggedArray(characteristics), out max, out maxIndex);
+
+            return max;
+        }
+        public static double GetMinValue(double[,] characteristics)
+        {
+            int minIndex;
+            double min = 0.0;
+            searchMax(ConvertArrayToJuggedArray(characteristics), out min, out minIndex);
+
+            return min;
+        }
+
         private void InterpolateCharacteristics()
         {
             // Interpoplate profile with 3-dimensional Spline
@@ -58,8 +75,19 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
         }
         private void searchMaxCharac(double[][] reference)
         {
-            var max = reference[0][0];
-            var maxIndex = 0;
+            double max;
+            int maxIndex;
+
+            searchMax(reference, out max, out maxIndex);
+
+            this.max = max;
+            this.maxAngle = reference[maxIndex][0];
+        }
+
+        private static void searchMax(double[][] reference, out double max, out int maxIndex)
+        {
+            max = reference[0][0];
+            maxIndex = 0;
             for (int i = 1; i < reference.Length; i++)
             {
                 if (reference[i][1] > max)
@@ -68,14 +96,23 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
                     maxIndex = i;
                 }
             }
-
-            this.max = max;
-            this.maxAngle = reference[maxIndex][0];
         }
+
         private void searchMinCharac(double[][] reference)
         {
-            var min = reference[0][0];
-            var minIndex = 0;
+            double min;
+            int minIndex;
+
+            searchMin(reference, out min, out minIndex);
+
+            this.min = min;
+            this.minAngle = reference[minIndex][0];
+        }
+
+        private static void searchMin(double[][] reference, out double min, out int minIndex)
+        {
+            min = reference[0][0];
+            minIndex = 0;
             for (int i = 1; i < reference.Length; i++)
             {
                 if (reference[i][1] < min)
@@ -84,11 +121,9 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
                     minIndex = i;
                 }
             }
-
-            this.min = min;
-            this.minAngle = reference[minIndex][0];
         }
-        private T[][] ConvertArrayToJuggedArray<T>(T[,] array)
+
+        private static T[][] ConvertArrayToJuggedArray<T>(T[,] array)
         {
             var length = array.GetLength(0);
             var width = array.GetLength(1);
@@ -105,7 +140,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
 
             return jArray;
         }
-        private T[,] ConvertJuggedArrayToArray<T>(T[][] jArray)
+        private static T[,] ConvertJuggedArrayToArray<T>(T[][] jArray)
         {
             bool isSameSize = true;
             // FormatCheck

@@ -59,7 +59,8 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
             foreach (var item in airfoils)
             {
                 //double fitness = 1.0;
-                FitnessCalculator fitnessCalculator = new FitnessCalculator(item.CombinedAirfoil);
+                // Calculate fintness based on Lift
+                FitnessCalculator fitnessCalculator = new FitnessCalculator(item.CombinedAirfoil, FitnessCalculator.FitnessMode.Lift);
                 fitnessCalculator.CalculateFitness();
                 double fitness = fitnessCalculator.Fitness;
 

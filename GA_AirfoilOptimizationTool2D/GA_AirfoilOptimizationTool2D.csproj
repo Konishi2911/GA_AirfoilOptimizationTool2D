@@ -150,6 +150,7 @@
     </ApplicationDefinition>
     <Compile Include="Airfoil\AirfoilCoordinateExporter.cs" />
     <Compile Include="Airfoil\Characteristics\AngleBasedCharacteristics.cs" />
+    <Compile Include="Airfoil\CoefficientOfCombination.cs" />
     <Compile Include="Airfoil\CombinedAirfoilGroup.cs" />
     <Compile Include="Airfoil\Evaluation\ExternalEvaluation.cs" />
     <Compile Include="Airfoil\IAirfoilGroupManager.cs" />

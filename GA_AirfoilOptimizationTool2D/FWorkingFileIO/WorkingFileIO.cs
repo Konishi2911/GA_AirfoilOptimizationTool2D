@@ -113,13 +113,19 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
             writingString += General.CsvManager.CreateCSV(OptimizingConfiguration.Instance.CoefficientOfCombination) + NewLine;
             writingString += EndPart();
 
-            writingString += CreateIndex(PARENT_INDEX);
-            writingString += General.CsvManager.CreateCSV(OptimizingConfiguration.Instance.ParentsIndex, false) + NewLine;
-            writingString += EndPart();
+            if (OptimizingConfiguration.Instance.ParentsIndex != null)
+            {
+                writingString += CreateIndex(PARENT_INDEX);
+                writingString += General.CsvManager.CreateCSV(OptimizingConfiguration.Instance.ParentsIndex, false) + NewLine;
+                writingString += EndPart();
+            }
 
-            writingString += CreateIndex(OFFSPRING_COEFFICIENT);
-            writingString += General.CsvManager.CreateCSV(OptimizingConfiguration.Instance.OffspringAirfoilsCandidates.CoefficientOfCombination) + NewLine;
-            writingString += EndPart();
+            if (OptimizingConfiguration.Instance.OffspringAirfoilsCandidates != null)
+            {
+                writingString += CreateIndex(OFFSPRING_COEFFICIENT);
+                writingString += General.CsvManager.CreateCSV(OptimizingConfiguration.Instance.OffspringAirfoilsCandidates.CoefficientOfCombination) + NewLine;
+                writingString += EndPart();
+            }
 
 
             using (var writer = new StreamWriter(path, false, System.Text.Encoding.UTF8))

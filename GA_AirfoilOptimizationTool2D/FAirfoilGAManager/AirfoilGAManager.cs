@@ -76,19 +76,19 @@
         public void StartSelection(Airfoil.CombinedAirfoilsGroup offsprings)
         {
             // Executes selection to extract airfoil from offsprings
-            selectionExecutor.ExecuteSelection(offsprings.CoefficientOfCombination);
+            selectionExecutor.ExecuteSelection(offsprings);
 
             // Extract selected offsprings
             var selectedAirfoils = selectionExecutor.SelectedAirfoils;
             offspringAirfoils = new Airfoil.CombinedAirfoilsGroup();
-            foreach (var item in selectedAirfoils)
+            foreach (var item in selectedAirfoils.CombinedAirfoils)
             {
-                offspringAirfoils.Add(item);
+                offspringAirfoils.Add(item, );
             }
 
             // Create next Generation
             int k = 0;
-            var previousGen = parentAirfoils.GetCombinedAirfoilsArray();
+            var previousGen = parentAirfoils.CombinedAirfoils;
             Airfoil.CombinedAirfoilsGroup nextGenerations = new Airfoil.CombinedAirfoilsGroup(0);
             for (int i = 0; i < previousGen.Length; i++)
             {

@@ -7,7 +7,7 @@
         private Airfoil.CombinedAirfoilsGroupManager parentAirfoils;
         private int[] parentsIndex;
         private Airfoil.CombinedAirfoilsGroupManager offspringAirfoilsCombiner;
-        private Airfoil.CombinedAirfoilGroup offspringAirfoils;
+        private Airfoil.CombinedAirfoilsGroup offspringAirfoils;
         private Airfoil.CombinedAirfoilsGroupManager nextAirfoilGenerations;
         private ExternalAirfoilEvaluation airfoilEvaluation;
         private AirfoilCrossover crossoverExecutor;
@@ -73,7 +73,7 @@
 
             // Extract selected offsprings
             var selectedAirfoils = selectionExecutor.SelectedAirfoils;
-            offspringAirfoils = new Airfoil.CombinedAirfoilGroup();
+            offspringAirfoils = new Airfoil.CombinedAirfoilsGroup();
             foreach (var item in selectedAirfoils)
             {
                 offspringAirfoils.Add(item.CombinedAirfoil);

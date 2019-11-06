@@ -9,7 +9,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
     /// <summary>
     /// Represents combined airfoils group. Contains basis airfoils, coefficients of combination and coordinates of combined airfoils.
     /// </summary>
-    public class CombinedAirfoilGroup
+    public class CombinedAirfoilsGroup
     {
         private int _numberOfAirfoils;
         private readonly General.BasisAirfoils _basisAirfoils;
@@ -21,7 +21,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
 
         public event EventHandler CombinedAirfoilsUpdated;
 
-        public CombinedAirfoilGroup()
+        public CombinedAirfoilsGroup()
         {
 
         }
@@ -29,7 +29,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         /// 
         /// </summary>
         /// <param name="noAirfoils">Number of Combined airfoils</param>
-        public CombinedAirfoilGroup(int noAirfoils)
+        public CombinedAirfoilsGroup(int noAirfoils)
         {
 
         }
@@ -54,6 +54,18 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
 
             // Increment number of combined airfoils
             _numberOfAirfoils++;
+        }
+
+        /// <summary>
+        /// Add combined airfoils collection.
+        /// </summary>
+        /// <param name="combinedAirfoils"></param>
+        public void AddRange(ICollection<Representation.AirfoilCombiner> combinedAirfoils)
+        {
+            foreach (var item in combinedAirfoils)
+            {
+                Add(item);
+            }
         }
     }
 }

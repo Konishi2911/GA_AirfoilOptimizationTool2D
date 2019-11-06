@@ -9,13 +9,15 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
     /// <summary>
     /// Provides methods to combine basis airfoils and to create new combined airfoils.
     /// </summary>
-    public class CombinedAirfoils
+    public class AirfoilsMixer
     {
         private General.BasisAirfoils _basisAirfoils;
         private CoefficientOfCombination _coefficients;
         private Airfoil.Representation.AirfoilCombiner[] _combinedAirfoils;
 
-        public CombinedAirfoils(General.BasisAirfoils basisAirfoils, CoefficientOfCombination coefficients)
+        public Airfoil.Representation.AirfoilCombiner[] CombinedAirfoils => _combinedAirfoils;
+
+        public AirfoilsMixer(General.BasisAirfoils basisAirfoils, CoefficientOfCombination coefficients)
         {
             _basisAirfoils = basisAirfoils;
             _coefficients = coefficients;

@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace GA_AirfoilOptimizationTool2D.Airfoil
-{
+{   
+    /// <summary>
+    /// Represents coeffieicnts of combination. 
+    /// </summary>
     public class CoefficientOfCombination
     {
         #region Fields
@@ -26,6 +25,16 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         public int NoBasisAirfoils => noBasisAirfoils;
         #endregion
 
+        public CoefficientOfCombination() { }
+
+        /// <summary>
+        /// Initializes a new instance of CoefficientOfCombination with coefficients array.
+        /// </summary>
+        /// <param name="coefficients"></param>
+        public CoefficientOfCombination(double[,] coefficients)
+        {
+            coefficientCombination = General.ArrayManager.ConvertArrayToList(coefficients);
+        }
 
         public double GetCoefficient(int airfoilNumber, int basisAirfoilNumber)
         {

@@ -149,7 +149,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Airfoil\AirfoilCoordinateExporter.cs" />
-    <Compile Include="Airfoil\CombinedAirfoils.cs" />
+    <Compile Include="Airfoil\AirfoilsMixer.cs" />
     <Compile Include="Airfoil\Characteristics\AngleBasedCharacteristics.cs" />
     <Compile Include="Airfoil\CoefficientOfCombination.cs" />
     <Compile Include="Airfoil\CombinedAirfoilGroup.cs" />

@@ -76,7 +76,7 @@
             offspringAirfoils = new Airfoil.CombinedAirfoilsGroup();
             foreach (var item in selectedAirfoils)
             {
-                offspringAirfoils.Add(item.CombinedAirfoil);
+                offspringAirfoils.Add(item);
             }
 
             // Create next Generation

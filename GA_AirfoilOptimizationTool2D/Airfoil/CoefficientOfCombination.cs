@@ -6,11 +6,25 @@ using System.Threading.Tasks;
 
 namespace GA_AirfoilOptimizationTool2D.Airfoil
 {
-    class CoefficientOfCombination
+    public class CoefficientOfCombination
     {
+        #region Fields
         private int noBasisAirfoils;    // Number of basis airfoils
         private int noAirfoils;         // Number of combined airfoils
         private List<List<double>> coefficientCombination;   // double[Number of basis airfoils, Number of airfoils]
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Number of Airfoils to combine
+        /// </summary>
+        public int NoAirfoils => noAirfoils;
+
+        /// <summary>
+        /// Number of Basis airfoils
+        /// </summary>
+        public int NoBasisAirfoils => noBasisAirfoils;
+        #endregion
 
 
         public double GetCoefficient(int airfoilNumber, int basisAirfoilNumber)

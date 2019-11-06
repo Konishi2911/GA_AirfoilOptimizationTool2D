@@ -16,8 +16,9 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         private CoefficientOfCombination _coefficientsOfCombination;
         private List<AirfoilManager> _combinedAirfoils;
 
-        public double[,] CoefficientOfCombination => _coefficientsOfCombination.GetCoefficientArray();
+        public CoefficientOfCombination CoefficientOfCombination => _coefficientsOfCombination;
         public AirfoilManager[] CombinedAirfoils => _combinedAirfoils.ToArray<AirfoilManager>();
+        public General.BasisAirfoils BasisAirfoils => _basisAirfoils;
 
         public event EventHandler CombinedAirfoilsUpdated;
 
@@ -51,6 +52,24 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
 
             // Add new combined airfoil
             _combinedAirfoils.Add(combinedAirfoil.CombinedAirfoil);
+
+            // Increment number of combined airfoils
+            _numberOfAirfoils++;
+        }
+        public void Add(AirfoilManager airfoil, double[] coefficients)
+        {
+            // Format Check (Check number of basis airfoils)
+            var noBasisAirfoils = _basisAirfoils.AirfoilGroup.Count;
+            if (noBasisAirfoils != coefficients.Length)
+            {
+                throw new FormatException("The combined airfoil that has different basis airfoils from defined in this instance are passed.");
+            }
+
+            // Add coefficients of new airfoil
+            _coefficientsOfCombination.AddCoefficient(coefficients);
+
+            // Add new combined airfoil
+            _combinedAirfoils.Add(airfoil);
 
             // Increment number of combined airfoils
             _numberOfAirfoils++;

@@ -11,11 +11,11 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
         #region Fields
         private SelectionModel selectionModel;
         private FGeneticAlgorithm.IndividualsGroup selectedIndividuals;
-        private List<Airfoil.Representation.AirfoilCombiner> selectedAirfoils;
+        private Airfoil.CombinedAirfoilsGroup selectedAirfoils;
         #endregion
 
         #region Properties
-        public List<Airfoil.Representation.AirfoilCombiner> SelectedAirfoils => selectedAirfoils;
+        public Airfoil.CombinedAirfoilsGroup SelectedAirfoils => selectedAirfoils;
         #endregion
 
         public AirfoilSelection(SelectionModel crossoverOperator)
@@ -28,7 +28,7 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
             MGG
         }
 
-        public void ExecuteSelection(Airfoil.CombinedAirfoilsGroupManager offspringAirfoils)
+        public void ExecuteSelection(Airfoil.CombinedAirfoilsGroup offspringAirfoils)
         {
             // Create Indiviuals
             var parentsIndividuals = CreateIndividuals(offspringAirfoils);
@@ -43,28 +43,36 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
                 var selectedIndex = mggExecutor.SelectedIndividualsIndex;
 
                 // Store selected Airfoils' characteristics
-                selectedAirfoils = new List<Airfoil.Representation.AirfoilCombiner>();
+                selectedAirfoils = new Airfoil.CombinedAirfoilsGroup();
                 for (int i = 0; i < selectedIndex.Length; i++)
                 {
-                    SelectedAirfoils.Add(offspringAirfoils.GetCombinedAirfoilsArray()[i]);
+                    Airfoil.AirfoilManager airfoil = offspringAirfoils.CombinedAirfoils[selectedIndex[i]];
+                    double[] coefficients = offspringAirfoils.CoefficientOfCombination.GetCoefficients(selectedIndex[i]);
+
+                    SelectedAirfoils.Add(airfoil, coefficients);
                 }
             }
         }
 
-        private FGeneticAlgorithm.IndividualsGroup CreateIndividuals(Airfoil.CombinedAirfoilsGroupManager airfoilsGroup)
+        private FGeneticAlgorithm.IndividualsGroup CreateIndividuals(Airfoil.CombinedAirfoilsGroup airfoilsGroup)
         {
             FGeneticAlgorithm.IndividualsGroup individuals = new FGeneticAlgorithm.IndividualsGroup();
 
-            var airfoils = airfoilsGroup.GetCombinedAirfoilsArray();
+            var airfoils = airfoilsGroup.CombinedAirfoils;
+            var fitness = new List<double>();
             foreach (var item in airfoils)
             {
                 //double fitness = 1.0;
                 // Calculate fintness based on Lift
-                FitnessCalculator fitnessCalculator = new FitnessCalculator(item.CombinedAirfoil, FitnessCalculator.FitnessMode.Lift);
+                FitnessCalculator fitnessCalculator = new FitnessCalculator(item, FitnessCalculator.FitnessMode.Lift);
                 fitnessCalculator.CalculateFitness();
-                double fitness = fitnessCalculator.Fitness;
+                fitness.Add(fitnessCalculator.Fitness);
+            }
 
-                individuals.AddIndivisual(new FGeneticAlgorithm.Individual(item.Coefficients, fitness));
+            var coefficients = airfoilsGroup.CoefficientOfCombination;
+            for (int i = 0; i < airfoils.Length; i++)
+            {
+                individuals.AddIndivisual(new FGeneticAlgorithm.Individual(coefficients.GetCoefficients(i), fitness[i]));
             }
 
             return individuals;

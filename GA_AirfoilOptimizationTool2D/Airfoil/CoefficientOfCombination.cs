@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace GA_AirfoilOptimizationTool2D.Airfoil
 {   
@@ -25,7 +26,10 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         public int NoBasisAirfoils => noBasisAirfoils;
         #endregion
 
-        public CoefficientOfCombination() { }
+        public CoefficientOfCombination(int noBasis) 
+        {
+            noBasisAirfoils = noBasis;
+        }
 
         /// <summary>
         /// Initializes a new instance of CoefficientOfCombination with coefficients array.
@@ -33,12 +37,25 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         /// <param name="coefficients"></param>
         public CoefficientOfCombination(double[,] coefficients)
         {
-            coefficientCombination = General.ArrayManager.ConvertArrayToList(coefficients);
+            SetCoefficient(coefficients);
         }
 
         public double GetCoefficient(int airfoilNumber, int basisAirfoilNumber)
         {
-            return coefficientCombination[airfoilNumber][basisAirfoilNumber];
+            return coefficientCombination[basisAirfoilNumber][airfoilNumber];
+        }
+        public double[] GetCoefficients(int airfoilNumber)
+        {
+            if (noBasisAirfoils != 0 && coefficientCombination != null)
+            {
+                var coefficients = new double[noBasisAirfoils];
+                for (int i = 0; i < noBasisAirfoils; i++)
+                {
+                    coefficients[i] = coefficientCombination[i][airfoilNumber];
+                }
+                return coefficients;
+            }
+            else { return null; }
         }
         public double[,] GetCoefficientArray()
         {
@@ -63,14 +80,20 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         /// <param name="coefficients"></param>
         public void AddCoefficient(double[] coefficients)
         {
-            // Increment number of airfoils
-            noAirfoils++;
+            // If different size is detected between coefficients size and number of basis airfoils in this instance, throw exception.
+            if (coefficients.Length != noBasisAirfoils)
+            {
+                throw new FormatException();
+            }
 
             // Add new coefficients
             for (int i = 0; i < noBasisAirfoils; i++)
             {
                 coefficientCombination[i].Add(coefficients[i]);
             }
+
+            // Increment number of airfoils
+            noAirfoils++;
         }
     }
 }

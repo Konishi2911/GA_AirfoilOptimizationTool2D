@@ -70,7 +70,9 @@
     <None Include="TestData\DAE-11.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="TestData\NACA4412.csv" />
+    <None Include="TestData\NACA4412.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GA_AirfoilOptimizationTool2D\GA_AirfoilOptimizationTool2D.csproj">

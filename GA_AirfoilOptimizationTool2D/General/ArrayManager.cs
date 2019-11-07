@@ -68,7 +68,7 @@ namespace GA_AirfoilOptimizationTool2D.General
 
             for (int i = 0; i < height; i++)
             {
-                list[i] = new List<T>();
+                list.Add(new List<T>());
                 for (int j = 0; j < width; j++)
                 {
                     list[i].Add(array[i, j]);
@@ -83,7 +83,7 @@ namespace GA_AirfoilOptimizationTool2D.General
 
             for (int i = 0; i < jArray.Length; i++)
             {
-                list[i] = new List<T>();
+                list.Add(new List<T>());
                 for (int j = 0; j < jArray[i].Length; j++)
                 {
                     list[i].Add(jArray[i][j]);

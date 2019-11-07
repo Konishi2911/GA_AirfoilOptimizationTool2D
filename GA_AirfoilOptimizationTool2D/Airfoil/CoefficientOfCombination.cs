@@ -37,6 +37,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         /// <param name="coefficients"></param>
         public CoefficientOfCombination(double[,] coefficients)
         {
+            noBasisAirfoils = coefficients.GetLength(0);
             SetCoefficient(coefficients);
         }
 

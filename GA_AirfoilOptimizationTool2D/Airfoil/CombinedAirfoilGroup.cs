@@ -86,5 +86,10 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
                 Add(item);
             }
         }
+
+        public CoefficientOfCombination Clone()
+        {
+            return MemberwiseClone() as CoefficientOfCombination;
+        }
     }
 }

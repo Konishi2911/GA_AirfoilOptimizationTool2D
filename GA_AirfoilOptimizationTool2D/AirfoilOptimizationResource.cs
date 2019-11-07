@@ -80,13 +80,11 @@ namespace GA_AirfoilOptimizationTool2D
         public event EventHandler OffspringCandidatesUpdated;
         #endregion
 
-        public static AirfoilOptimizationResource Instance { get; } = new AirfoilOptimizationResource();
         private AirfoilOptimizationResource()
         {
-            Assembly thisAssembry = Assembly.GetEntryAssembly();
-            String entryPath = thisAssembry.Location;
             OffspringsExportDirectory = "..\\..\\..\\Offsprings";
         }
+        public static AirfoilOptimizationResource Instance { get; } = new AirfoilOptimizationResource();
 
         #region Methods
         /// <summary>

@@ -81,9 +81,12 @@
             // Extract selected offsprings
             var selectedAirfoils = selectionExecutor.SelectedAirfoils;
             offspringAirfoils = new Airfoil.CombinedAirfoilsGroup();
-            foreach (var item in selectedAirfoils.CombinedAirfoils)
+            for (int i = 0; i < selectedAirfoils.CombinedAirfoils.Length; i++)
             {
-                offspringAirfoils.Add(item, );
+                var airfoil = selectedAirfoils.CombinedAirfoils[i];
+                var coefficients = selectedAirfoils.CoefficientOfCombination.GetCoefficients(i);
+
+                offspringAirfoils.Add(airfoil, coefficients);
             }
 
             // Create next Generation
@@ -94,12 +97,18 @@
             {
                 if (IsEqual(i, parentsIndex))
                 {
-                    nextGenerations.AddElement(selectedAirfoils[k]);
+                    var airfoil = selectedAirfoils.CombinedAirfoils[k];
+                    var coefficients = selectedAirfoils.CoefficientOfCombination.GetCoefficients(k);
+
+                    nextGenerations.Add(airfoil, coefficients);
                     ++k;
                 }
                 else
                 {
-                    nextGenerations.AddElement(previousGen[i]);
+                    var airfoil = selectedAirfoils.CombinedAirfoils[i];
+                    var coefficients = selectedAirfoils.CoefficientOfCombination.GetCoefficients(i);
+
+                    nextGenerations.Add(airfoil, coefficients);
                 }
             }
             nextAirfoilGenerations = nextGenerations;
@@ -122,13 +131,15 @@
             */
         }
 
-        private Airfoil.CombinedAirfoilsGroup CreateOffspringAirfoils(double[][] optParams)
+        private Airfoil.CombinedAirfoilsGroup CreateOffspringAirfoils(Airfoil.CoefficientOfCombination optParams)
         {
-            Airfoil.CombinedAirfoilsGroup offsprings = new Airfoil.CombinedAirfoilsGroup(optParams.Length);
+            Airfoil.CombinedAirfoilsGroup offsprings = new Airfoil.CombinedAirfoilsGroup();
+            Airfoil.AirfoilsMixer airfoilsMixer = new Airfoil.AirfoilsMixer(basisAirfoils, optParams);
 
-            offsprings.CombineAirfoils(basisAirfoils, ConvertJuggedArrayToArray(optParams));
+            airfoilsMixer.CombineAirfoils();
+            offspringAirfoils.AddRange(airfoilsMixer.CombinedAirfoils);
+
             return offsprings;
-
         }
 
         private T[][] SwapJuggedArray<T>(T[][] jArray)

@@ -67,8 +67,13 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         /// <param name="coefficients">[ Number of basis airfoils , Number of airfoils ]</param>
         public void SetCoefficient(double[,] coefficients)
         {
+            // Format check
+            if (coefficients.GetLength(0) != noBasisAirfoils)
+            {
+                throw new FormatException("Length of passed coefficients array is invalid");
+            }
+
             // Update Coefficients size
-            noBasisAirfoils = coefficients.GetLength(0);
             noAirfoils = coefficients.GetLength(1);
 
             // Update Coefficients

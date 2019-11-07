@@ -114,7 +114,7 @@ namespace GA_AirfoilOptimizationTool2D
                 if (BasisAirfoils.NumberOfAirfoils > CoefficientOfCombination.GetLength(0))
                 {
                     // Add new row of coefficient at the last of CoefficientOfCombination.
-                    AddCoefficient(out _coefficientOfCombination);
+                    AddCoefficient(out _coefficientOfCombination.GetCoefficientArray());
                 }
 
                 // Re-Generate the combined airfoils

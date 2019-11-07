@@ -80,7 +80,7 @@ namespace GA_AirfoilOptimizationTool2D
         public event EventHandler OffspringCandidatesUpdated;
         #endregion
 
-        public AirfoilOptimizationResource Instance { get; } = new AirfoilOptimizationResource();
+        public static AirfoilOptimizationResource Instance { get; } = new AirfoilOptimizationResource();
         private AirfoilOptimizationResource()
         {
             Assembly thisAssembry = Assembly.GetEntryAssembly();

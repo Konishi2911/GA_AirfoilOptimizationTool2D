@@ -58,6 +58,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="AirfoilOptimizationResourceTests.cs" />
     <Compile Include="FGeneticAlgorithm\GenerationalChangeTests.cs" />
     <Compile Include="FGeneticAlgorithm\UNDXTests.cs" />
     <Compile Include="General\RandomNumber\RandomNumberGeneratorTests.cs" />
@@ -66,6 +67,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="TestData\DAE-11.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestData\NACA4412.csv" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GA_AirfoilOptimizationTool2D\GA_AirfoilOptimizationTool2D.csproj">

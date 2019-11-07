@@ -27,14 +27,11 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         {
             int _numberOfAirfoils = _coefficients.NoAirfoils;
             List<Task> tasks = new List<Task>();
+            _combinedAirfoils = new Representation.AirfoilCombiner[_coefficients.NoAirfoils];
 
             for (int i = 0; i < _numberOfAirfoils; i++)
             {
-                // Null Check
-                if (_combinedAirfoils[i] == null)
-                {
-                    _combinedAirfoils[i] = new Representation.AirfoilCombiner();
-                }
+                _combinedAirfoils[i] = new Representation.AirfoilCombiner();
 
                 var x = i;
                 var basis = _basisAirfoils.AirfoilGroup.ToArray();

@@ -17,10 +17,10 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
 
         public Airfoil.Representation.AirfoilCombiner[] CombinedAirfoils => _combinedAirfoils;
 
-        public AirfoilsMixer(General.BasisAirfoils basisAirfoils, CoefficientOfCombination coefficients)
+        public AirfoilsMixer(in General.BasisAirfoils basisAirfoils, in CoefficientOfCombination coefficients)
         {
-            _basisAirfoils = basisAirfoils;
-            _coefficients = coefficients;
+            _basisAirfoils = basisAirfoils ?? throw new ArgumentNullException();
+            _coefficients = coefficients ?? throw new ArgumentNullException();
         }
 
         public void CombineAirfoils()

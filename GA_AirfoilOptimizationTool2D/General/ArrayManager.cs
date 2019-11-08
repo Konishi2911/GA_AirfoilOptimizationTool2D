@@ -31,13 +31,13 @@ namespace GA_AirfoilOptimizationTool2D.General
         /// <typeparam name="T"></typeparam>
         /// <param name="jArray"></param>
         /// <returns></returns>
-        public static T[,] ConvertJuggedArrayToArray<T>(T[][] jArray)
+        public static T[,] ConvertJuggedArrayToArray<T>(IList<IList<T>> jArray)
         {
             bool isSameSize = true;
             // FormatCheck
-            for (int i = 0; i < jArray.Length - 1; i++)
+            for (int i = 0; i < jArray.Count - 1; i++)
             {
-                isSameSize &= jArray[i].Length == jArray[i + 1].Length;
+                isSameSize &= jArray[i].Count == jArray[i + 1].Count;
             }
 
             if (isSameSize == false)
@@ -45,8 +45,8 @@ namespace GA_AirfoilOptimizationTool2D.General
                 return null;
             }
 
-            var length = jArray.Length;
-            var width = jArray[0].Length;
+            var length = jArray.Count;
+            var width = jArray[0].Count;
             var array = new T[length, width];
 
             for (int i = 0; i < length; i++)

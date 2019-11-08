@@ -156,7 +156,7 @@ namespace GA_AirfoilOptimizationTool2D
                     }
                 }
 
-                _coefficientOfCombination.SetCoefficient(currentCoefficients);
+                _coefficientOfCombination = new Airfoil.CoefficientOfCombination(currentCoefficients);
             }
         }
         #endregion

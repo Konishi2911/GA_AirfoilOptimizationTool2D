@@ -93,11 +93,11 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
             writingString += EndPart();
 
             writingString += CreateIndex("NUMBER_OF_BASE_AIRFOILS");
-            writingString += OptimizingConfiguration.Instance.BasisAirfoils.NumberOfAirfoils.ToString() + NewLine;
+            writingString += AirfoilOptimizationResource.Instance.BasisAirfoils.NumberOfAirfoils.ToString() + NewLine;
             writingString += EndPart();
 
             writingString += CreateIndex("BASE_AIRFOILS");
-            foreach (var item in OptimizingConfiguration.Instance.BasisAirfoils.AirfoilGroup)
+            foreach (var item in AirfoilOptimizationResource.Instance.BasisAirfoils.AirfoilGroup)
             {
                 writingString += CreateSubIndex("NAME");
                 writingString += item.AirfoilName + NewLine;
@@ -110,15 +110,15 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
             writingString += EndPart();
 
             writingString += CreateIndex("COEFFICIENT_OF_COMBINATION");
-            writingString += General.CsvManager.CreateCSV(OptimizingConfiguration.Instance.CoefficientOfCombination.GetCoefficientArray()) + NewLine;
+            writingString += General.CsvManager.CreateCSV(AirfoilOptimizationResource.Instance.CurrentCoefficients.GetCoefficientArray()) + NewLine;
             writingString += EndPart();
 
             writingString += CreateIndex(PARENT_INDEX);
-            writingString += General.CsvManager.CreateCSV(OptimizingConfiguration.Instance.ParentsIndex, false) + NewLine;
+            writingString += General.CsvManager.CreateCSV(AirfoilOptimizationResource.Instance.ParentsIndex, false) + NewLine;
             writingString += EndPart();
 
             writingString += CreateIndex(OFFSPRING_COEFFICIENT);
-            writingString += General.CsvManager.CreateCSV(OptimizingConfiguration.Instance.OffspringAirfoilsCandidates.CoefficientOfCombination.GetCoefficientArray()) + NewLine;
+            writingString += General.CsvManager.CreateCSV(AirfoilOptimizationResource.Instance.OffspringCandidates.CoefficientOfCombination.GetCoefficientArray()) + NewLine;
             writingString += EndPart();
 
 

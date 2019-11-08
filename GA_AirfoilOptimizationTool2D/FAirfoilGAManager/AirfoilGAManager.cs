@@ -62,7 +62,7 @@
             parentsIndex = crossoverExecutor.ParentsIndex;
 
             // Initialize each fields
-            offspringAirfoilsCombiner = new Airfoil.CombinedAirfoilsGroup(crossoverExecutor.NumberOfCrossovers);
+            offspringAirfoilsCombiner = new Airfoil.CombinedAirfoilsGroup(basisAirfoils.NumberOfBasisAirfoils);
             Airfoil.AirfoilsMixer airfoilsMixer = new Airfoil.AirfoilsMixer(basisAirfoils, parentAirfoils.CoefficientOfCombination);
 
             // Create Offspring Airfoils

@@ -43,7 +43,7 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
             this.PropertyChanged += This_PropertyChanged;
 
             // Clone Offsprng Airfoils
-            sourceAirfoils = OptimizingConfiguration.Instance.OffspringAirfoilsCandidates;
+            sourceAirfoils = AirfoilOptimizationResource.Instance.OffspringCandidates;
             AssignTargetAirfoils();
         }
 
@@ -77,7 +77,7 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
 
         private void ApplyButtonClicked()
         {
-            OptimizingConfiguration.Instance.OffspringAirfoilsCandidates = this.sourceAirfoils;
+            AirfoilOptimizationResource.Instance.OffspringCandidates = this.sourceAirfoils;
         }
         private bool IsApplyButtonAvailable()
         {

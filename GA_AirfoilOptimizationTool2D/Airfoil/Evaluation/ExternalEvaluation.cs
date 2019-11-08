@@ -57,8 +57,7 @@
                 combinedAirfoilsGroup = new CombinedAirfoilsGroup();
 
                 // Create optimized Coefficients
-                CoefficientOfCombination optCoefficients = new CoefficientOfCombination(basisAirfoils.NumberOfAirfoils);
-                optCoefficients.SetCoefficient(General.ArrayManager.ConvertJuggedArrayToArray(optParams));
+                var optCoefficients = new CoefficientOfCombination(General.ArrayManager.ConvertJuggedArrayToArray(optParams));
 
                 // Combine airfoil
                 AirfoilsMixer airfoilsMixer = new AirfoilsMixer(basisAirfoils, optCoefficients);

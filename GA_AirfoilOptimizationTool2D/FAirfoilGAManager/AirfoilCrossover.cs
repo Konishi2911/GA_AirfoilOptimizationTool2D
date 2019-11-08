@@ -57,7 +57,7 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
             
             // Pick coefficients array up fromCoefficientOfCombination
             var temp = coefficients.GetCoefficientArray();
-            var coefficientsArray = General.ArrayManager.ConvertArrayToJuggedArray(temp);
+            var coefficientsArray = General.ArrayManager.ConvertArrayToJuggedArray(temp) as double[][];
 
             foreach (var item in coefficientsArray)
             {

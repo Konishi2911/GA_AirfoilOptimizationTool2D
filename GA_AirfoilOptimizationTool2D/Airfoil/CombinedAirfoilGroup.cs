@@ -12,10 +12,13 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
     public class CombinedAirfoilsGroup
     {
         private int _numberOfAirfoils;
+        private int _numberOfBasisAirfoils;
         private readonly General.BasisAirfoils _basisAirfoils;
         private CoefficientOfCombination _coefficientsOfCombination;
         private List<AirfoilManager> _combinedAirfoils;
 
+        public int NoAirfoils => _numberOfAirfoils;
+        public int NoBasisAirfoils => _numberOfBasisAirfoils;
         public CoefficientOfCombination CoefficientOfCombination => _coefficientsOfCombination;
         public AirfoilManager[] CombinedAirfoils => _combinedAirfoils.ToArray<AirfoilManager>();
         public General.BasisAirfoils BasisAirfoils => _basisAirfoils;
@@ -29,10 +32,10 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="noAirfoils">Number of Combined airfoils</param>
-        public CombinedAirfoilsGroup(int noAirfoils)
+        /// <param name="noAirfoils">Number of basis airfoils</param>
+        public CombinedAirfoilsGroup(int noBasisAirfoils)
         {
-
+            _numberOfBasisAirfoils = noBasisAirfoils;
         }
 
         public void Add(Representation.AirfoilCombiner combinedAirfoil)
@@ -41,16 +44,17 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             var coefficients = combinedAirfoil.Coefficients;
 
             // Format Check
-            var noBasisAirfoils = _basisAirfoils.AirfoilGroup.Count;
-            if (noBasisAirfoils != basisAirfoils.Length)
+            if (_numberOfBasisAirfoils != basisAirfoils.Length)
             {
                 throw new FormatException("The combined airfoil that has different basis airfoils from defined in this instance are passed.");
             }
 
             // Add coefficients of new airfoil
+            _coefficientsOfCombination ??= new CoefficientOfCombination(_numberOfBasisAirfoils);
             _coefficientsOfCombination.AddCoefficient(coefficients);
 
             // Add new combined airfoil
+            _combinedAirfoils ??= new List<AirfoilManager>();
             _combinedAirfoils.Add(combinedAirfoil.CombinedAirfoil);
 
             // Increment number of combined airfoils
@@ -59,16 +63,17 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         public void Add(AirfoilManager airfoil, double[] coefficients)
         {
             // Format Check (Check number of basis airfoils)
-            var noBasisAirfoils = _basisAirfoils.AirfoilGroup.Count;
-            if (noBasisAirfoils != coefficients.Length)
+            if (_numberOfBasisAirfoils != coefficients.Length)
             {
                 throw new FormatException("The combined airfoil that has different basis airfoils from defined in this instance are passed.");
             }
 
             // Add coefficients of new airfoil
+            _coefficientsOfCombination ??= new CoefficientOfCombination(_numberOfBasisAirfoils);
             _coefficientsOfCombination.AddCoefficient(coefficients);
 
             // Add new combined airfoil
+            _combinedAirfoils ??= new List<AirfoilManager>();
             _combinedAirfoils.Add(airfoil);
 
             // Increment number of combined airfoils

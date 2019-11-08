@@ -44,20 +44,20 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager.Models
 
             this.PropertyChanged += This_PropertyChanged;
             Coefficients.CollectionChanged += Coordinates_CollectionChanged;
-            OptimizingConfiguration.Instance.PropertyChanged += Source_PropertyChanged;
+            AirfoilOptimizationResource.Instance.CurrentParameterUpdated += Source_ParameterChanged;
 
             // If the Coefficient of combination in the source is not empty, push it to the coefficients in this class.
-            if (OptimizingConfiguration.Instance.CoefficientOfCombination != null)
+            if (AirfoilOptimizationResource.Instance.CurrentCoefficients != null)
             {
-                foreach (var item in ConvertDoubleArrayToObservable(OptimizingConfiguration.Instance.CoefficientOfCombination.GetCoefficientArray()))
+                foreach (var item in ConvertDoubleArrayToObservable(AirfoilOptimizationResource.Instance.CurrentCoefficients.GetCoefficientArray()))
                 {
                     Coefficients.Add(item);
                 }
             }
             // If the basisAirfoils in the source is not empty, create new coefficient collection that size is the number of basisAirfoils in the source.
-            else if (OptimizingConfiguration.Instance.BasisAirfoils != null)
+            else if (AirfoilOptimizationResource.Instance.BasisAirfoils != null)
             {
-                setCoefficientLength(OptimizingConfiguration.Instance.BasisAirfoils.NumberOfAirfoils);
+                setCoefficientLength(AirfoilOptimizationResource.Instance.BasisAirfoils.NumberOfAirfoils);
             }
             // If both the coefficient collection and basisAirfoils are empty, it create new coefficient collection that size is zero. 
             else
@@ -100,14 +100,10 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager.Models
                 //setCoordinateLength(NumberOfBasisAirfoils);
             }
         }
-        private void Source_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void Source_ParameterChanged(object sender, EventArgs e)
         {
-            // Coefficient Collection Changed
-            if (e.PropertyName == nameof(OptimizingConfiguration.CoefficientOfCombination))
-            {
-                // Copy the coefficient collection from OptimizingConfiguration
-                UpdateCoefficients(ConvertDoubleArrayToObservable(OptimizingConfiguration.Instance.CoefficientOfCombination.GetCoefficientArray()));
-            }
+            // Copy the coefficient collection from OptimizingConfiguration
+            UpdateCoefficients(ConvertDoubleArrayToObservable(AirfoilOptimizationResource.Instance.CurrentCoefficients.GetCoefficientArray()));
         }
         private void Coordinates_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -131,7 +127,8 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager.Models
         }
         private void Coordinates_CollectionPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            OptimizingConfiguration.Instance.CoefficientOfCombination = new Airfoil.CoefficientOfCombination(GetDoubleArray());
+            Airfoil.CoefficientOfCombination coef = new Airfoil.CoefficientOfCombination(GetDoubleArray());
+            AirfoilOptimizationResource.Instance.SetSource(coef);
         }
         #endregion
 

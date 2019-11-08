@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Reflection;
 
 namespace GA_AirfoilOptimizationTool2D
@@ -53,6 +54,7 @@ namespace GA_AirfoilOptimizationTool2D
             }
         }
 
+        public int[] ParentsIndex => _parentsIndex;
         public Airfoil.CoefficientOfCombination OffspringCoefficients
         {
             get => this._offspringCoefficients;
@@ -76,6 +78,7 @@ namespace GA_AirfoilOptimizationTool2D
         #endregion
 
         #region Events
+        public event EventHandler CurrentParameterUpdated;
         public event EventHandler CurrentPopulationUpdated;
         public event EventHandler OffspringCandidatesUpdated;
         #endregion
@@ -107,8 +110,11 @@ namespace GA_AirfoilOptimizationTool2D
             this._basisAirfoils = basisAirfoils;
             this._currentCoefficient = coefficients;
 
+            // Initialization
+            _currentPopulations = new Airfoil.CombinedAirfoilsGroup(_basisAirfoils.NumberOfAirfoils);
+            //
+
             // Re-Generate the combined airfoils
-            _currentPopulations = new Airfoil.CombinedAirfoilsGroup();
             Airfoil.AirfoilsMixer airfoilsMixer = new Airfoil.AirfoilsMixer(basisAirfoils, coefficients);
 
             // Combine new airfoils
@@ -116,6 +122,8 @@ namespace GA_AirfoilOptimizationTool2D
             // Add combined airfoils into the current airfoils population 
             _currentPopulations.AddRange(airfoilsMixer.CombinedAirfoils);
 
+            // Fire the event updated coefficient are ready
+            CurrentParameterUpdated?.Invoke(this, new EventArgs());
             // Fire the event updated SourceData are ready
             CurrentPopulationUpdated?.Invoke(this, new EventArgs());
         }
@@ -136,9 +144,12 @@ namespace GA_AirfoilOptimizationTool2D
                 }
 
                 this._basisAirfoils = basisAirfoils;
+                
+                // Initialization
+                _currentPopulations = new Airfoil.CombinedAirfoilsGroup(basisAirfoils.NumberOfAirfoils);
+                //
 
                 // Re-Generate the combined airfoils
-                _currentPopulations = new Airfoil.CombinedAirfoilsGroup();
                 Airfoil.AirfoilsMixer airfoilsMixer = new Airfoil.AirfoilsMixer(basisAirfoils, _currentCoefficient);
 
                 // Combine new airfoils
@@ -155,6 +166,9 @@ namespace GA_AirfoilOptimizationTool2D
 
                 _basisAirfoils = basisAirfoils;
                 _currentCoefficient = new Airfoil.CoefficientOfCombination(noBasis);
+
+                // Fire the event updated coefficient are ready
+                CurrentParameterUpdated?.Invoke(this, new EventArgs());
             }
         }
         public void SetSource(Airfoil.CoefficientOfCombination coefficients)
@@ -175,8 +189,11 @@ namespace GA_AirfoilOptimizationTool2D
 
                 this._currentCoefficient = coefficients;
 
+                // Initialization
+                _currentPopulations = new Airfoil.CombinedAirfoilsGroup(_basisAirfoils.NumberOfAirfoils);
+                //
+
                 // Re-Generate the combined airfoils
-                _currentPopulations = new Airfoil.CombinedAirfoilsGroup();
                 Airfoil.AirfoilsMixer airfoilsMixer = new Airfoil.AirfoilsMixer(_basisAirfoils, coefficients);
 
                 // Combine new airfoils
@@ -191,6 +208,9 @@ namespace GA_AirfoilOptimizationTool2D
             {
                 this._currentCoefficient = coefficients;
             }
+
+            // Fire the event updated coefficient are ready
+            CurrentParameterUpdated?.Invoke(this, new EventArgs());
         }
 
         /// <summary>

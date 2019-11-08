@@ -10,8 +10,8 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
     {
         #region Fields
         private int noBasisAirfoils;    // Number of basis airfoils
-        private int noAirfoils;         // Number of combined airfoils
-        private List<List<double>> coefficientCombination;   // double[Number of basis airfoils, Number of airfoils]
+        private int noAirfoils;         // Number of airfoils to combine
+        private List<double>[] coefficientCombination;   // double[Number of basis airfoils, Number of airfoils]
         #endregion
 
         #region Properties
@@ -29,6 +29,12 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         public CoefficientOfCombination(int noBasis) 
         {
             noBasisAirfoils = noBasis;
+
+            coefficientCombination = new List<double>[noBasisAirfoils];
+            for (int i = 0; i < noBasisAirfoils; i++)
+            {
+                coefficientCombination[i] = new List<double>();
+            }
         }
 
         /// <summary>
@@ -60,7 +66,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         }
         public double[,] GetCoefficientArray()
         {
-            return General.ArrayManager.ConvertListToArray(coefficientCombination);
+            return General.ArrayManager.ConvertJuggedArrayToArray(coefficientCombination);
         }
         /// <summary>
         /// Set coefficients
@@ -78,7 +84,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             noAirfoils = coefficients.GetLength(1);
 
             // Update Coefficients
-            coefficientCombination = General.ArrayManager.ConvertArrayToList(coefficients);
+            coefficientCombination = ConvertToCoefficientFormat(coefficients);
         }
         /// <summary>
         /// Add coefficients of new airfoil at end of the coefficient collection
@@ -100,6 +106,18 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
 
             // Increment number of airfoils
             noAirfoils++;
+        }
+
+        private List<double>[] ConvertToCoefficientFormat(double[,] array)
+        {
+            var jArray = General.ArrayManager.ConvertArrayToJuggedArray(array);
+            List<double>[] lArray = new List<double>[jArray.Length];
+            for (int i = 0; i < jArray.Length; i++)
+            {
+                lArray[i] = new List<double>(jArray[i]);
+            }
+
+            return lArray;
         }
     }
 }

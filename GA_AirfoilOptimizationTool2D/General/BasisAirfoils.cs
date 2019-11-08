@@ -54,5 +54,15 @@ namespace GA_AirfoilOptimizationTool2D.General
 
             return temp;
         }
+
+        public static bool operator == (BasisAirfoils basis1, BasisAirfoils basis2)
+        {
+            return basis1.AirfoilGroup == basis2.AirfoilGroup;
+        }
+
+        public static bool operator !=(BasisAirfoils basis1, BasisAirfoils basis2)
+        {
+            return basis1.AirfoilGroup != basis2.AirfoilGroup;
+        }
     }
 }

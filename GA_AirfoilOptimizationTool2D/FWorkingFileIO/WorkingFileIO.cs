@@ -20,6 +20,7 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
         private const string NAME = "NAME";
         private const string COORDINATE = "COORDINATE";
         #endregion
+
         #region Fields
         private int numberOfSameGeneration;
         private int numberOfBaseAirfoils;
@@ -28,7 +29,7 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
         private List<Airfoil.AirfoilManager> combinedAirfoils;
         private Airfoil.CoefficientOfCombination coefficientOfCombination;
         private int[] parentsIndex;
-        private Double[,] offspringCoefficients;
+        private Airfoil.CoefficientOfCombination offspringCoefficients;
         #endregion
 
         public delegate void OpeningFileFinishedEventHandler(object sender, OpeningFileFinishedEventArgs e);
@@ -42,7 +43,7 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
             public List<Airfoil.AirfoilManager> CombinedAirfoils { get; set; }
             public Airfoil.CoefficientOfCombination CoefficientOfCombination { get; set; }
             public int[] ParentsIndex { get; set; }
-            public Double[,] OffspringCoefficients { get; set; }
+            public Airfoil.CoefficientOfCombination OffspringCoefficients { get; set; }
         }
 
         public WorkingFileIO()
@@ -199,7 +200,7 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
                     }
                     else if (PreviousIndexName == OFFSPRING_COEFFICIENT)
                     {
-                        offspringCoefficients = ConvertListToDoubleArray(offspringCoefArray);
+                        offspringCoefficients = new Airfoil.CoefficientOfCombination(ConvertListToDoubleArray(offspringCoefArray));
                     }
                 }
                 else if (IndexName == "NUMBER_OF_SAME_GENERATION")

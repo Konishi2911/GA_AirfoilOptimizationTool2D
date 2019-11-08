@@ -54,7 +54,11 @@ namespace GA_AirfoilOptimizationTool2D
             }
         }
 
-        public int[] ParentsIndex => _parentsIndex;
+        public int[] ParentsIndex 
+        { 
+            get => _parentsIndex;
+            set => _parentsIndex = value;
+        }
         public Airfoil.CoefficientOfCombination OffspringCoefficients
         {
             get => this._offspringCoefficients;
@@ -68,13 +72,17 @@ namespace GA_AirfoilOptimizationTool2D
         public Airfoil.CombinedAirfoilsGroup OffspringCandidates
         {
             get => this._offsptingCandidates;
-            private set
+            set
             {
-                this._offsptingCandidates = value;
+                if (OffspringCandidates.BasisAirfoils == _basisAirfoils)
+                {
+                    this._offsptingCandidates = value;
+                }
 
                 OnPropertyChanged(nameof(OffspringCandidates));
             }
         }
+        public bool OffspringAirfoilsReady { get; private set; }
         #endregion
 
         #region Events

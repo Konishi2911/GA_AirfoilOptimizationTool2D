@@ -35,8 +35,8 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         public MainWindowViewModel()
         {
             // Allocate Event CallBack Functions
-            OptimizingConfiguration.Instance.SourceDataChanged += SourceChanged;
-            OptimizingConfiguration.Instance.OffspringsAirfoilsReady += OffspringAirfoilsReady;
+            AirfoilOptimizationResource.Instance.CurrentPopulationUpdated += SourceChanged;
+            AirfoilOptimizationResource.Instance.OffspringCandidatesUpdated += OffspringAirfoilsReady;
             this.PropertyChanged += this.This_PropertyChanged;
             //
 
@@ -93,19 +93,19 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         private void SourceChanged(object sender, EventArgs e)
         {
             // Null Check
-            if (OptimizingConfiguration.Instance.BasisAirfoils == null) return;
-            if (OptimizingConfiguration.Instance.CoefficientOfCombination == null) return;
+            if (AirfoilOptimizationResource.Instance.BasisAirfoils == null) return;
+            if (AirfoilOptimizationResource.Instance.CurrentCoefficients == null) return;
 
             // Update baseAirfoil
-            this.basisAirfoils = General.BasisAirfoils.Convert(OptimizingConfiguration.Instance.BasisAirfoils);
+            this.basisAirfoils = General.BasisAirfoils.Convert(AirfoilOptimizationResource.Instance.BasisAirfoils);
 
             // Update coefficients
-            this.coefficients = OptimizingConfiguration.Instance.CoefficientOfCombination.GetCoefficientArray() as Double[,];
+            this.coefficients = AirfoilOptimizationResource.Instance.CurrentCoefficients.GetCoefficientArray() as Double[,];
 
             // Re-combinate Airfoil
-            this.currentPopulations = OptimizingConfiguration.Instance.CurrentAirfoilsPopulation;
+            this.currentPopulations = AirfoilOptimizationResource.Instance.CurrentPopulations;
             // Re-set current offsprings
-            this.offspringAirfoilCandidates = OptimizingConfiguration.Instance.OffspringAirfoilsCandidates;
+            this.offspringAirfoilCandidates = AirfoilOptimizationResource.Instance.OffspringCandidates;
 
             // Re-generate the coordinates for airfoil previewing.
             ReDrawPreviewWindow();
@@ -113,7 +113,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         private void OffspringAirfoilsReady(object sender, EventArgs e)
         {
             // Pull offspringAirfoils from OptConfig
-            this.offspringAirfoilCandidates = OptimizingConfiguration.Instance.OffspringAirfoilsCandidates;
+            this.offspringAirfoilCandidates = AirfoilOptimizationResource.Instance.OffspringCandidates;
 
             // Re-generate the coordinates for airfoil previewing.
             ReDrawPreviewWindow();
@@ -133,13 +133,13 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             }
 
             // Set Current Population
-            OptimizingConfiguration.Instance.SetSource(baseAirfoilsGroup, e.CoefficientOfCombination);
+            AirfoilOptimizationResource.Instance.SetSource(baseAirfoilsGroup, e.CoefficientOfCombination);
 
             // Set Optimization Halfway
-            OptimizingConfiguration.Instance.ParentsIndex = e.ParentsIndex;
+            AirfoilOptimizationResource.Instance.ParentsIndex = e.ParentsIndex;
 
             // Set Current Offspring candidates
-            OptimizingConfiguration.Instance.SetOffspringCadidates(baseAirfoilsGroup, e.OffspringCoefficients);
+            AirfoilOptimizationResource.Instance.SetOffspringCandidates(e.OffspringCoefficients);
         }
 
         private void This_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -339,7 +339,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         }
         public bool IsCoefManagerEnabled()
         {
-            return (OptimizingConfiguration.Instance.BasisAirfoils != null);
+            return (AirfoilOptimizationResource.Instance.BasisAirfoils != null);
         }
         //
 
@@ -360,22 +360,22 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         // Start Optimization with Genetic Algorithm
         public void StartGeneticOptimization()
         {
-            OptimizingConfiguration.Instance.StartCrossovers();
+            AirfoilOptimizationResource.Instance.StartCrossovers();
         }
         public bool IsGAExecutable()
         {
-            bool nullCheck = OptimizingConfiguration.Instance.CurrentAirfoilsPopulation != null && !CollectionNullCheck(OptimizingConfiguration.Instance.CurrentAirfoilsPopulation.CombinedAirfoils);
-            bool lengthCheck = OptimizingConfiguration.Instance.CurrentAirfoilsPopulation.CombinedAirfoils.Length == GeneralConstants.NUMBER_OF_AIRFOILS_OF_GENERATION;
+            bool nullCheck = AirfoilOptimizationResource.Instance.CurrentPopulations != null && !CollectionNullCheck(AirfoilOptimizationResource.Instance.CurrentPopulations.CombinedAirfoils);
+            bool lengthCheck = AirfoilOptimizationResource.Instance.CurrentPopulations.CombinedAirfoils.Length == GeneralConstants.NUMBER_OF_AIRFOILS_OF_GENERATION;
             return nullCheck && lengthCheck;
         }
 
         public void ResumeGeneticOptimization()
         {
-            OptimizingConfiguration.Instance.StartSelection();
+            AirfoilOptimizationResource.Instance.StartSelection();
         }
         public bool IsGASelectionAvailable()
         {
-            return OptimizingConfiguration.Instance.OffspringAirfoilsReady;
+            return AirfoilOptimizationResource.Instance.OffspringAirfoilsReady;
         }
 
         public void OpenCharacteristicsManager()

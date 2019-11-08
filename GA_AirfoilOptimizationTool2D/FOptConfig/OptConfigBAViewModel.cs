@@ -242,16 +242,16 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             //
 
             // Read Loaded Airfoil
-            if (OptimizingConfiguration.Instance.BasisAirfoils == null)
+            if (AirfoilOptimizationResource.Instance.BasisAirfoils == null)
             {
                 ImportedAirfoil = Models.ImportedAirfoilGroupManager.GetNewInstance();
             }
             else
             {
                 ImportedAirfoil = Models.ImportedAirfoilGroupManager.GetNewInstance();
-                ImportedAirfoil.AirfoilGroup = new System.Collections.Generic.List<Airfoil.AirfoilManager>(OptimizingConfiguration.Instance.BasisAirfoils.AirfoilGroup);
-                ImportedAirfoil.NumberOfAirfoils = OptimizingConfiguration.Instance.BasisAirfoils.NumberOfAirfoils;
-                ImportedAirfoil.NumberOfBasisAirfoils = OptimizingConfiguration.Instance.BasisAirfoils.NumberOfBasisAirfoils;
+                ImportedAirfoil.AirfoilGroup = new System.Collections.Generic.List<Airfoil.AirfoilManager>(AirfoilOptimizationResource.Instance.BasisAirfoils.AirfoilGroup);
+                ImportedAirfoil.NumberOfAirfoils = AirfoilOptimizationResource.Instance.BasisAirfoils.NumberOfAirfoils;
+                ImportedAirfoil.NumberOfBasisAirfoils = AirfoilOptimizationResource.Instance.BasisAirfoils.NumberOfBasisAirfoils;
             }
             #endregion
 

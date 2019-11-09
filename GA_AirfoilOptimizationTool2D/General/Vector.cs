@@ -174,7 +174,7 @@ namespace GA_AirfoilOptimizationTool2D.General
             {
                 for (int i = 0; i < vec.Length && result; i++)
                 {
-                    result = this._vec[i] == vec[1];
+                    result = this._vec[i] == vec[i];
                 }
             }
             return result;

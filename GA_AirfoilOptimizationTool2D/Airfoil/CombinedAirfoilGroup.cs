@@ -20,22 +20,15 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         public int NoAirfoils => _numberOfAirfoils;
         public int NoBasisAirfoils => _numberOfBasisAirfoils;
         public CoefficientOfCombination CoefficientOfCombination => _coefficientsOfCombination;
-        public AirfoilManager[] CombinedAirfoils => _combinedAirfoils.ToArray<AirfoilManager>();
+        public AirfoilManager[] CombinedAirfoils => _combinedAirfoils?.ToArray<AirfoilManager>();
         public General.BasisAirfoils BasisAirfoils => _basisAirfoils;
 
         public event EventHandler CombinedAirfoilsUpdated;
 
-        public CombinedAirfoilsGroup()
+        public CombinedAirfoilsGroup(General.BasisAirfoils basisAirfoils)
         {
-
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="noAirfoils">Number of basis airfoils</param>
-        public CombinedAirfoilsGroup(int noBasisAirfoils)
-        {
-            _numberOfBasisAirfoils = noBasisAirfoils;
+            this._basisAirfoils = basisAirfoils;
+            _numberOfBasisAirfoils = basisAirfoils.NumberOfAirfoils;
         }
 
         public void Add(Representation.AirfoilCombiner combinedAirfoil)
@@ -91,10 +84,15 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
                 Add(item);
             }
         }
-
-        public CoefficientOfCombination Clone()
+        public void AddRange(AirfoilsMixer combinedAirfoils)
         {
-            return MemberwiseClone() as CoefficientOfCombination;
         }
+
+        //public CoefficientOfCombination Clone()
+        //{
+        //    int _n_numberOfAirfoils = _numberOfAirfoils;
+        //    int _n_numberOfBasisAirfoils = _numberOfBasisAirfoils;
+        //    var _n_coefficientOfCombination = _coefficientsOfCombination.Clone();
+        //}
     }
 }

@@ -43,7 +43,7 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
                 var selectedIndex = mggExecutor.SelectedIndividualsIndex;
 
                 // Store selected Airfoils' characteristics
-                selectedAirfoils = new Airfoil.CombinedAirfoilsGroup();
+                selectedAirfoils = new Airfoil.CombinedAirfoilsGroup(offspringAirfoils.BasisAirfoils);
                 for (int i = 0; i < selectedIndex.Length; i++)
                 {
                     Airfoil.AirfoilManager airfoil = offspringAirfoils.CombinedAirfoils[selectedIndex[i]];

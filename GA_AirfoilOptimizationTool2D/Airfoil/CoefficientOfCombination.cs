@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace GA_AirfoilOptimizationTool2D.Airfoil
-{   
+{
     /// <summary>
     /// Represents coeffieicnts of combination. 
     /// </summary>
@@ -26,7 +26,8 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         public int NoBasisAirfoils => noBasisAirfoils;
         #endregion
 
-        public CoefficientOfCombination(int noBasis) 
+        // Initialize coefficients that have noBasis length and no width.
+        public CoefficientOfCombination(int noBasis)
         {
             noBasisAirfoils = noBasis;
 
@@ -36,7 +37,30 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
                 coefficientCombination[i] = new List<double>();
             }
         }
+        /// <summary>
+        /// Initialize coefficients that have noBasis length and noAirfoils width with 0
+        /// </summary>
+        /// <param name="noBasis">Number of Basis airfoils</param>
+        /// <param name="noAirfoils">Number of airfoils to combine</param>
+        public CoefficientOfCombination(int noBasis, int noAirfoils)
+        {
+            noBasisAirfoils = noBasis;
 
+            coefficientCombination = new List<double>[noBasisAirfoils];
+            for (int i = 0; i < noBasisAirfoils; i++)
+            {
+                coefficientCombination[i] = new List<double>();
+                for (int j = 0; j < noAirfoils; j++)
+                {
+                    coefficientCombination[i].Add(0);
+                }
+            }
+        }
+
+        /// <summary>
+        /// use for Clone method only
+        /// </summary>
+        private CoefficientOfCombination() { }
         /// <summary>
         /// Initializes a new instance of CoefficientOfCombination with coefficients array.
         /// </summary>
@@ -106,6 +130,29 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
 
             // Increment number of airfoils
             noAirfoils++;
+        }
+
+        public CoefficientOfCombination Clone()
+        {
+            int _n_noBasisAirfoils = noBasisAirfoils;
+            int _n_noAirfoils = noAirfoils;
+            List<double>[] _n_coefficientCombination = new List<double>[coefficientCombination.Length];
+
+            for (int i = 0; i < coefficientCombination.Length; i++)
+            {
+                _n_coefficientCombination[i] = new List<double>();
+                for (int j = 0; j < coefficientCombination[i].Count; j++)
+                {
+                    _n_coefficientCombination[i].Add(coefficientCombination[i][j]);
+                }
+            }
+
+            return new CoefficientOfCombination()
+            {
+                coefficientCombination = _n_coefficientCombination,
+                noBasisAirfoils = _n_noBasisAirfoils,
+                noAirfoils = _n_noAirfoils
+            };
         }
 
         private List<double>[] ConvertToCoefficientFormat(double[,] array)

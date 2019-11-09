@@ -92,7 +92,7 @@ namespace GA_AirfoilOptimizationTool2D
             String entryPath = thisAssembry.Location;
             OffspringsExportDirectory = "..\\..\\..\\Offsprings";
 
-            CurrentAirfoilsPopulation = new Airfoil.CombinedAirfoilsGroup(numberOfSameGenerations);
+            CurrentAirfoilsPopulation = new Airfoil.CombinedAirfoilsGroup(new General.BasisAirfoils());
 
             // Assign Event
             this.PropertyChanged += This_PropertyChanged;
@@ -230,7 +230,7 @@ namespace GA_AirfoilOptimizationTool2D
                 }
 
                 // Re-Generate the combined airfoils
-                _offspringAirfoilsCandidates = new Airfoil.CombinedAirfoilsGroup(coefficients.GetLength(1));
+                _offspringAirfoilsCandidates = new Airfoil.CombinedAirfoilsGroup(new General.BasisAirfoils());
 
                 var cff = new Airfoil.CoefficientOfCombination(coefficients);
                 Airfoil.AirfoilsMixer airfoilsMixer = new Airfoil.AirfoilsMixer(General.BasisAirfoils.Convert(BasisAirfoils), cff);

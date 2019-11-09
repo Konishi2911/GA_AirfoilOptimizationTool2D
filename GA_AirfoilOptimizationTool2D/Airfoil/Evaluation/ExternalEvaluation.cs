@@ -54,7 +54,7 @@
             if (optParams.Length == basisAirfoils.NumberOfAirfoils)
             {
                 var length = basisAirfoils.NumberOfAirfoils;
-                combinedAirfoilsGroup = new CombinedAirfoilsGroup();
+                combinedAirfoilsGroup = new CombinedAirfoilsGroup(basisAirfoils);
 
                 // Create optimized Coefficients
                 var optCoefficients = new CoefficientOfCombination(General.ArrayManager.ConvertJuggedArrayToArray(optParams));

@@ -79,6 +79,9 @@ namespace GA_AirfoilOptimizationTool2D
                     this._offsptingCandidates = value;
                 }
 
+                // Scan offsprings' characteristics to see if they are set.
+                ScanOffspringCharacteristics();
+
                 OnPropertyChanged(nameof(OffspringCandidates));
             }
         }
@@ -89,6 +92,10 @@ namespace GA_AirfoilOptimizationTool2D
         public event EventHandler CurrentParameterUpdated;
         public event EventHandler CurrentPopulationUpdated;
         public event EventHandler OffspringCandidatesUpdated;
+        #endregion
+
+        #region Event Callbacks
+
         #endregion
 
         private AirfoilOptimizationResource()
@@ -119,7 +126,7 @@ namespace GA_AirfoilOptimizationTool2D
             this._currentCoefficient = coefficients;
 
             // Initialization
-            _currentPopulations = new Airfoil.CombinedAirfoilsGroup(_basisAirfoils.NumberOfAirfoils);
+            _currentPopulations = new Airfoil.CombinedAirfoilsGroup(_basisAirfoils);
             //
 
             // Re-Generate the combined airfoils
@@ -154,7 +161,7 @@ namespace GA_AirfoilOptimizationTool2D
                 this._basisAirfoils = basisAirfoils;
                 
                 // Initialization
-                _currentPopulations = new Airfoil.CombinedAirfoilsGroup(basisAirfoils.NumberOfAirfoils);
+                _currentPopulations = new Airfoil.CombinedAirfoilsGroup(basisAirfoils);
                 //
 
                 // Re-Generate the combined airfoils
@@ -173,7 +180,7 @@ namespace GA_AirfoilOptimizationTool2D
                 var noBasis = basisAirfoils.NumberOfAirfoils;
 
                 _basisAirfoils = basisAirfoils;
-                _currentCoefficient = new Airfoil.CoefficientOfCombination(noBasis);
+                _currentCoefficient = new Airfoil.CoefficientOfCombination(noBasis, GeneralConstants.NUMBER_OF_AIRFOILS_OF_GENERATION);
 
                 // Fire the event updated coefficient are ready
                 CurrentParameterUpdated?.Invoke(this, new EventArgs());
@@ -198,7 +205,7 @@ namespace GA_AirfoilOptimizationTool2D
                 this._currentCoefficient = coefficients;
 
                 // Initialization
-                _currentPopulations = new Airfoil.CombinedAirfoilsGroup(_basisAirfoils.NumberOfAirfoils);
+                _currentPopulations = new Airfoil.CombinedAirfoilsGroup(_basisAirfoils);
                 //
 
                 // Re-Generate the combined airfoils
@@ -228,7 +235,7 @@ namespace GA_AirfoilOptimizationTool2D
         public void SetOffspringCandidates(Airfoil.CoefficientOfCombination coefficients)
         {
             // Re-Generate the combined airfoils
-            _offsptingCandidates = new Airfoil.CombinedAirfoilsGroup();
+            _offsptingCandidates = new Airfoil.CombinedAirfoilsGroup(_basisAirfoils);
             Airfoil.AirfoilsMixer airfoilsMixer = new Airfoil.AirfoilsMixer(_basisAirfoils, coefficients);
 
             // Combine airfoils
@@ -246,6 +253,11 @@ namespace GA_AirfoilOptimizationTool2D
 
             _parentsIndex = _airfoilGAManager.ParentsIndex;
             _offsptingCandidates = _airfoilGAManager.OffspringAirfoilCandidates;
+
+            // Fire the event updated SourceData are ready
+            OffspringCandidatesUpdated?.Invoke(this, new EventArgs());
+
+            // Export offsring's coefficient to as CSV files
             ExportAsCSV();
         }
 
@@ -271,6 +283,14 @@ namespace GA_AirfoilOptimizationTool2D
                 item.AirfoilName = "Offspring_" + i;
                 CSVexporter.ExportAirfoilCoordinate(item, ExportResolution);
                 i++;
+            }
+        }
+        private void ScanOffspringCharacteristics()
+        {
+            OffspringAirfoilsReady = true;
+            foreach (var item in _offsptingCandidates.CombinedAirfoils)
+            {
+                OffspringAirfoilsReady &= item.LiftProfile != null;
             }
         }
     }

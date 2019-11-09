@@ -56,13 +56,20 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
             FGeneticAlgorithm.IndividualsGroup individuals = new FGeneticAlgorithm.IndividualsGroup();
             
             // Pick coefficients array up fromCoefficientOfCombination
-            var temp = coefficients.GetCoefficientArray();
-            var coefficientsArray = General.ArrayManager.ConvertArrayToJuggedArray(temp) as double[][];
+            //var temp = coefficients.GetCoefficientArray();
+            //var coefficientsArray = General.ArrayManager.ConvertArrayToJuggedArray(temp) as double[][];
 
-            foreach (var item in coefficientsArray)
+            //foreach (var item in coefficientsArray)
+            //{
+            //    double fitness = 1.0;
+            //    individuals.AddIndivisual(new FGeneticAlgorithm.Individual(item, fitness));
+            //}
+
+            for (int i = 0; i < coefficients.NoAirfoils; i++)
             {
                 double fitness = 1.0;
-                individuals.AddIndivisual(new FGeneticAlgorithm.Individual(item, fitness));
+                var parameters = coefficients.GetCoefficients(i);
+                individuals.AddIndivisual(new FGeneticAlgorithm.Individual(parameters, fitness));
             }
 
             return individuals;

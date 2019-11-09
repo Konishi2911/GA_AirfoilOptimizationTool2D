@@ -57,13 +57,14 @@
             // Read Offsprings' optimization parameters
             var optParams = crossoverExecutor.OptimizationParamters;
             optParams = SwapJuggedArray(optParams);
+            var optCoef = new Airfoil.CoefficientOfCombination(General.ArrayManager.ConvertJuggedArrayToArray(optParams));
 
             // Assign Selected Parents Index
             parentsIndex = crossoverExecutor.ParentsIndex;
 
             // Initialize each fields
-            offspringAirfoilsCombiner = new Airfoil.CombinedAirfoilsGroup(basisAirfoils.NumberOfBasisAirfoils);
-            Airfoil.AirfoilsMixer airfoilsMixer = new Airfoil.AirfoilsMixer(basisAirfoils, parentAirfoils.CoefficientOfCombination);
+            offspringAirfoilsCombiner = new Airfoil.CombinedAirfoilsGroup(basisAirfoils);
+            Airfoil.AirfoilsMixer airfoilsMixer = new Airfoil.AirfoilsMixer(basisAirfoils, optCoef);
 
             // Create Offspring Airfoils
             // Combine airfoils
@@ -80,7 +81,7 @@
 
             // Extract selected offsprings
             var selectedAirfoils = selectionExecutor.SelectedAirfoils;
-            offspringAirfoils = new Airfoil.CombinedAirfoilsGroup();
+            offspringAirfoils = new Airfoil.CombinedAirfoilsGroup(basisAirfoils);
             for (int i = 0; i < selectedAirfoils.CombinedAirfoils.Length; i++)
             {
                 var airfoil = selectedAirfoils.CombinedAirfoils[i];
@@ -92,7 +93,7 @@
             // Create next Generation
             int k = 0;
             var previousGen = parentAirfoils.CombinedAirfoils;
-            Airfoil.CombinedAirfoilsGroup nextGenerations = new Airfoil.CombinedAirfoilsGroup(0);
+            Airfoil.CombinedAirfoilsGroup nextGenerations = new Airfoil.CombinedAirfoilsGroup(basisAirfoils);
             for (int i = 0; i < previousGen.Length; i++)
             {
                 if (IsEqual(i, parentsIndex))
@@ -105,7 +106,7 @@
                 }
                 else
                 {
-                    var airfoil = selectedAirfoils.CombinedAirfoils[i];
+                    var airfoil = parentAirfoils.CombinedAirfoils[i];
                     var coefficients = selectedAirfoils.CoefficientOfCombination.GetCoefficients(i);
 
                     nextGenerations.Add(airfoil, coefficients);
@@ -133,7 +134,7 @@
 
         private Airfoil.CombinedAirfoilsGroup CreateOffspringAirfoils(Airfoil.CoefficientOfCombination optParams)
         {
-            Airfoil.CombinedAirfoilsGroup offsprings = new Airfoil.CombinedAirfoilsGroup();
+            Airfoil.CombinedAirfoilsGroup offsprings = new Airfoil.CombinedAirfoilsGroup(basisAirfoils);
             Airfoil.AirfoilsMixer airfoilsMixer = new Airfoil.AirfoilsMixer(basisAirfoils, optParams);
 
             airfoilsMixer.CombineAirfoils();

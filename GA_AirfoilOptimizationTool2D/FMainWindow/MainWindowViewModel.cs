@@ -57,7 +57,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
 
             // Instantiate Fields
             previewWindowMode = PreviewWindowMode.CurrentPopulation;
-            currentPopulations = new Airfoil.CombinedAirfoilsGroup(NumberOfChildren);
+            //currentPopulations = new Airfoil.CombinedAirfoilsGroup(NumberOfChildren);
 
             previewCoordinates = new ObservableCollection<System.Windows.Point>[NumberOfChildren];
             for (int i = 0; i < NumberOfChildren; i++)
@@ -451,15 +451,15 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
 
         private void UpdateCurrentAirfoilsPopulation()
         {
-            UpdateAirfoilPreviews(currentPopulations.CombinedAirfoils);
+            UpdateAirfoilPreviews(currentPopulations?.CombinedAirfoils);
         }
         private void UpdateOffspringAirfoilCandidates()
         {
-            UpdateAirfoilPreviews(offspringAirfoilCandidates.CombinedAirfoils);
+            UpdateAirfoilPreviews(offspringAirfoilCandidates?.CombinedAirfoils);
         }
         private void UpdateAirfoilPreviews(Airfoil.AirfoilManager[] source)
         {
-            if (source[0] != null && source.Length == 10)
+            if (source != null && source[0] != null && source.Length == 10)
             {
                 PreviewCoordinate1 = General.AirfoilPreview.GetPreviewPointList(source[0], PreviewWindowHeight, PreviewWindowWidth);
                 PreviewCoordinate2 = General.AirfoilPreview.GetPreviewPointList(source[1], PreviewWindowHeight, PreviewWindowWidth);

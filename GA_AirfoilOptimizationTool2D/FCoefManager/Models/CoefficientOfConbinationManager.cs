@@ -185,7 +185,7 @@ namespace GA_AirfoilOptimizationTool2D.FCoefManager.Models
             // Format Check
             if (width != GeneralConstants.NUMBER_OF_AIRFOILS_OF_GENERATION)
             {
-                throw new FormatException();
+                throw new FormatException("width of array of coefficient is invalid");
             }
 
             var oCollection = new ObservableCollection<EachCoefficients>();

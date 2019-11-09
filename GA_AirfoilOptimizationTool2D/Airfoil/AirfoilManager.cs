@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace GA_AirfoilOptimizationTool2D.Airfoil
 {

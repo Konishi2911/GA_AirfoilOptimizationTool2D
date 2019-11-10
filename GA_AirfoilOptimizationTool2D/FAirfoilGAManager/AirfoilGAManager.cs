@@ -107,7 +107,7 @@
                 else
                 {
                     var airfoil = parentAirfoils.CombinedAirfoils[i];
-                    var coefficients = selectedAirfoils.CoefficientOfCombination.GetCoefficients(i);
+                    var coefficients = parentAirfoils.CoefficientOfCombination.GetCoefficients(i);
 
                     nextGenerations.Add(airfoil, coefficients);
                 }

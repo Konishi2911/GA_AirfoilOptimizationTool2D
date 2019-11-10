@@ -51,7 +51,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             updatePreviewWindow = new General.DelegateCommand(UpdateCurrentAirfoilsPopulation, () => true);
             startGAOptimization = new General.DelegateCommand(StartGeneticOptimization, IsGAExecutable);
             resumeGAOptimization = new General.DelegateCommand(ResumeGeneticOptimization, IsGASelectionAvailable);
-            airfoilCharacteristicsManager = new General.DelegateCommand(OpenCharacteristicsManager, () => true);
+            airfoilCharacteristicsManager = new General.DelegateCommand(OpenCharacteristicsManager, IsCharacteristicsManagerAvailable);
             setSpecifications = new General.ParamDelegateCommand<String>(DisplaySpecifications, () => true);
             //
 
@@ -365,7 +365,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         public bool IsGAExecutable()
         {
             bool nullCheck = AirfoilOptimizationResource.Instance.CurrentPopulations != null && !CollectionNullCheck(AirfoilOptimizationResource.Instance.CurrentPopulations.CombinedAirfoils);
-            bool lengthCheck = AirfoilOptimizationResource.Instance.CurrentPopulations.CombinedAirfoils.Length == GeneralConstants.NUMBER_OF_AIRFOILS_OF_GENERATION;
+            bool lengthCheck = AirfoilOptimizationResource.Instance.CurrentPopulations?.CombinedAirfoils.Length == GeneralConstants.NUMBER_OF_AIRFOILS_OF_GENERATION;
             return nullCheck && lengthCheck;
         }
 
@@ -381,6 +381,10 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         public void OpenCharacteristicsManager()
         {
             Messenger.AirfoilCharacManagerMessenger.Show();
+        }
+        private bool IsCharacteristicsManagerAvailable()
+        {
+            return AirfoilOptimizationResource.Instance.OffspringCandidates != null;
         }
 
         // Display the Airfoil Specifications

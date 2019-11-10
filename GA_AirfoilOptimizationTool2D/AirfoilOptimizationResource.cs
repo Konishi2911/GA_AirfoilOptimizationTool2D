@@ -266,8 +266,16 @@ namespace GA_AirfoilOptimizationTool2D
             _airfoilGAManager ??= new FAirfoilGAManager.AirfoilGAManager(_parentsIndex, _currentPopulations);
             _airfoilGAManager.StartSelection(_offsptingCandidates);
             var NextGeneration = _airfoilGAManager.NextAirfoilGenerations;
+
+            // Update currnet populations with selected next generation
             _currentPopulations = NextGeneration;
 
+            // Crear the data of offspring populations.
+            _offsptingCandidates = null;
+            _offspringCoefficients = null;
+            OffspringAirfoilsReady = false;
+
+            // fires the event that notifies current pupulations updated.
             CurrentPopulationUpdated?.Invoke(this, new EventArgs());
         }
         #endregion

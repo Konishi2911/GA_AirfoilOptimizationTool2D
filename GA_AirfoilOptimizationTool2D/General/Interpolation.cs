@@ -151,8 +151,21 @@ namespace GA_AirfoilOptimizationTool2D.General
                 vec_by[i] = 3 * (ay[i + 1] - 2 * ay[i] + ay[i - 1]);
             }
 
-            cx = (A.InverceMatrix() * vec_bx).ToDoubleArray();
-            cy = (A.InverceMatrix() * vec_by).ToDoubleArray();
+            //cx = (A.InverceMatrix() * vec_bx).ToDoubleArray();
+            //cy = (A.InverceMatrix() * vec_by).ToDoubleArray();
+
+            General.Solvers.JacobiMethod jSolver1 = new Solvers.JacobiMethod(A.GetArray(), vec_bx.ToDoubleArray());
+            General.Solvers.JacobiMethod jSolver2 = new Solvers.JacobiMethod(A.GetArray(), vec_by.ToDoubleArray());
+            jSolver1.Error = 1E-15;
+            jSolver2.Error = 1E-15;
+            jSolver1.CheckInterval = 10;
+            jSolver2.CheckInterval = 10;
+
+            jSolver1.Solve();
+            jSolver2.Solve();
+
+            cx = jSolver1.Solution;
+            cy = jSolver2.Solution;
 
             for (int i = 0; i < n; i++)
             {

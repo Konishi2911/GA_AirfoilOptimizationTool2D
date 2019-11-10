@@ -36,6 +36,11 @@ namespace GA_AirfoilOptimizationTool2D.General
             _size = (Int32)System.Math.Sqrt(_matrix.Length);
         }
 
+        public double[,] GetArray()
+        {
+            return _matrix;
+        }
+
         public double this[int i, int j]
         {
             set

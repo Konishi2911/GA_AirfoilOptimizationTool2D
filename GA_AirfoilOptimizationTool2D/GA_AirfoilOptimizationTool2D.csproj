@@ -216,6 +216,7 @@
     <Compile Include="General\RandomNumber\BoxMuller.cs" />
     <Compile Include="General\RandomNumber\MersenneTwister.cs" />
     <Compile Include="General\RandomNumber\RandomNumberGenerator.cs" />
+    <Compile Include="General\Solvers\JacobiMethod.cs" />
     <Compile Include="General\Statistics\SamplingWithoutReplacement.cs" />
     <Compile Include="General\Triggers\SaveFileDialogTriger.cs" />
     <Compile Include="OptimizingConfiguration.cs" />

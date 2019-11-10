@@ -9,7 +9,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
     public class AirfoilManager
     {
         #region Fields
-        private const int NumberOfControlPoint = 400;
+        private const int NumberOfControlPoint = 600;
         private const int NumberOfDivision = GeneralConstants.NUMBER_OF_DIVISION;
 
         private String airfoilName;
@@ -129,7 +129,8 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         {
             InitializeComponent();
 
-            _importedCoordinate = RefineCoordinate(coordinate);
+            var tempCoordinate = RefineCoordinate(coordinate);
+            _importedCoordinate = RefineCoordinate(tempCoordinate);
 
             // Interpolate Airfoil with three dimensional Spline.
             airfoilInterpolation();
@@ -321,6 +322,36 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             AirfoilCoordinate refinedCoordinate = new AirfoilCoordinate();
             refinedCoordinate.Import(refinedCoordinateArray);
             return refinedCoordinate;
+        }
+
+        private AirfoilCoordinate StandardizeAirfoilCoordinates(AirfoilCoordinate coordinate)
+        {
+            var standardized = new List<double[]>();
+            double chordLength = AirfoilCoordinate.GetMaximumValue(coordinate, 0) - AirfoilCoordinate.GetMinimumValue(coordinate, 0);
+            AirfoilCoordinate newValue = new AirfoilCoordinate();
+
+            // Null check
+            if (coordinate == null)
+            {
+                return null;
+            }
+
+            for (int i = 0; i < coordinate.Length; i++)
+            {
+                var temp = new double[] { coordinate[i].X / chordLength, coordinate[i].Z / chordLength };
+                standardized.Add(temp);
+            }
+
+            // Convert List to two dimensional Double Type Array
+            var refinedCoordinateArray = new Double[standardized.Count, 2];
+            for (int i = 0; i < standardized.Count; i++)
+            {
+                refinedCoordinateArray[i, 0] = standardized[i][0];
+                refinedCoordinateArray[i, 1] = standardized[i][1];
+            }
+
+            newValue.Import(refinedCoordinateArray);
+            return newValue;
         }
     }
 }

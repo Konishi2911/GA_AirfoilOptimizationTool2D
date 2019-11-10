@@ -6,7 +6,7 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
     class CharacteristicsManagerViewModel : General.ViewModelBase
     {
         #region Fields
-        private Airfoil.CombinedAirfoilsGroupManager sourceAirfoils;
+        private Airfoil.CombinedAirfoilsGroup sourceAirfoils;
         private Airfoil.Characteristics.AngleBasedCharacteristics liftProfile;
         private int currentAirfoilNumber;
 
@@ -43,7 +43,7 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
             this.PropertyChanged += This_PropertyChanged;
 
             // Clone Offsprng Airfoils
-            sourceAirfoils = OptimizingConfiguration.Instance.OffspringAirfoilsCandidates.Clone();
+            sourceAirfoils = AirfoilOptimizationResource.Instance.OffspringCandidates;
             AssignTargetAirfoils();
         }
 
@@ -52,9 +52,9 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
         /// </summary>
         private void AssignTargetAirfoils()
         {
-            for (int i = 0; i < sourceAirfoils.GetCombinedAirfoilsArray().Length; i++)
+            for (int i = 0; i < sourceAirfoils.CombinedAirfoils.Length; i++)
             {
-                TargetAirfoils.Add(new TargetAirfoilSelectorViewModel(sourceAirfoils.GetCombinedAirfoilsArray()[i].CombinedAirfoil, "Airfoil" + (i + 1)));
+                TargetAirfoils.Add(new TargetAirfoilSelectorViewModel(sourceAirfoils.CombinedAirfoils[i], "Airfoil" + (i + 1)));
             }
         }
 
@@ -71,13 +71,13 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
                 }
 
                 // Apply lift profiles to temporary airfoils collection
-                sourceAirfoils.GetCombinedAirfoilsArray()[currentAirfoilNumber].CombinedAirfoil.LiftProfile = liftProfile;
+                sourceAirfoils.CombinedAirfoils[currentAirfoilNumber].LiftProfile = liftProfile;
             }
         }
 
         private void ApplyButtonClicked()
         {
-            OptimizingConfiguration.Instance.OffspringAirfoilsCandidates = this.sourceAirfoils;
+            AirfoilOptimizationResource.Instance.OffspringCandidates = this.sourceAirfoils;
         }
         private bool IsApplyButtonAvailable()
         {

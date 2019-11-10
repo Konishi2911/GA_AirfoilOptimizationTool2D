@@ -10,11 +10,11 @@ namespace GA_AirfoilOptimizationTool2D
         private const int numberOfSameGenerations = GeneralConstants.NUMBER_OF_AIRFOILS_OF_GENERATION;
 
         private General.BasisAirfoils _basisAirfoils;
-        private Airfoil.CombinedAirfoilsGroupManager _currentAirfoils;
-        private Double[,] _coefficientOfCombination;
+        private Airfoil.CombinedAirfoilsGroup _currentAirfoils;
+        private Airfoil.CoefficientOfCombination _coefficientOfCombination;
 
         private int[] parentsIndex;
-        private Airfoil.CombinedAirfoilsGroupManager _offspringAirfoilsCandidates;
+        private Airfoil.CombinedAirfoilsGroup _offspringAirfoilsCandidates;
 
         private FAirfoilGAManager.AirfoilGAManager airfoilGAManager;
 
@@ -42,7 +42,7 @@ namespace GA_AirfoilOptimizationTool2D
         /// <summary>
         /// This airfoils are displayed on preview windows in the Main window
         /// </summary>
-        public Airfoil.CombinedAirfoilsGroupManager CurrentAirfoilsPopulation
+        public Airfoil.CombinedAirfoilsGroup CurrentAirfoilsPopulation
         {
             get => _currentAirfoils;
             set
@@ -51,7 +51,7 @@ namespace GA_AirfoilOptimizationTool2D
                 OnPropertyChanged(nameof(CurrentAirfoilsPopulation));
             }
         }
-        public Double[,] CoefficientOfCombination
+        public Airfoil.CoefficientOfCombination CoefficientOfCombination
         {
             get => _coefficientOfCombination;
             set
@@ -64,7 +64,7 @@ namespace GA_AirfoilOptimizationTool2D
 
         }
 
-        public Airfoil.CombinedAirfoilsGroupManager OffspringAirfoilsCandidates
+        public Airfoil.CombinedAirfoilsGroup OffspringAirfoilsCandidates
         {
             get => _offspringAirfoilsCandidates;
             set
@@ -92,7 +92,7 @@ namespace GA_AirfoilOptimizationTool2D
             String entryPath = thisAssembry.Location;
             OffspringsExportDirectory = "..\\..\\..\\Offsprings";
 
-            CurrentAirfoilsPopulation = new Airfoil.CombinedAirfoilsGroupManager(numberOfSameGenerations);
+            CurrentAirfoilsPopulation = new Airfoil.CombinedAirfoilsGroup(new General.BasisAirfoils());
 
             // Assign Event
             this.PropertyChanged += This_PropertyChanged;
@@ -111,14 +111,17 @@ namespace GA_AirfoilOptimizationTool2D
                 }
 
                 // If number of basis airfoils are greater than number of coefficient of combination
-                if (BasisAirfoils.NumberOfAirfoils > CoefficientOfCombination.GetLength(0))
+                if (BasisAirfoils.NumberOfAirfoils > CoefficientOfCombination.NoBasisAirfoils)
                 {
                     // Add new row of coefficient at the last of CoefficientOfCombination.
-                    AddCoefficient(out _coefficientOfCombination);
+                    var temp = _coefficientOfCombination.GetCoefficientArray();
+                    AddCoefficient(out temp);
                 }
 
                 // Re-Generate the combined airfoils
-                CurrentAirfoilsPopulation.CombineAirfoils(General.BasisAirfoils.Convert(BasisAirfoils), CoefficientOfCombination);
+                Airfoil.AirfoilsMixer airfoilsMixer = new Airfoil.AirfoilsMixer(General.BasisAirfoils.Convert(BasisAirfoils), CoefficientOfCombination);
+                airfoilsMixer.CombineAirfoils();
+                CurrentAirfoilsPopulation.AddRange(airfoilsMixer.CombinedAirfoils);
 
                 // Fire the event updated SourceData are ready
                 SourceDataChanged?.Invoke(this, new EventArgs());
@@ -132,16 +135,16 @@ namespace GA_AirfoilOptimizationTool2D
 
                 // Check wheather characteristic of each offspring is ready.
                 OffspringAirfoilsReady = true;
-                foreach (var item in OffspringAirfoilsCandidates.GetCombinedAirfoilsArray())
+                foreach (var item in OffspringAirfoilsCandidates.CombinedAirfoils)
                 {
-                    OffspringAirfoilsReady &= item.CombinedAirfoil.LiftProfile != null;
+                    OffspringAirfoilsReady &= item.LiftProfile != null;
                 }
             }
 
             // Current Airfoils Updates
             else if (e.PropertyName == nameof(CurrentAirfoilsPopulation))
             {
-                var currentAirfoils = CurrentAirfoilsPopulation.GetCombinedAirfoilsArray();
+                var currentAirfoils = CurrentAirfoilsPopulation.CombinedAirfoils;
                 var noAirfoils = currentAirfoils.Length;
                 double[,] currentCoefficients = new double[BasisAirfoils.NumberOfAirfoils, noAirfoils];
 
@@ -149,21 +152,22 @@ namespace GA_AirfoilOptimizationTool2D
                 {
                     for (int j = 0; j < noAirfoils; j++)
                     {
-                        currentCoefficients[i, j] = currentAirfoils[j].Coefficients[i];
+                        currentCoefficients[i, j] = CurrentAirfoilsPopulation.CoefficientOfCombination.GetCoefficients(j)[i];
                     }
                 }
 
-                _coefficientOfCombination = currentCoefficients;
+                _coefficientOfCombination = new Airfoil.CoefficientOfCombination(currentCoefficients);
             }
         }
         #endregion
 
         /// <summary>
+        /// 
         /// Set Sources of current airfoils
         /// </summary>
         /// <param name="baseAirfoils"></param>
         /// <param name="coefficients"></param>
-        public void SetSource(General.BasisAirfoils baseAirfoils, Double[,] coefficients)
+        public void SetSource(General.BasisAirfoils baseAirfoils, Airfoil.CoefficientOfCombination coefficients)
         {
             this._basisAirfoils = baseAirfoils;
             this._coefficientOfCombination = coefficients;
@@ -171,14 +175,24 @@ namespace GA_AirfoilOptimizationTool2D
             if (baseAirfoils != null && coefficients != null)
             {
                 // If number of basis airfoils are greater than number of coefficient of combination
-                if (BasisAirfoils.NumberOfAirfoils > CoefficientOfCombination.GetLength(0))
+                if (BasisAirfoils.NumberOfAirfoils > CoefficientOfCombination.NoBasisAirfoils)
                 {
-                    // Add new row of coefficient at the last of CoefficientOfCombination.
-                    AddCoefficient(BasisAirfoils.NumberOfAirfoils - CoefficientOfCombination.GetLength(0), _coefficientOfCombination);
+                    // Add new empty row of coefficient at the end of CoefficientOfCombination.
+                    int length = BasisAirfoils.NumberOfAirfoils - CoefficientOfCombination.NoBasisAirfoils;
+                    for (int i = 0; i < length; i++)
+                    {
+                        _coefficientOfCombination.AddCoefficient(new double[_coefficientOfCombination.NoBasisAirfoils]);
+                    }
+                    //AddCoefficient(BasisAirfoils.NumberOfAirfoils - CoefficientOfCombination.NoBasisAirfoils, _coefficientOfCombination);
                 }
 
                 // Re-Generate the combined airfoils
-                CurrentAirfoilsPopulation.CombineAirfoils(General.BasisAirfoils.Convert(BasisAirfoils), CoefficientOfCombination);
+                Airfoil.AirfoilsMixer airfoilsMixer = new Airfoil.AirfoilsMixer(BasisAirfoils, CoefficientOfCombination);
+
+                // Combine new airfoils
+                airfoilsMixer.CombineAirfoils();
+                // Add combined airfoils into the current airfoils population 
+                CurrentAirfoilsPopulation.AddRange(airfoilsMixer.CombinedAirfoils);
 
                 // Fire the event updated SourceData are ready
                 SourceDataChanged?.Invoke(this, new EventArgs());
@@ -190,11 +204,13 @@ namespace GA_AirfoilOptimizationTool2D
             else if (baseAirfoils != null && coefficients == null)
             {
                 // Add new row of coefficient at the last of CoefficientOfCombination.
-                _coefficientOfCombination = new double[0,10];
-                AddCoefficient(BasisAirfoils.NumberOfAirfoils, _coefficientOfCombination);
+                _coefficientOfCombination = new Airfoil.CoefficientOfCombination(10);
+                AddCoefficient(BasisAirfoils.NumberOfAirfoils, _coefficientOfCombination.GetCoefficientArray());
 
                 // Re-Generate the combined airfoils
-                CurrentAirfoilsPopulation.CombineAirfoils(General.BasisAirfoils.Convert(BasisAirfoils), CoefficientOfCombination);
+                Airfoil.AirfoilsMixer airfoilsMixer = new Airfoil.AirfoilsMixer(General.BasisAirfoils.Convert(BasisAirfoils), CoefficientOfCombination);
+                airfoilsMixer.CombineAirfoils();
+                CurrentAirfoilsPopulation.AddRange(airfoilsMixer.CombinedAirfoils);
 
                 // Fire the event updated SourceData are ready
                 SourceDataChanged?.Invoke(this, new EventArgs());
@@ -206,16 +222,20 @@ namespace GA_AirfoilOptimizationTool2D
             if (baseAirfoils != null && coefficients != null)
             {
                 // If number of basis airfoils are greater than number of coefficient of combination
-                if (BasisAirfoils.NumberOfAirfoils > CoefficientOfCombination.GetLength(0))
+                if (BasisAirfoils.NumberOfAirfoils > CoefficientOfCombination.NoBasisAirfoils)
                 {
                     // Add new row of coefficient at the last of CoefficientOfCombination.
                     var coef = _offspringAirfoilsCandidates.CoefficientOfCombination;
-                    AddCoefficient(BasisAirfoils.NumberOfAirfoils - CoefficientOfCombination.GetLength(0), coef);
+                    AddCoefficient(BasisAirfoils.NumberOfAirfoils - CoefficientOfCombination.NoBasisAirfoils, coef.GetCoefficientArray());
                 }
 
                 // Re-Generate the combined airfoils
-                _offspringAirfoilsCandidates = new Airfoil.CombinedAirfoilsGroupManager(coefficients.GetLength(1));
-                OffspringAirfoilsCandidates.CombineAirfoils(General.BasisAirfoils.Convert(BasisAirfoils), coefficients);
+                _offspringAirfoilsCandidates = new Airfoil.CombinedAirfoilsGroup(new General.BasisAirfoils());
+
+                var cff = new Airfoil.CoefficientOfCombination(coefficients);
+                Airfoil.AirfoilsMixer airfoilsMixer = new Airfoil.AirfoilsMixer(General.BasisAirfoils.Convert(BasisAirfoils), cff);
+                airfoilsMixer.CombineAirfoils();
+                OffspringAirfoilsCandidates.AddRange(airfoilsMixer.CombinedAirfoils);
 
                 // Fire the event updated SourceData are ready
                 SourceDataChanged?.Invoke(this, new EventArgs());
@@ -247,15 +267,15 @@ namespace GA_AirfoilOptimizationTool2D
         /// </summary>
         private void AddCoefficient(out double[,] coefficients)
         {
-            var length = CoefficientOfCombination.GetLength(0);
-            var width = CoefficientOfCombination.GetLength(1);
+            var length = CoefficientOfCombination.NoBasisAirfoils;
+            var width = CoefficientOfCombination.NoAirfoils;
 
-            var newCoefficientCollection = new Double[length + 1, width];
+            var newCoefficientCollection = new Airfoil.CoefficientOfCombination(length);
 
-            Array.Copy(CoefficientOfCombination, newCoefficientCollection, length * width);
+            newCoefficientCollection = CoefficientOfCombination;
 
             // Update coefficientCollection directly (without Event firing).
-            coefficients = newCoefficientCollection;
+            coefficients = newCoefficientCollection.GetCoefficientArray();
         }
         /// <summary>
         /// Add the number of coefficients specifiedbu the argument
@@ -271,14 +291,14 @@ namespace GA_AirfoilOptimizationTool2D
 
         private void ExportAsCSV()
         {
-            var offsprings = OffspringAirfoilsCandidates.GetCombinedAirfoilsArray();
+            var offsprings = OffspringAirfoilsCandidates.CombinedAirfoils;
             Airfoil.AirfoilCoordinateExporter CSVexporter = new Airfoil.AirfoilCoordinateExporter(OffspringsExportDirectory);
             var i = 1;
             foreach (var item in offsprings)
             {
-                var offspringAirfoils = item.CombinedAirfoil;
+                var offspringAirfoils = item;
                 offspringAirfoils.AirfoilName = "Offspring_" + i;
-                CSVexporter.ExportAirfoilCoordinate(item.CombinedAirfoil, ExportResolution);
+                CSVexporter.ExportAirfoilCoordinate(item, ExportResolution);
                 i++;
             }
         }

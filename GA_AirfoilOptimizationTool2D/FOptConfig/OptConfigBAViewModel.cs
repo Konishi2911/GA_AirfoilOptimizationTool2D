@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.IO;
 
 namespace GA_AirfoilOptimizationTool2D.FOptConfig
 {
@@ -200,8 +201,12 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             // Analyze the CSV file located in _airfoil_path
             var result = airfoilCsvAnalyzer.Analyze(_airfoil_path);
 
+            // Get Airfoil's name from csv file name.
+            var newAirfoil = new Airfoil.AirfoilManager(result);
+            newAirfoil.AirfoilName = Path.GetFileName(_airfoil_path).Replace(".csv", "");
+
             // Registrate imported Airfoil to the AirfoilGroupManager.
-            ImportedAirfoil.Add(result);
+            ImportedAirfoil.Add(newAirfoil);
         }
         private void UpdatePreview()
         {
@@ -231,7 +236,6 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
 
         public OptConfigBAViewModel()
         {
-            #region Instantiate
             // ------------------------------------------------------------
 
             // SelectBaseAirfoil Button related ============================
@@ -242,23 +246,21 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             //
 
             // Read Loaded Airfoil
-            if (OptimizingConfiguration.Instance.BasisAirfoils == null)
+            if (AirfoilOptimizationResource.Instance.BasisAirfoils == null)
             {
                 ImportedAirfoil = Models.ImportedAirfoilGroupManager.GetNewInstance();
             }
             else
             {
                 ImportedAirfoil = Models.ImportedAirfoilGroupManager.GetNewInstance();
-                ImportedAirfoil.AirfoilGroup = new System.Collections.Generic.List<Airfoil.AirfoilManager>(OptimizingConfiguration.Instance.BasisAirfoils.AirfoilGroup);
-                ImportedAirfoil.NumberOfAirfoils = OptimizingConfiguration.Instance.BasisAirfoils.NumberOfAirfoils;
-                ImportedAirfoil.NumberOfBasisAirfoils = OptimizingConfiguration.Instance.BasisAirfoils.NumberOfBasisAirfoils;
+                ImportedAirfoil.AirfoilGroup = new System.Collections.Generic.List<Airfoil.AirfoilManager>(AirfoilOptimizationResource.Instance.BasisAirfoils.AirfoilGroup);
+                ImportedAirfoil.NumberOfAirfoils = AirfoilOptimizationResource.Instance.BasisAirfoils.NumberOfAirfoils;
+                ImportedAirfoil.NumberOfBasisAirfoils = AirfoilOptimizationResource.Instance.BasisAirfoils.NumberOfAirfoils;
             }
-            #endregion
 
             // Assign EventHandler
             assignEventHandler();
 
-            #region Initialize Fields
             if (ImportedAirfoil.NumberOfAirfoils == 0)
             {
                 NumberOfBasisAirfoils = 1;
@@ -313,7 +315,6 @@ namespace GA_AirfoilOptimizationTool2D.FOptConfig
             AirfoilSelectionStatus
                 = numberOfLoadedAirfoils.ToString() + " airfoil is loaded." + "  "
                 + (numberOfBAirfoils - numberOfLoadedAirfoils).ToString() + " airfoils left are required.";
-            #endregion
         }
 
         /// <summary>

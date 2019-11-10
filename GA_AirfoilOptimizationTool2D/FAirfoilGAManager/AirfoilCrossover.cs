@@ -27,9 +27,9 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
             UNDX
         }
 
-        public void ExecuteCrossover(Airfoil.CombinedAirfoilsGroupManager parentAirfoils)
+        public void ExecuteCrossover(Airfoil.CoefficientOfCombination parentCoefficients)
         {
-            var parentsIndividuals = CreateIndividuals(parentAirfoils);
+            var parentsIndividuals = CreateIndividuals(parentCoefficients);
 
             // UNDX Crossover
             if (crossoverOperator == CrossoverOperator.UNDX)
@@ -51,15 +51,25 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
 
         }
 
-        private FGeneticAlgorithm.IndividualsGroup CreateIndividuals(Airfoil.CombinedAirfoilsGroupManager airfoilsGroup)
+        private FGeneticAlgorithm.IndividualsGroup CreateIndividuals(Airfoil.CoefficientOfCombination coefficients)
         {
             FGeneticAlgorithm.IndividualsGroup individuals = new FGeneticAlgorithm.IndividualsGroup();
+            
+            // Pick coefficients array up fromCoefficientOfCombination
+            //var temp = coefficients.GetCoefficientArray();
+            //var coefficientsArray = General.ArrayManager.ConvertArrayToJuggedArray(temp) as double[][];
 
-            var airfoils = airfoilsGroup.GetCombinedAirfoilsArray();
-            foreach (var item in airfoils)
+            //foreach (var item in coefficientsArray)
+            //{
+            //    double fitness = 1.0;
+            //    individuals.AddIndivisual(new FGeneticAlgorithm.Individual(item, fitness));
+            //}
+
+            for (int i = 0; i < coefficients.NoAirfoils; i++)
             {
                 double fitness = 1.0;
-                individuals.AddIndivisual(new FGeneticAlgorithm.Individual(item.Coefficients, fitness));
+                var parameters = coefficients.GetCoefficients(i);
+                individuals.AddIndivisual(new FGeneticAlgorithm.Individual(parameters, fitness));
             }
 
             return individuals;

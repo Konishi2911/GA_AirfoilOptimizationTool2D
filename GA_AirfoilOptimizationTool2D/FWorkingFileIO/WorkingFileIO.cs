@@ -20,15 +20,16 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
         private const string NAME = "NAME";
         private const string COORDINATE = "COORDINATE";
         #endregion
+
         #region Fields
         private int numberOfSameGeneration;
         private int numberOfBaseAirfoils;
         private int numberOfGenerations;
         private List<Airfoil.AirfoilManager> baseAirfoils;
         private List<Airfoil.AirfoilManager> combinedAirfoils;
-        private Double[,] coefficientOfCombination;
+        private Airfoil.CoefficientOfCombination coefficientOfCombination;
         private int[] parentsIndex;
-        private Double[,] offspringCoefficients;
+        private Airfoil.CoefficientOfCombination offspringCoefficients;
         #endregion
 
         public delegate void OpeningFileFinishedEventHandler(object sender, OpeningFileFinishedEventArgs e);
@@ -40,9 +41,9 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
             public int NumberOfGenerations { get; set; }
             public List<Airfoil.AirfoilManager> BaseAirfoils { get; set; }
             public List<Airfoil.AirfoilManager> CombinedAirfoils { get; set; }
-            public Double[,] CoefficientOfCombination { get; set; }
+            public Airfoil.CoefficientOfCombination CoefficientOfCombination { get; set; }
             public int[] ParentsIndex { get; set; }
-            public Double[,] OffspringCoefficients { get; set; }
+            public Airfoil.CoefficientOfCombination OffspringCoefficients { get; set; }
         }
 
         public WorkingFileIO()
@@ -93,11 +94,11 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
             writingString += EndPart();
 
             writingString += CreateIndex("NUMBER_OF_BASE_AIRFOILS");
-            writingString += OptimizingConfiguration.Instance.BasisAirfoils.NumberOfAirfoils.ToString() + NewLine;
+            writingString += AirfoilOptimizationResource.Instance.BasisAirfoils.NumberOfAirfoils.ToString() + NewLine;
             writingString += EndPart();
 
             writingString += CreateIndex("BASE_AIRFOILS");
-            foreach (var item in OptimizingConfiguration.Instance.BasisAirfoils.AirfoilGroup)
+            foreach (var item in AirfoilOptimizationResource.Instance.BasisAirfoils.AirfoilGroup)
             {
                 writingString += CreateSubIndex("NAME");
                 writingString += item.AirfoilName + NewLine;
@@ -110,15 +111,15 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
             writingString += EndPart();
 
             writingString += CreateIndex("COEFFICIENT_OF_COMBINATION");
-            writingString += General.CsvManager.CreateCSV(OptimizingConfiguration.Instance.CoefficientOfCombination) + NewLine;
+            writingString += General.CsvManager.CreateCSV(AirfoilOptimizationResource.Instance.CurrentCoefficients.GetCoefficientArray()) + NewLine;
             writingString += EndPart();
 
             writingString += CreateIndex(PARENT_INDEX);
-            writingString += General.CsvManager.CreateCSV(OptimizingConfiguration.Instance.ParentsIndex, false) + NewLine;
+            writingString += General.CsvManager.CreateCSV(AirfoilOptimizationResource.Instance.ParentsIndex, false) + NewLine;
             writingString += EndPart();
 
             writingString += CreateIndex(OFFSPRING_COEFFICIENT);
-            writingString += General.CsvManager.CreateCSV(OptimizingConfiguration.Instance.OffspringAirfoilsCandidates.CoefficientOfCombination) + NewLine;
+            writingString += General.CsvManager.CreateCSV(AirfoilOptimizationResource.Instance.OffspringCandidates.CoefficientOfCombination.GetCoefficientArray()) + NewLine;
             writingString += EndPart();
 
 
@@ -195,11 +196,11 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
                 {
                     if (PreviousIndexName == "COEFFICIENT_OF_COMBINATION")
                     {
-                        coefficientOfCombination = ConvertListToDoubleArray(coefficientArray);
+                        coefficientOfCombination = new Airfoil.CoefficientOfCombination(ConvertListToDoubleArray(coefficientArray));
                     }
                     else if (PreviousIndexName == OFFSPRING_COEFFICIENT)
                     {
-                        offspringCoefficients = ConvertListToDoubleArray(offspringCoefArray);
+                        offspringCoefficients = new Airfoil.CoefficientOfCombination(ConvertListToDoubleArray(offspringCoefArray));
                     }
                 }
                 else if (IndexName == "NUMBER_OF_SAME_GENERATION")

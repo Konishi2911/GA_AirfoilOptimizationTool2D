@@ -5,7 +5,7 @@
     /// </summary>
     public class ExternalEvaluation
     {
-        private CombinedAirfoilsGroupManager combinedAirfoilsGroup;
+        private CombinedAirfoilsGroup combinedAirfoilsGroup;
         private General.BasisAirfoils basisAirfoils;
 
         public ExternalEvaluation(General.BasisAirfoils basisAirfoils)
@@ -13,6 +13,11 @@
             this.basisAirfoils = basisAirfoils;
         }
 
+        /// <summary>
+        /// Execute Evaluation of airfoils that is made from optimized parameters.
+        /// </summary>
+        /// <param name="optParams"></param>
+        /// <returns></returns>
         public double[] EvaluateAirfoils(double[][] optParams)
         {
             double[] fitness = new double[basisAirfoils.NumberOfAirfoils];
@@ -20,39 +25,48 @@
             var combinedAirfoilsGroup = AssignParameters(optParams, basisAirfoils);
             var coordinateCSV = CreateCSV(combinedAirfoilsGroup);
 
-
-
             return fitness;
         }
 
-        private string[] CreateCSV(CombinedAirfoilsGroupManager combinedAirfoilsGroup)
+        private string[] CreateCSV(CombinedAirfoilsGroup combinedAirfoilsGroup)
         {
-            var combinedAirfoils = combinedAirfoilsGroup.GetCombinedAirfoilsArray();
+            var combinedAirfoils = combinedAirfoilsGroup.CombinedAirfoils;
             var length = combinedAirfoils.Length;
             string[] coordinateCSV = new string[length];
 
             for (int i = 0; i < length; i++)
             {
-                coordinateCSV[i] = General.CsvManager.CreateCSV(combinedAirfoils[i].CombinedAirfoil.InterpolatedCoordinate.ToDouleArray());
+                coordinateCSV[i] = General.CsvManager.CreateCSV(combinedAirfoils[i].InterpolatedCoordinate.ToDouleArray());
             }
 
             return coordinateCSV;
         }
 
-        private CombinedAirfoilsGroupManager AssignParameters(double[][] optParams, General.BasisAirfoils basisAirfoils)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="optParams"></param>
+        /// <param name="basisAirfoils"></param>
+        /// <returns></returns>
+        private CombinedAirfoilsGroup AssignParameters(double[][] optParams, General.BasisAirfoils basisAirfoils)
         {
             // Format Check
             if (optParams.Length == basisAirfoils.NumberOfAirfoils)
             {
                 var length = basisAirfoils.NumberOfAirfoils;
-                combinedAirfoilsGroup = new CombinedAirfoilsGroupManager(length);
+                combinedAirfoilsGroup = new CombinedAirfoilsGroup(basisAirfoils);
 
-                // Combine Airfoils
-                for (int i = 0; i < length; i++)
-                {
-                    combinedAirfoilsGroup.CombineAirfoils(basisAirfoils, ConvertJuggedArrayToArray(optParams));
-                }
+                // Create optimized Coefficients
+                var optCoefficients = new CoefficientOfCombination(General.ArrayManager.ConvertJuggedArrayToArray(optParams));
+
+                // Combine airfoil
+                AirfoilsMixer airfoilsMixer = new AirfoilsMixer(basisAirfoils, optCoefficients);
+                airfoilsMixer.CombineAirfoils();
+
+                // Assign combined airfoils into the CombinedAirfoilsGroup
+                combinedAirfoilsGroup.AddRange(airfoilsMixer.CombinedAirfoils);
             }
+
             return combinedAirfoilsGroup;
         }
 

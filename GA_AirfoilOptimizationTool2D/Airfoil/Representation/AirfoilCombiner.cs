@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace GA_AirfoilOptimizationTool2D.Airfoil.Representation
 {
     /// <summary>
-    /// This class provides some functions such as the function to combine basis airfoils for generating new airfoil.
+    /// Provides methods to combine airfoil from basis airfoils and coefficients. Contains basis airfoils, coefficients of combination and a combined airfoil
     /// </summary>
     /// <exception cref="FormatException"/>
     public class AirfoilCombiner :General.ModelBase

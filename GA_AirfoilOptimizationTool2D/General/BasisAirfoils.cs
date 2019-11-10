@@ -25,6 +25,7 @@ namespace GA_AirfoilOptimizationTool2D.General
         }
         public BasisAirfoils(ICollection<Airfoil.AirfoilManager> airfoils) : this()
         {
+            NumberOfAirfoils = airfoils.Count;
             foreach (var item in airfoils)
             {
                 this.AirfoilGroup.Add(item);

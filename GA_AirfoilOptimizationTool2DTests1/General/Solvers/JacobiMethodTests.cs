@@ -37,7 +37,9 @@ namespace GA_AirfoilOptimizationTool2D.General.Solvers.Tests
             Console.WriteLine(solution[0]);
             Console.WriteLine(solution[1]);
             Console.WriteLine(solution[2]);
-            
+            Console.Write("Final Residue : ");
+            Console.WriteLine(jacobiMethod.FinalResidue);
+
             Assert.IsTrue(accuracy);
         }
     }

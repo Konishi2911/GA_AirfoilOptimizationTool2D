@@ -18,7 +18,7 @@ namespace GA_AirfoilOptimizationTool2D
         private FAirfoilGAManager.AirfoilGAManager _airfoilGAManager;
 
         // Temporary
-        private String OffspringsExportDirectory;
+        private String CsvExportDirectory;
         private int ExportResolution;
         #endregion
 
@@ -94,13 +94,15 @@ namespace GA_AirfoilOptimizationTool2D
         public event EventHandler OffspringCandidatesUpdated;
         #endregion
 
-        #region Event Callbacks
-
-        #endregion
+        public enum ExportAirfoilsGroup
+        {
+            CurrentPopulation,
+            OffspringPopulation
+        }
 
         private AirfoilOptimizationResource()
         {
-            OffspringsExportDirectory = "..\\..\\..\\Offsprings";
+            CsvExportDirectory = "..\\..\\..\\Offsprings";
         }
         public static AirfoilOptimizationResource Instance { get; } = new AirfoilOptimizationResource();
 
@@ -258,7 +260,7 @@ namespace GA_AirfoilOptimizationTool2D
             OffspringCandidatesUpdated?.Invoke(this, new EventArgs());
 
             // Export offsring's coefficient to as CSV files
-            ExportAsCSV();
+            ExportAsCSV(ExportAirfoilsGroup.OffspringPopulation);
         }
 
         public void StartSelection()
@@ -280,15 +282,28 @@ namespace GA_AirfoilOptimizationTool2D
         }
         #endregion
 
-        private void ExportAsCSV()
+        public void ExportAsCSV(ExportAirfoilsGroup exportAirfoils)
         {
-            var offsprings = _offsptingCandidates.CombinedAirfoils;
-            Airfoil.AirfoilCoordinateExporter CSVexporter = new Airfoil.AirfoilCoordinateExporter(OffspringsExportDirectory);
+            Airfoil.AirfoilManager[] airfoils = null;
+            String Tags = null;
+            if (exportAirfoils == ExportAirfoilsGroup.CurrentPopulation)
+            {
+                airfoils = _currentPopulations.CombinedAirfoils;
+                Tags = "CurrentPopulation_";
+            }
+            else if(exportAirfoils == ExportAirfoilsGroup.OffspringPopulation)
+            {
+                airfoils = _offsptingCandidates.CombinedAirfoils;
+                Tags = "Offspring_";
+            }
+
+
+            Airfoil.AirfoilCoordinateExporter CSVexporter = new Airfoil.AirfoilCoordinateExporter(CsvExportDirectory);
             var i = 1;
-            foreach (var item in offsprings)
+            foreach (var item in airfoils)
             {
                 var offspringAirfoils = item;
-                item.AirfoilName = "Offspring_" + i;
+                item.AirfoilName = Tags + i;
                 CSVexporter.ExportAirfoilCoordinate(item, ExportResolution);
                 i++;
             }

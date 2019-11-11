@@ -130,7 +130,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             InitializeComponent();
 
             var tempCoordinate = RefineCoordinate(coordinate);
-            _importedCoordinate = RefineCoordinate(tempCoordinate);
+            _importedCoordinate = StandardizeAirfoilCoordinates(tempCoordinate);
 
             // Interpolate Airfoil with three dimensional Spline.
             airfoilInterpolation();

@@ -276,8 +276,9 @@
                       SelectedItem="{Binding Path=SelectedAirfoilPreviewMode}"/>
             <Button Content=">>" Grid.Column="4" Margin="0,5,5,5" Width="30" HorizontalAlignment="Right"/>
             <Button Content="&lt;&lt;" Grid.Column="4" Margin="0,5,40,5" Width="30" HorizontalAlignment="Right"/>
-            <Button Content="Resume" Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,10,10" Grid.Row="4" VerticalAlignment="Bottom" Width="74"
+            <Button Content="Resume" Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,5,5" Grid.Row="4" VerticalAlignment="Bottom" Width="74"
                     Command="{Binding Path=ResumeGAOptimization}"/>
+            <Button Content="Start" Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,84,5" Grid.Row="4" VerticalAlignment="Bottom" Width="75"/>
         </Grid>
         <StatusBar Margin="0" Height="25" VerticalAlignment="Bottom"/>
     </Grid>

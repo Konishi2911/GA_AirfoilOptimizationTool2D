@@ -31,12 +31,15 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             return new PreviewWindowSelecterViewModel(mode, previewModeMap[mode]);
         }
 
-        public static IEnumerable<PreviewWindowSelecterViewModel> Create()
+        public static List<PreviewWindowSelecterViewModel> Create()
         {
+            List<PreviewWindowSelecterViewModel> list = new List<PreviewWindowSelecterViewModel>();
             foreach (PreviewWindowMode e in System.Enum.GetValues(typeof(PreviewWindowMode)))
             {
-                yield return Create(e);
+                list.Add(Create(e));
             }
+
+            return list;
         }
     }
 }

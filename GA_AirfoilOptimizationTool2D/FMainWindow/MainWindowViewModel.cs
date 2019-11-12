@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -28,6 +29,8 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         private ObservableCollection<System.Windows.Point>[] previewCoordinates;
         private System.Data.DataTable airfoilSpecifications;
 
+        private string logMessages;
+
         private PreviewWindowSelecterViewModel previewWindowSelecter;
 
         /// <summary>
@@ -36,6 +39,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         public MainWindowViewModel()
         {
             // Allocate Event CallBack Functions
+            AirfoilOptimizationResource.Instance.LogMessageAdded += UpdateLogMessage;
             AirfoilOptimizationResource.Instance.CurrentPopulationUpdated += SourceChanged;
             AirfoilOptimizationResource.Instance.OffspringCandidatesUpdated += OffspringAirfoilsReady;
             this.PropertyChanged += this.This_PropertyChanged;
@@ -49,7 +53,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             saveWorkingFile = new General.DelegateCommand(SaveWorkingFile, () => true);
             showOprConfigDialog = new General.DelegateCommand(openOptConfigDialog, isOptConfigEnabled);
             showCoefficientManager = new General.DelegateCommand(OpenCoefficientManager, IsCoefManagerEnabled);
-            updatePreviewWindow = new General.DelegateCommand(UpdateCurrentAirfoilsPopulation, () => true);
+            updatePreviewWindow = new General.DelegateCommand(ReDrawPreviewWindow, () => true);
             startGAOptimization = new General.DelegateCommand(StartGeneticOptimization, IsGAExecutable);
             resumeGAOptimization = new General.DelegateCommand(ResumeGeneticOptimization, IsGASelectionAvailable);
             airfoilCharacteristicsManager = new General.DelegateCommand(OpenCharacteristicsManager, IsCharacteristicsManagerAvailable);
@@ -76,7 +80,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         public Func<bool> isOptConfigEnabled;
 
         #region ComboBox Related
-        public System.Collections.Generic.IEnumerable<PreviewWindowSelecterViewModel> AirfoilPreviewModes { get; private set; }
+        public List<PreviewWindowSelecterViewModel> AirfoilPreviewModes { get; private set; }
         public PreviewWindowSelecterViewModel SelectedAirfoilPreviewMode
         {
             get
@@ -92,6 +96,10 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         #endregion
 
         #region Event CallBacks
+        private void UpdateLogMessage(object sender, EventArgs e)
+        {
+            LogMessagesBuffer = AirfoilOptimizationResource.Instance.LogMessage.Messages;
+        }
         private void SourceChanged(object sender, EventArgs e)
         {
             // Null Check
@@ -486,6 +494,15 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         public General.ParamDelegateCommand<String> SetSpecifications
         {
             get => setSpecifications;
+        }
+        public String LogMessagesBuffer
+        {
+            get => logMessages;
+            private set
+            {
+                logMessages = value;
+                OnPropertyChanged(nameof(LogMessagesBuffer));
+            }
         }
         #endregion
 

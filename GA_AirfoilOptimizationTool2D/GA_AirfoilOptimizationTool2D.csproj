@@ -211,6 +211,7 @@
     <Compile Include="General\Converter\PointCollectionConverter.cs" />
     <Compile Include="General\CsvManager.cs" />
     <Compile Include="General\DelegateCommand.cs" />
+    <Compile Include="General\LogMessage.cs" />
     <Compile Include="General\Messengers\SaveFileMessenger.cs" />
     <Compile Include="General\ParamDelegateCommand.cs" />
     <Compile Include="General\RandomNumber\BoxMuller.cs" />

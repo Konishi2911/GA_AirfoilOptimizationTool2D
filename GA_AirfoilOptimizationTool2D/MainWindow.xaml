@@ -252,7 +252,8 @@
                     <Polyline x:Name="AirfoilLine10" Stroke ="Black" Points="{Binding Path=PreviewCoordinate10, Converter={StaticResource pointCollectionConverter}}"/>
                 </Canvas>
             </Border>
-            <TextBox x:Name="GA_LogBox" TextWrapping="Wrap" Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Grid.RowSpan="1" Margin="5,5,5,4" VerticalScrollBarVisibility="Auto"/>
+            <TextBox x:Name="GA_LogBox" TextWrapping="Wrap" Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Grid.RowSpan="1" Margin="5,5,5,4" VerticalScrollBarVisibility="Auto" IsReadOnly="True"
+                     Text="{Binding Path=LogMessagesBuffer, Mode=OneWay}"/>
             <DataGrid x:Name="specDataGrid" Margin="5,5,5,4" Grid.Column="4" Grid.Row="3" Grid.RowSpan="3" CanUserResizeColumns="False" CanUserSortColumns="False" CanUserReorderColumns="False" HeadersVisibility="None" ColumnWidth="*"
                       ItemsSource="{Binding Path=AirfoilSpecifications}"/>
             <Border BorderBrush="Black" BorderThickness="1" Margin="5,5,5,4" Grid.Column="2" Grid.Row="4" Grid.ColumnSpan="2" Grid.RowSpan="2">

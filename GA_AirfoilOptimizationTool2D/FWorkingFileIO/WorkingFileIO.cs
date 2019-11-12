@@ -58,6 +58,8 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
         /// <param name="path">The File Path to Open the working file</param>
         public async void OpenFile(String path)
         {
+            AirfoilOptimizationResource.Instance.LogMessage.Write("## Opening Working File ##");
+
             String openedFileString;
             using (var reader = new StreamReader(path))
             {

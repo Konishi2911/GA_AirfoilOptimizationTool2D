@@ -23,6 +23,8 @@ namespace GA_AirfoilOptimizationTool2D
         #endregion
 
         #region Properties
+        public General.LogMessage LogMessage { get; } = new General.LogMessage();
+
         public General.BasisAirfoils BasisAirfoils
         {
             get => this._basisAirfoils;
@@ -89,6 +91,7 @@ namespace GA_AirfoilOptimizationTool2D
         #endregion
 
         #region Events
+        public event EventHandler LogMessageAdded;
         public event EventHandler CurrentParameterUpdated;
         public event EventHandler CurrentPopulationUpdated;
         public event EventHandler OffspringCandidatesUpdated;
@@ -102,8 +105,18 @@ namespace GA_AirfoilOptimizationTool2D
 
         private AirfoilOptimizationResource()
         {
+            LogMessage.MessageUpdated += AddLogMessage;
+
             CsvExportDirectory = "..\\..\\..\\Offsprings";
         }
+
+        #region Event Callbacks
+        private void AddLogMessage(object sender, EventArgs e)
+        {
+            LogMessageAdded?.Invoke(sender, e);
+        }
+        #endregion
+
         public static AirfoilOptimizationResource Instance { get; } = new AirfoilOptimizationResource();
 
         #region Methods

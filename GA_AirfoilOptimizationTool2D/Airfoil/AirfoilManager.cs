@@ -132,8 +132,9 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             var tempCoordinate = RefineCoordinate(coordinate);
             _importedCoordinate = StandardizeAirfoilCoordinates(tempCoordinate);
 
-            // Interpolate Airfoil with three dimensional Spline.
+            // Interpolate Airfoil with three dimensional Spline and standadize.
             airfoilInterpolation();
+            _interpolatedCoordinate = StandardizeAirfoilCoordinates(_interpolatedCoordinate);
 
             // 
             CalculateSpecifications();
@@ -326,8 +327,8 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
 
         private AirfoilCoordinate StandardizeAirfoilCoordinates(AirfoilCoordinate coordinate)
         {
+            var sizeStandardized = new List<double[]>();
             var standardized = new List<double[]>();
-            double chordLength = AirfoilCoordinate.GetMaximumValue(coordinate, 0) - AirfoilCoordinate.GetMinimumValue(coordinate, 0);
             AirfoilCoordinate newValue = new AirfoilCoordinate();
 
             // Null check
@@ -336,15 +337,26 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
                 return null;
             }
 
+            // Set the chord length to 1.
+            double chordLength = AirfoilCoordinate.GetMaximumValue(coordinate, 0) - AirfoilCoordinate.GetMinimumValue(coordinate, 0);
             for (int i = 0; i < coordinate.Length; i++)
             {
                 var temp = new double[] { coordinate[i].X / chordLength, coordinate[i].Z / chordLength };
+                sizeStandardized.Add(temp);
+            }
+
+            // Shift coordinate to match the leading edge to origin.
+            var l_edge = AirfoilCoordinate.GetMinimumValue(sizeStandardized, 0);
+            for (int i = 0; i < sizeStandardized.Count; i++)
+            {
+                var temp = new double[] { sizeStandardized[i][0] - l_edge, sizeStandardized[i][1] };
                 standardized.Add(temp);
             }
 
+
             // Convert List to two dimensional Double Type Array
-            var refinedCoordinateArray = new Double[standardized.Count, 2];
-            for (int i = 0; i < standardized.Count; i++)
+            var refinedCoordinateArray = new Double[sizeStandardized.Count, 2];
+            for (int i = 0; i < sizeStandardized.Count; i++)
             {
                 refinedCoordinateArray[i, 0] = standardized[i][0];
                 refinedCoordinateArray[i, 1] = standardized[i][1];

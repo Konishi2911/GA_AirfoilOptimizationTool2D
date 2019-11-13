@@ -308,6 +308,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         }
         #endregion
 
+
         #region DelegateCommand Actions
         // Open Working File
         public void OpenWorkingFile()

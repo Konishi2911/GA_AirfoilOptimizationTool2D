@@ -58,7 +58,7 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
         /// <param name="path">The File Path to Open the working file</param>
         public async void OpenFile(String path)
         {
-            AirfoilOptimizationResource.Instance.LogMessage.Write("## Opening Working File ##");
+            AirfoilOptimizationResource.Instance.LogMessage.Write("=============== Open a working file ================");
 
             String openedFileString;
             using (var reader = new StreamReader(path))
@@ -79,7 +79,12 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
                 NumberOfBaseAirfoils = this.numberOfBaseAirfoils,
                 NumberOfGenerations = this.numberOfGenerations
             };
+
             NotifyOpeningFileFinished?.Invoke(this, e);
+
+            AirfoilOptimizationResource.Instance.LogMessage.Write("Working file loaded.");
+            AirfoilOptimizationResource.Instance.LogMessage.Write(">Number of basis airfoils : " + (baseAirfoils?.Count.ToString() ?? "N/A"));
+            AirfoilOptimizationResource.Instance.LogMessage.Write(">Number of offspring airfoils : " + (offspringCoefficients?.NoAirfoils.ToString() ?? "N/A"));
         }
         /// <summary>
         /// Save current state and airfois data as a working file to the designated file path that is passed as a parameter.

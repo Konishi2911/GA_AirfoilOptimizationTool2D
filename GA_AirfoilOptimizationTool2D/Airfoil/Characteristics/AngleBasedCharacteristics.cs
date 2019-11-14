@@ -9,6 +9,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
     public class AngleBasedCharacteristics
     {
         #region Fields
+        private int nInterpolatedPoints;
         private int nData;
         private double[,] chr;
         private double[,] interpolatedChr;
@@ -19,17 +20,20 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
         #endregion
 
         #region Properties
+        public int NoInterpolatedPoints 
+        {
+            set
+            {
+                nInterpolatedPoints = value;
+                InterpolateCharacteristics();
+            }
+        }
         public Double Max => max;
         public Double MaxAngle => maxAngle;
         public Double Min => min;
         public Double MinAngle => minAngle;
         public Double[,] InterpolatedCharacteristics => interpolatedChr;
         #endregion
-
-        public AngleBasedCharacteristics()
-        {
-            nData = 0;
-        }
 
         private void InitializeCharaceristics(double[,] characteristics)
         {
@@ -40,13 +44,26 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
             searchMinCharac(ConvertArrayToJuggedArray(this.chr));
             InterpolateCharacteristics();
         }
+        public AngleBasedCharacteristics()
+        {
+            nData = 0;
+            nInterpolatedPoints = 200;
+        }
         public AngleBasedCharacteristics(double[][] characteristics)
         {
+            nInterpolatedPoints = 200;
             InitializeCharaceristics(ConvertJuggedArrayToArray(characteristics));
         }
 
         public AngleBasedCharacteristics(double[,] characteristics)
         {
+            nInterpolatedPoints = 200;
+            InitializeCharaceristics(characteristics);
+        }
+
+        public AngleBasedCharacteristics(double[,] characteristics, int nInterPoint)
+        {
+            nInterpolatedPoints = nInterPoint;
             InitializeCharaceristics(characteristics);
         }
 
@@ -70,8 +87,8 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
         private void InterpolateCharacteristics()
         {
             // Interpoplate profile with 3-dimensional Spline
-            var splinedChr =  General.Interpolation.SplineInterpolation(chr, 200);
-            interpolatedChr = General.Interpolation.LinearInterpolation(splinedChr, 100);
+            var splinedChr =  General.Interpolation.SplineInterpolation(chr, nInterpolatedPoints);
+            interpolatedChr = General.Interpolation.LinearInterpolation(splinedChr, nInterpolatedPoints);
         }
         private void searchMaxCharac(double[][] reference)
         {

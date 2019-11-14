@@ -6,8 +6,12 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
     class CharacteristicsManagerViewModel : General.ViewModelBase
     {
         #region Fields
+        private int nInterpolatedPoints;
         private Airfoil.CombinedAirfoilsGroup sourceAirfoils;
         private Airfoil.Characteristics.AngleBasedCharacteristics liftProfile;
+        private Airfoil.Characteristics.AngleBasedCharacteristics dragProfile;
+        private Airfoil.Characteristics.AngleBasedCharacteristics momentProfile;
+        private Airfoil.Characteristics.AngleBasedCharacteristics ldProfile;
         private int currentAirfoilNumber;
 
         private TargetAirfoilSelectorViewModel selectedTargetAirfoil;
@@ -15,6 +19,7 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
 
         #region DelegateCommand
         public General.DelegateCommand LiftCoefProfileSelection { get; private set; }
+        public General.DelegateCommand DragCoefProfileSelection { get; private set; }
         public General.DelegateCommand ClickApplyButton { get; set; }
         #endregion
 
@@ -34,9 +39,12 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
         public CharacteristicsManagerViewModel()
         {
             // Initialize
+            nInterpolatedPoints = 100;
+
             currentAirfoilNumber = 0;
             TargetAirfoils = new System.Collections.ObjectModel.ObservableCollection<TargetAirfoilSelectorViewModel>();
             LiftCoefProfileSelection = new General.DelegateCommand(SelectLiftCoefProfile, () => true);
+            DragCoefProfileSelection = new General.DelegateCommand(SelectDragCoefProfile, () => true);
             ClickApplyButton = new General.DelegateCommand(ApplyButtonClicked, IsApplyButtonAvailable);
 
             // Assign Events
@@ -57,6 +65,22 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
                 TargetAirfoils.Add(new TargetAirfoilSelectorViewModel(sourceAirfoils.CombinedAirfoils[i], "Airfoil" + (i + 1)));
             }
         }
+        private void CalculateLDRatio()
+        {
+            if (liftProfile != null && dragProfile != null
+                && liftProfile.InterpolatedCharacteristics[0, 0] == dragProfile.InterpolatedCharacteristics[0, 0]
+                && liftProfile.InterpolatedCharacteristics[nInterpolatedPoints - 1, 0] == dragProfile.InterpolatedCharacteristics[nInterpolatedPoints - 1, 0]
+                )
+            {
+                var profileArray = new double[nInterpolatedPoints, 2];
+                for (int i = 0; i < nInterpolatedPoints; i++)
+                {
+                    profileArray[i, 0] = liftProfile.InterpolatedCharacteristics[i, 0];
+                    profileArray[i, 1] = liftProfile.InterpolatedCharacteristics[i, 1] / dragProfile.InterpolatedCharacteristics[i, 1];
+                }
+                ldProfile = new Airfoil.Characteristics.AngleBasedCharacteristics(profileArray, nInterpolatedPoints);
+            }
+        }
 
         #region DelegateCommand Callbacks
         public void SelectLiftCoefProfile()
@@ -68,10 +92,32 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
                 {
                     var profileArray = General.CsvManager.ConvertCsvToArray(openedCsv.ReadToEnd());
                     liftProfile = new Airfoil.Characteristics.AngleBasedCharacteristics(profileArray);
+                    liftProfile.NoInterpolatedPoints = nInterpolatedPoints;
                 }
+
+                CalculateLDRatio();
 
                 // Apply lift profiles to temporary airfoils collection
                 sourceAirfoils.CombinedAirfoils[currentAirfoilNumber].LiftProfile = liftProfile;
+            }
+        }
+
+        public void SelectDragCoefProfile()
+        {
+            String pFilePath = General.Messenger.OpenFileMessenger.Show("csv File (*.csv)|*.csv");
+            if (pFilePath != null)
+            {
+                using (var openedCsv = new System.IO.StreamReader(pFilePath, Encoding.UTF8))
+                {
+                    var profileArray = General.CsvManager.ConvertCsvToArray(openedCsv.ReadToEnd());
+                    dragProfile = new Airfoil.Characteristics.AngleBasedCharacteristics(profileArray);
+                    dragProfile.NoInterpolatedPoints = nInterpolatedPoints;
+                }
+
+                CalculateLDRatio();
+
+                // Apply lift profiles to temporary airfoils collection
+                sourceAirfoils.CombinedAirfoils[currentAirfoilNumber].DragProfile = dragProfile;
             }
         }
 

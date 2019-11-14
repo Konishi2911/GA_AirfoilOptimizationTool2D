@@ -16,7 +16,7 @@ namespace GA_AirfoilOptimizationTool2D.General
 
         public void Write(string message)
         {
-            _messages += message;
+            _messages += message + "\r\n";
             MessageUpdated?.Invoke(this, new EventArgs());
         }
     }

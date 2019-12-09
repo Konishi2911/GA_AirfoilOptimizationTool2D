@@ -308,7 +308,6 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         }
         #endregion
 
-
         #region DelegateCommand Actions
         // Open Working File
         public void OpenWorkingFile()
@@ -401,7 +400,11 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         }
         private bool IsCharacteristicsManagerAvailable()
         {
-            return AirfoilOptimizationResource.Instance.OffspringCandidates != null;
+            return 
+                (
+                AirfoilOptimizationResource.Instance.OffspringCandidates != null ||
+                AirfoilOptimizationResource.Instance.CurrentPopulations != null
+                );
         }
 
         public void ExportCsv()

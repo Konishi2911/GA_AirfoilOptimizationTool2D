@@ -285,7 +285,14 @@ namespace GA_AirfoilOptimizationTool2D
             // Update currnet populations with selected next generation
             _currentPopulations = NextGeneration;
 
-            // Crear the data of offspring populations.
+            LogMessage.Write("================ Selection Result =================");
+            for (int i = 0; i < _airfoilGAManager.SelectedOffspringsNo.Count; i++)
+            {
+                var num = _airfoilGAManager.SelectedOffspringsNo[i];
+                LogMessage.Write("> Selected offspring : " + num);
+            }
+
+            // Clear the data of offspring populations.
             _offsptingCandidates = null;
             _offspringCoefficients = null;
             OffspringAirfoilsReady = false;

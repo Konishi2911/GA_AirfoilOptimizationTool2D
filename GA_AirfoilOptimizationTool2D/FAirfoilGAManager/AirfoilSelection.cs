@@ -12,10 +12,16 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
         private SelectionModel selectionModel;
         private FGeneticAlgorithm.IndividualsGroup selectedIndividuals;
         private Airfoil.CombinedAirfoilsGroup selectedAirfoils;
+        private List<int> selectedAirfoilsNo;
         #endregion
 
         #region Properties
         public Airfoil.CombinedAirfoilsGroup SelectedAirfoils => selectedAirfoils;
+        public List<int> SelectedAirfoilsNo
+        {
+            get => selectedAirfoilsNo;
+            private set => selectedAirfoilsNo = value;
+        }
         #endregion
 
         public AirfoilSelection(SelectionModel crossoverOperator)
@@ -49,6 +55,7 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
                     Airfoil.AirfoilManager airfoil = offspringAirfoils.CombinedAirfoils[selectedIndex[i]];
                     double[] coefficients = offspringAirfoils.CoefficientOfCombination.GetCoefficients(selectedIndex[i]);
 
+                    SelectedAirfoilsNo = new List<int>(selectedIndex);
                     SelectedAirfoils.Add(airfoil, coefficients);
                 }
             }

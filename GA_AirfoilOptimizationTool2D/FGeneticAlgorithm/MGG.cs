@@ -21,13 +21,14 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
             IndividualsGroup selectedIndividuals = new IndividualsGroup();
 
             var elite = EliteSelection(targetIndividuals);
-            var roulette = RouletteSelection(targetIndividuals);
-
             SelectedIndividualsIndex[0] = targetIndividuals.IndexOf(elite);
+
+            targetIndividuals.IndivisualsGroup.Remove(elite);
+            var roulette = RouletteSelection(targetIndividuals);
             SelectedIndividualsIndex[1] = targetIndividuals.IndexOf(roulette);
 
-            selectedIndividuals.AddIndivisual(EliteSelection(targetIndividuals));
-            selectedIndividuals.AddIndivisual(RouletteSelection(targetIndividuals));
+            selectedIndividuals.AddIndivisual(elite);
+            selectedIndividuals.AddIndivisual(roulette);
 
             return selectedIndividuals;
         }
@@ -42,7 +43,7 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
             elite = population.IndivisualsGroup[0];
             for (int i = 1; i < length; i++)
             {
-                if (maximumFitness < population.IndivisualsGroup[0].Fitness)
+                if (maximumFitness < population.IndivisualsGroup[i].Fitness)
                 {
                     maximumFitness = population.IndivisualsGroup[i].Fitness;
                     elite = population.IndivisualsGroup[i];

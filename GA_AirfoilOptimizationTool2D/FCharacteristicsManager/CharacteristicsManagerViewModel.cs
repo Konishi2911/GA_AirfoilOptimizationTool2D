@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
@@ -14,6 +15,7 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
         private Airfoil.Characteristics.AngleBasedCharacteristics ldProfile;
         private int currentAirfoilNumber;
 
+        private SourceSelectorViewModel selectedSource;
         private TargetAirfoilSelectorViewModel selectedTargetAirfoil;
         #endregion
 
@@ -24,6 +26,17 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
         #endregion
 
         #region Properties
+        public List<SourceSelectorViewModel> Sources { get; private set; }
+        public SourceSelectorViewModel SelectedSource
+        {
+            get => selectedSource;
+            set
+            {
+                selectedSource = value;
+                OnPropertyChanged(nameof(this.SelectedSource));
+            }
+        }
+
         public System.Collections.ObjectModel.ObservableCollection<TargetAirfoilSelectorViewModel> TargetAirfoils { get; private set; }
         public TargetAirfoilSelectorViewModel SelectedTargetAirfoil
         {
@@ -41,8 +54,14 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
             // Initialize
             nInterpolatedPoints = 100;
 
+            // Combobox about Source related
+            this.Sources = FCharacteristicsManager.SourceSelectorViewModel.Create();
+            this.SelectedSource = Sources[0];
+
+            // Combobox about target airfoil related
             currentAirfoilNumber = 0;
             TargetAirfoils = new System.Collections.ObjectModel.ObservableCollection<TargetAirfoilSelectorViewModel>();
+
             LiftCoefProfileSelection = new General.DelegateCommand(SelectLiftCoefProfile, () => true);
             DragCoefProfileSelection = new General.DelegateCommand(SelectDragCoefProfile, () => true);
             ClickApplyButton = new General.DelegateCommand(ApplyButtonClicked, IsApplyButtonAvailable);
@@ -51,7 +70,14 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
             this.PropertyChanged += This_PropertyChanged;
 
             // Clone Offsprng Airfoils
-            sourceAirfoils = AirfoilOptimizationResource.Instance.OffspringCandidates;
+            if (SelectedSource.Source == PopulationSources.CurrentPopulation)
+            {
+                sourceAirfoils = AirfoilOptimizationResource.Instance.CurrentPopulations;
+            }
+            else if (selectedSource.Source == PopulationSources.OffspringCandidates)
+            {
+                sourceAirfoils = AirfoilOptimizationResource.Instance.OffspringCandidates;
+            }
             AssignTargetAirfoils();
         }
 

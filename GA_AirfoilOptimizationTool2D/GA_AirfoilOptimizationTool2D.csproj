@@ -108,6 +108,7 @@
       <HintPath>..\packages\System.Composition.TypedParts.1.0.31\lib\portable-net45+win8+wp8+wpa81\System.Composition.TypedParts.dll</HintPath>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.5.3\lib\netstandard2.0\System.Memory.dll</HintPath>
     </Reference>
@@ -127,6 +128,7 @@
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.3\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -157,6 +159,8 @@
     <Compile Include="Airfoil\Evaluation\ExternalEvaluation.cs" />
     <Compile Include="Airfoil\IAirfoilGroupManager.cs" />
     <Compile Include="Airfoil\Representation\AirfoilCombiner.cs" />
+    <Compile Include="Chart\AxisStyle.cs" />
+    <Compile Include="Chart\LineChart.cs" />
     <Compile Include="FAirfoilGAManager\AirfoilCrossover.cs" />
     <Compile Include="FAirfoilGAManager\AirfoilGAManager.cs" />
     <Compile Include="FAirfoilGAManager\AirfoilSelection.cs" />
@@ -274,6 +278,10 @@
     <Page Include="OptConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

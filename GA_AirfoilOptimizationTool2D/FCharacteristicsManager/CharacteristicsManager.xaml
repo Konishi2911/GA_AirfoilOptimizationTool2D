@@ -55,6 +55,7 @@
         <ComboBox Margin="65,5,10,0" VerticalAlignment="Top" ItemsSource="{Binding Path=Sources}" SelectedItem="{Binding Path=SelectedSource}"/>
         <Label Content="Source" HorizontalAlignment="Left" Margin="10,2,0,0" VerticalAlignment="Top"/>
         <Label Content="Airfoil" HorizontalAlignment="Left" Margin="10,2,0,0" Grid.Row="1" VerticalAlignment="Top"/>
+        <Canvas Grid.Column="1" HorizontalAlignment="Left" Height="340" Margin="10,10,0,0" Grid.Row="1" Grid.RowSpan="5" VerticalAlignment="Top" Width="376"/>
 
     </Grid>
 </Window>

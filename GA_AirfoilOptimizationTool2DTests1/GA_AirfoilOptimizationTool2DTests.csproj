@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="AirfoilOptimizationResourceTests.cs" />
     <Compile Include="FGeneticAlgorithm\GenerationalChangeTests.cs" />
+    <Compile Include="FGeneticAlgorithm\MGGTests.cs" />
     <Compile Include="FGeneticAlgorithm\UNDXTests.cs" />
     <Compile Include="General\RandomNumber\RandomNumberGeneratorTests.cs" />
     <Compile Include="General\Solvers\JacobiMethodTests.cs" />

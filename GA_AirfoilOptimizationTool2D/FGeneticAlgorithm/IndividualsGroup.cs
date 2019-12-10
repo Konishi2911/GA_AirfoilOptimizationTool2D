@@ -16,6 +16,12 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
             individuals = new List<Individual>();
         }
 
+        public IndividualsGroup(IndividualsGroup group)
+        {
+            this.nIndividuals = group.nIndividuals;
+            this.individuals = new List<Individual>(group.individuals);
+        }
+
         /// <summary>
         /// Number of individuals
         /// </summary>

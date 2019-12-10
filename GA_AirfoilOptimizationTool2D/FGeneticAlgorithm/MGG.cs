@@ -16,16 +16,25 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
         /// </summary>
         /// <param name="targetIndividuals"></param>
         /// <returns></returns>
-        public IndividualsGroup ExecuteSelection(IndividualsGroup targetIndividuals)
+        public IndividualsGroup ExecuteSelection(IndividualsGroup _targetIndividuals)
         {
             IndividualsGroup selectedIndividuals = new IndividualsGroup();
+            IndividualsGroup targetIndividuals = new IndividualsGroup(_targetIndividuals);
 
             var elite = EliteSelection(targetIndividuals);
             SelectedIndividualsIndex[0] = targetIndividuals.IndexOf(elite);
 
             targetIndividuals.IndivisualsGroup.Remove(elite);
             var roulette = RouletteSelection(targetIndividuals);
-            SelectedIndividualsIndex[1] = targetIndividuals.IndexOf(roulette);
+
+            if (SelectedIndividualsIndex[0] < targetIndividuals.IndexOf(roulette))
+            {
+                SelectedIndividualsIndex[1] = targetIndividuals.IndexOf(roulette) + 1;
+            }
+            else
+            {
+                SelectedIndividualsIndex[1] = targetIndividuals.IndexOf(roulette);
+            }
 
             selectedIndividuals.AddIndivisual(elite);
             selectedIndividuals.AddIndivisual(roulette);

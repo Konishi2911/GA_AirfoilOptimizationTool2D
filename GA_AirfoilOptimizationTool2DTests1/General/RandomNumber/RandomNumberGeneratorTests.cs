@@ -26,5 +26,20 @@ namespace GA_AirfoilOptimizationTool2D.General.RandomNumber.Tests
             }
 
         }
+
+        [TestMethod()]
+        public void UniformRndNumTest()
+        {
+            uint seed = 0;
+            int sequenceLength = 1000;
+            RandomNumberGenerator randomNumberGenerator = new RandomNumberGenerator();
+
+            for (int i = 0; i < sequenceLength; i++)
+            {
+                var result = randomNumberGenerator.UniformRndNum();
+
+                Console.WriteLine(result);
+            }
+        }
     }
 }

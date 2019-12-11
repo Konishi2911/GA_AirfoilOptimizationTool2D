@@ -71,7 +71,7 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
             {
                 //double fitness = 1.0;
                 // Calculate fintness based on Lift
-                FitnessCalculator fitnessCalculator = new FitnessCalculator(item, FitnessCalculator.FitnessMode.Lift);
+                FitnessCalculator fitnessCalculator = new FitnessCalculator(item, FitnessCalculator.FitnessMode.LiftDrag);
                 fitnessCalculator.CalculateFitness();
                 fitness.Add(fitnessCalculator.Fitness);
             }

@@ -45,7 +45,7 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
 
         private void LiftDragFitness()
         {
-
+            fitness = Airfoil.Characteristics.AngleBasedCharacteristics.GetMaxValue(airfoil.LiftDragProfile.InterpolatedCharacteristics);
         }
         private void LiftFitness()
         {

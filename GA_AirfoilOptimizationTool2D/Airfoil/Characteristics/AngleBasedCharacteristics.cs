@@ -22,6 +22,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
         #region Properties
         public int NoInterpolatedPoints 
         {
+            get => nInterpolatedPoints;
             set
             {
                 nInterpolatedPoints = value;

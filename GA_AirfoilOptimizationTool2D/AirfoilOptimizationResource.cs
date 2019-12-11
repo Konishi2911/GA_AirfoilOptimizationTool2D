@@ -17,9 +17,20 @@ namespace GA_AirfoilOptimizationTool2D
 
         private FAirfoilGAManager.AirfoilGAManager _airfoilGAManager;
 
+        private OptimizingMode _optimizingMode;
+
         // Temporary
         private String CsvExportDirectory;
         private int ExportResolution;
+        #endregion
+
+        #region Enums
+        enum OptimizingMode
+        {
+            Lift,
+            Drag,
+            LiftDrag
+        }
         #endregion
 
         #region Properties
@@ -105,6 +116,7 @@ namespace GA_AirfoilOptimizationTool2D
 
         private AirfoilOptimizationResource()
         {
+            _optimizingMode = OptimizingMode.LiftDrag;
             LogMessage.MessageUpdated += AddLogMessage;
 
             CsvExportDirectory = "..\\..\\..\\Offsprings";
@@ -331,9 +343,26 @@ namespace GA_AirfoilOptimizationTool2D
         private void ScanOffspringCharacteristics()
         {
             OffspringAirfoilsReady = true;
-            foreach (var item in _offsptingCandidates.CombinedAirfoils)
+            if (_optimizingMode == OptimizingMode.Lift)
             {
-                OffspringAirfoilsReady &= item.LiftProfile != null;
+                foreach (var item in _offsptingCandidates.CombinedAirfoils)
+                {
+                    OffspringAirfoilsReady &= item.LiftProfile != null;
+                }
+            }
+            else if (_optimizingMode == OptimizingMode.Drag)
+            {
+                foreach (var item in _offsptingCandidates.CombinedAirfoils)
+                {
+                    OffspringAirfoilsReady &= item.DragProfile != null;
+                }
+            }
+            else if (_optimizingMode == OptimizingMode.LiftDrag)
+            {
+                foreach (var item in _offsptingCandidates.CombinedAirfoils)
+                {
+                    OffspringAirfoilsReady &= item.LiftProfile != null && item.DragProfile != null;
+                }
             }
         }
     }

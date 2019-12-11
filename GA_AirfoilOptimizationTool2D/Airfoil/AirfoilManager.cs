@@ -26,6 +26,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
 
         private Characteristics.AngleBasedCharacteristics liftProfile;
         private Characteristics.AngleBasedCharacteristics dragProfile;
+        private Characteristics.AngleBasedCharacteristics liftDragProfile;
         private Characteristics.AngleBasedCharacteristics momentProfile;
         #endregion
 
@@ -101,6 +102,18 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             set
             {
                 dragProfile = value;
+            }
+        }
+        public Characteristics.AngleBasedCharacteristics LiftDragProfile
+        {
+            get
+            {
+                calcLiftDrag();
+                return liftDragProfile;
+            }
+            set
+            {
+                liftDragProfile = value;
             }
         }
         #endregion
@@ -364,6 +377,27 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
 
             newValue.Import(refinedCoordinateArray);
             return newValue;
+        }
+        private void calcLiftDrag()
+        {
+            if
+            (
+                liftProfile != null && dragProfile != null &&
+                liftProfile.NoInterpolatedPoints == dragProfile.NoInterpolatedPoints &&
+                liftProfile.MinAngle == dragProfile.MinAngle &&
+                liftProfile.MaxAngle == dragProfile.MaxAngle
+            )
+            {
+                double[,] temp = new double[liftProfile.InterpolatedCharacteristics.Length,2];
+
+                for (int i = 0; i < liftProfile.NoInterpolatedPoints; i++)
+                {
+                    temp[i,0] = liftProfile.InterpolatedCharacteristics[i, 0];
+                    temp[i,1] = liftProfile.InterpolatedCharacteristics[i, 1]
+                               / dragProfile.InterpolatedCharacteristics[i, 1];
+                }
+                liftDragProfile = new Characteristics.AngleBasedCharacteristics(temp);
+            }
         }
     }
 }

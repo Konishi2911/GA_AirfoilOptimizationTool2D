@@ -54,6 +54,16 @@ namespace GA_AirfoilOptimizationTool2D.Chart
         public static readonly DependencyProperty XAxisProperty;
         public static readonly DependencyProperty YAxisProperty;
 
-        public AxisStyle
+        public AxisStyle XAxis
+        {
+            get => (AxisStyle)GetValue(XAxisProperty);
+            set => SetValue(XAxisProperty, value);
+        }
+
+        public AxisStyle YAxis
+        {
+            get => (AxisStyle)GetValue(YAxisProperty);
+            set => SetValue(YAxisProperty, value);
+        }
     }
 }

@@ -161,6 +161,7 @@
     <Compile Include="Airfoil\Representation\AirfoilCombiner.cs" />
     <Compile Include="Chart\AxisStyle.cs" />
     <Compile Include="Chart\LineChart.cs" />
+    <Compile Include="Chart\NotifyPropertyChangedDataClass.cs" />
     <Compile Include="FAirfoilGAManager\AirfoilCrossover.cs" />
     <Compile Include="FAirfoilGAManager\AirfoilGAManager.cs" />
     <Compile Include="FAirfoilGAManager\AirfoilSelection.cs" />

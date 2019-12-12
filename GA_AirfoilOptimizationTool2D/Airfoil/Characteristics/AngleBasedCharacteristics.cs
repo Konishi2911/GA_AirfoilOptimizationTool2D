@@ -53,7 +53,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
         public AngleBasedCharacteristics(double[][] characteristics)
         {
             nInterpolatedPoints = 200;
-            InitializeCharaceristics(ConvertJuggedArrayToArray(characteristics));
+            InitializeCharaceristics(General.ArrayManager.ConvertJuggedArrayToArray(characteristics));
         }
 
         public AngleBasedCharacteristics(double[,] characteristics)

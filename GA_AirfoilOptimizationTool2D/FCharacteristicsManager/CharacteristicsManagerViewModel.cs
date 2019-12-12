@@ -15,6 +15,9 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
         private Airfoil.Characteristics.AngleBasedCharacteristics ldProfile;
         private int currentAirfoilNumber;
 
+        private List<Airfoil.Characteristics.AngleBasedCharacteristics> liftProfiles;
+        private List<Airfoil.Characteristics.AngleBasedCharacteristics> dragProfiles;
+
         private SourceSelectorViewModel selectedSource;
         private TargetAirfoilSelectorViewModel selectedTargetAirfoil;
         #endregion
@@ -53,6 +56,8 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
         {
             // Initialize
             nInterpolatedPoints = 100;
+            liftProfiles = new List<Airfoil.Characteristics.AngleBasedCharacteristics>();
+            dragProfiles = new List<Airfoil.Characteristics.AngleBasedCharacteristics>();
 
             // Combobox about Source related
             this.Sources = FCharacteristicsManager.SourceSelectorViewModel.Create();
@@ -125,6 +130,7 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
 
                 // Apply lift profiles to temporary airfoils collection
                 sourceAirfoils.CombinedAirfoils[currentAirfoilNumber].LiftProfile = liftProfile;
+                liftProfiles.Add(liftProfile);
             }
         }
 
@@ -144,12 +150,20 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
 
                 // Apply lift profiles to temporary airfoils collection
                 sourceAirfoils.CombinedAirfoils[currentAirfoilNumber].DragProfile = dragProfile;
+                dragProfiles.Add(dragProfile);
             }
         }
 
         private void ApplyButtonClicked()
         {
-            AirfoilOptimizationResource.Instance.OffspringCandidates = this.sourceAirfoils;
+            if (SelectedSource.Source == PopulationSources.CurrentPopulation)
+            {
+                AirfoilOptimizationResource.Instance.CurrentPopulations.AddCharacteristics(liftProfiles, dragProfiles);
+            }
+            else if (SelectedSource.Source == PopulationSources.OffspringCandidates)
+            {
+                AirfoilOptimizationResource.Instance.OffspringCandidates = this.sourceAirfoils;
+            }
         }
         private bool IsApplyButtonAvailable()
         {

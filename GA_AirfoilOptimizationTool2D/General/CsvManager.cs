@@ -29,6 +29,8 @@ namespace GA_AirfoilOptimizationTool2D.General
         }
         public static String CreateCSV<T>(T[,] data)
         {
+            if (data == null) return null;
+
             String str = null;
             var length = data.GetLength(0);
             var width = data.GetLength(1);

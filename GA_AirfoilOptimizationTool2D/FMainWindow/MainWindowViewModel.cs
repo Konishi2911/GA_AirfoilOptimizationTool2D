@@ -143,7 +143,14 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             }
 
             // Set Current Population
-            AirfoilOptimizationResource.Instance.SetSource(baseAirfoilsGroup, e.CoefficientOfCombination);
+            AirfoilOptimizationResource.Instance.SetSource
+            (
+                baseAirfoilsGroup,
+                e.CoefficientOfCombination,
+                e.CurrentNames,
+                e.CurrentLifts,
+                e.CurrentDrags
+            );
 
             // Set Optimization Halfway
             if (e.ParentsIndex != null)
@@ -154,7 +161,13 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
             // Set Current Offspring candidates
             if (e.OffspringCoefficients != null)
             {
-                AirfoilOptimizationResource.Instance.SetOffspringCandidates(e.OffspringCoefficients);
+                AirfoilOptimizationResource.Instance.SetOffspringCandidates
+                (
+                    e.OffspringCoefficients,
+                    e.OffspringNames,
+                    e.OffspringLifts,
+                    e.OffspringDrags
+                );
             }
         }
 
@@ -400,7 +413,7 @@ namespace GA_AirfoilOptimizationTool2D.FMainWindow
         }
         private bool IsCharacteristicsManagerAvailable()
         {
-            return 
+            return
                 (
                 AirfoilOptimizationResource.Instance.OffspringCandidates != null ||
                 AirfoilOptimizationResource.Instance.CurrentPopulations != null

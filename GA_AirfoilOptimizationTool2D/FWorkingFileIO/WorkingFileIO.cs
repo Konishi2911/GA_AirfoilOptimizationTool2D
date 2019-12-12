@@ -14,11 +14,16 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
         private const string NUMBER_OF_BASE_AIRFOIL = "NUMBER_OF_BASE_AIRFOILS";
         private const string BASE_AIRFOIL = "BASE_AIRFOILS";
         private const string COEFFICIENT_OF_COMBINATION = "COEFFICIENT_OF_COMBINATION";
+        private const string CURRENT_SPECS = "CURRENT_SPECS";
         private const string OFFSPRING_COEFFICIENT = "OFFSPRING_COEFFICIENT";
         private const string PARENT_INDEX = "PARENT_INDEX";
+        private const string CURRENT_AIRFOIL = "CURRENT_AIRFOIL";
+        private const string OFFSPRING_AIRFOIL = "OFFSPRING_AIRFOIL";
 
         private const string NAME = "NAME";
         private const string COORDINATE = "COORDINATE";
+        private const string LIFT = "LIFT";
+        private const string DRAG = "DRAG";
         #endregion
 
         #region Fields
@@ -27,6 +32,12 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
         private int numberOfGenerations;
         private List<Airfoil.AirfoilManager> baseAirfoils;
         private List<Airfoil.AirfoilManager> combinedAirfoils;
+        private List<String> currentNames;
+        private List<Airfoil.Characteristics.AngleBasedCharacteristics> currentLifts;
+        private List<Airfoil.Characteristics.AngleBasedCharacteristics> currentDrags;
+        private List<String> offspringNames;
+        private List<Airfoil.Characteristics.AngleBasedCharacteristics> offspringLifts;
+        private List<Airfoil.Characteristics.AngleBasedCharacteristics> offspringDrags;
         private Airfoil.CoefficientOfCombination coefficientOfCombination;
         private int[] parentsIndex;
         private Airfoil.CoefficientOfCombination offspringCoefficients;
@@ -42,14 +53,27 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
             public List<Airfoil.AirfoilManager> BaseAirfoils { get; set; }
             public List<Airfoil.AirfoilManager> CombinedAirfoils { get; set; }
             public Airfoil.CoefficientOfCombination CoefficientOfCombination { get; set; }
+            public List<String> CurrentNames { get; set; }
+            public List<Airfoil.Characteristics.AngleBasedCharacteristics> CurrentLifts { get; set; }
+            public List<Airfoil.Characteristics.AngleBasedCharacteristics> CurrentDrags { get; set; }
             public int[] ParentsIndex { get; set; }
             public Airfoil.CoefficientOfCombination OffspringCoefficients { get; set; }
+            public List<String> OffspringNames { get; set; }
+            public List<Airfoil.Characteristics.AngleBasedCharacteristics> OffspringLifts { get; set; }
+            public List<Airfoil.Characteristics.AngleBasedCharacteristics> OffspringDrags { get; set; }
         }
 
         public WorkingFileIO()
         {
             baseAirfoils = new List<Airfoil.AirfoilManager>();
             combinedAirfoils = new List<Airfoil.AirfoilManager>();
+
+            currentNames = new List<string>();
+            currentLifts = new List<Airfoil.Characteristics.AngleBasedCharacteristics>();
+            currentDrags = new List<Airfoil.Characteristics.AngleBasedCharacteristics>();
+            offspringNames = new List<string>();
+            offspringLifts = new List<Airfoil.Characteristics.AngleBasedCharacteristics>();
+            offspringDrags = new List<Airfoil.Characteristics.AngleBasedCharacteristics>();
         }
 
         /// <summary>
@@ -73,8 +97,14 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
                 NumberOfSameGeneration = this.numberOfSameGeneration,
                 BaseAirfoils = this.baseAirfoils,
                 CoefficientOfCombination = this.coefficientOfCombination,
+                CurrentNames = this.currentNames,
+                CurrentLifts = this.currentLifts,
+                CurrentDrags = this.currentDrags,
                 ParentsIndex = this.parentsIndex,
                 OffspringCoefficients = this.offspringCoefficients,
+                OffspringNames = this.offspringNames,
+                OffspringLifts = this.offspringLifts,
+                OffspringDrags = this.offspringDrags,
                 CombinedAirfoils = this.combinedAirfoils,
                 NumberOfBaseAirfoils = this.numberOfBaseAirfoils,
                 NumberOfGenerations = this.numberOfGenerations
@@ -129,6 +159,39 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
             writingString += General.CsvManager.CreateCSV(AirfoilOptimizationResource.Instance.OffspringCandidates.CoefficientOfCombination.GetCoefficientArray()) + NewLine;
             writingString += EndPart();
 
+            writingString += CreateIndex(CURRENT_AIRFOIL);
+            foreach (var item in AirfoilOptimizationResource.Instance.CurrentPopulations.CombinedAirfoils)
+            {
+                writingString += CreateSubIndex(NAME);
+                writingString += item.AirfoilName + NewLine;
+                writingString += EndSubPart();
+
+                writingString += CreateSubIndex(LIFT);
+                writingString += General.CsvManager.CreateCSV(item.LiftProfile?.InterpolatedCharacteristics) + NewLine;
+                writingString += EndSubPart();
+
+                writingString += CreateSubIndex(DRAG);
+                writingString += General.CsvManager.CreateCSV(item.DragProfile?.InterpolatedCharacteristics) + NewLine;
+                writingString += EndSubPart();
+            }
+            writingString += EndPart();
+
+            writingString += CreateIndex(OFFSPRING_AIRFOIL);
+            foreach (var item in AirfoilOptimizationResource.Instance.OffspringCandidates.CombinedAirfoils)
+            {
+                writingString += CreateSubIndex(NAME);
+                writingString += item.AirfoilName + NewLine;
+                writingString += EndSubPart();
+
+                writingString += CreateSubIndex(LIFT);
+                writingString += General.CsvManager.CreateCSV(item.LiftProfile?.InterpolatedCharacteristics) + NewLine;
+                writingString += EndSubPart();
+
+                writingString += CreateSubIndex(DRAG);
+                writingString += General.CsvManager.CreateCSV(item.DragProfile?.InterpolatedCharacteristics) + NewLine;
+                writingString += EndSubPart();
+            }
+            writingString += EndPart();
 
             using (var writer = new StreamWriter(path, false, System.Text.Encoding.UTF8))
             {
@@ -171,6 +234,11 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
             List<Double[]> coordinateArray = new List<double[]>();
             List<Double[]> coefficientArray = new List<double[]>();
             List<Double[]> offspringCoefArray = new List<double[]>();
+
+            List<Double[]> currentLift = new List<double[]>();
+            List<Double[]> currentDrag = new List<double[]>();
+            List<Double[]> offspringLift = new List<double[]>();
+            List<Double[]> offspringDrag = new List<double[]>();
 
             // Scroll Working File
             for (int i = 0; i < numberOfLines; i++)
@@ -281,6 +349,82 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
                     }
 
                     offspringCoefArray.Add(coefficientRow);
+                }
+                else if (IndexName == CURRENT_AIRFOIL)
+                {
+                    // Finalize Procedure
+                    if (SubIndexName == "END")
+                    {
+                        if (PreviousSubIndexName == LIFT)
+                        {
+                            if (currentLift.Count != 0)
+                            {
+                                currentLifts.Add(new Airfoil.Characteristics.AngleBasedCharacteristics(currentLift.ToArray()));
+                            }
+                            currentLift.Clear();
+                        }
+                        if (PreviousSubIndexName == DRAG)
+                        {
+                            if (currentDrag.Count != 0)
+                            {
+                                currentDrags.Add(new Airfoil.Characteristics.AngleBasedCharacteristics(currentDrag.ToArray()));
+                            }
+                            currentDrag.Clear();
+                        }
+                    }
+                    else if (SubIndexName == NAME)
+                    {
+                        // Set Airfoils Name
+                        currentNames.Add(FileStringLines[i]);
+                    }
+                    else if (SubIndexName == LIFT)
+                    {
+                        var liftStr = FileStringLines[i].Split(',');
+                        currentLift.Add(new double[2] { double.Parse(liftStr[0]), double.Parse(liftStr[1]) });
+                    }
+                    else if (SubIndexName == DRAG)
+                    {
+                        var dragStr = FileStringLines[i].Split(',');
+                        currentDrag.Add(new double[2] { double.Parse(dragStr[0]), double.Parse(dragStr[1]) });
+                    }
+                }
+                else if (IndexName == OFFSPRING_AIRFOIL)
+                {
+                    // Finalize Procedure
+                    if (SubIndexName == "END")
+                    {
+                        if (PreviousSubIndexName == LIFT)
+                        {
+                            if (offspringLift.Count != 0)
+                            {
+                                offspringLifts.Add(new Airfoil.Characteristics.AngleBasedCharacteristics(offspringLift.ToArray()));
+                            }
+                            offspringLift.Clear();
+                        }
+                        if (PreviousSubIndexName == DRAG)
+                        {
+                            if (offspringDrag.Count != 0)
+                            {
+                                offspringDrags.Add(new Airfoil.Characteristics.AngleBasedCharacteristics(offspringDrag.ToArray()));
+                            }
+                            offspringDrag.Clear();
+                        }
+                    }
+                    else if (SubIndexName == NAME)
+                    {
+                        // Set Airfoils Name
+                        offspringNames.Add(FileStringLines[i]);
+                    }
+                    else if (SubIndexName == LIFT)
+                    {
+                        var liftStr = FileStringLines[i].Split(',');
+                        offspringLift.Add(new double[2] { double.Parse(liftStr[0]), double.Parse(liftStr[1]) });
+                    }
+                    else if (SubIndexName == DRAG)
+                    {
+                        var dragStr = FileStringLines[i].Split(',');
+                        offspringDrag.Add(new double[2] { double.Parse(dragStr[0]), double.Parse(dragStr[1]) });
+                    }
                 }
             }
         }

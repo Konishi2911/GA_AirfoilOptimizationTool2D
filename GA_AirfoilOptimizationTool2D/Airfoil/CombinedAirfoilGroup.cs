@@ -88,6 +88,29 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         {
         }
 
+        public void AddCharacteristics
+            (
+            List<Airfoil.Characteristics.AngleBasedCharacteristics> lifts, 
+            List<Airfoil.Characteristics.AngleBasedCharacteristics> drags
+            )
+        {
+            if (lifts == null || drags == null)
+            {
+                return;
+            }
+
+            if (lifts.Count != this.NoAirfoils || drags.Count != this.NoAirfoils)
+            {
+                return;
+            }
+
+            for (int i = 0; i < NoAirfoils; i++)
+            {
+                CombinedAirfoils[i].LiftProfile = lifts[i];
+                CombinedAirfoils[i].DragProfile = drags[i];
+            }
+        }
+
         //public CoefficientOfCombination Clone()
         //{
         //    int _n_numberOfAirfoils = _numberOfAirfoils;

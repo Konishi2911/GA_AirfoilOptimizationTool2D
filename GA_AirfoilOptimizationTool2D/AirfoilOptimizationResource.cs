@@ -294,6 +294,7 @@ namespace GA_AirfoilOptimizationTool2D
                 _currentPopulations.CombinedAirfoils[i].LiftProfile = lifts[i];
                 _currentPopulations.CombinedAirfoils[i].DragProfile = drags[i];
             }
+            ScanCurrentCharacteristics();
         }
 
         public void AddCurrentCharacteristics
@@ -393,6 +394,7 @@ namespace GA_AirfoilOptimizationTool2D
                 _offsptingCandidates.CombinedAirfoils[i].LiftProfile = lifts[i];
                 _offsptingCandidates.CombinedAirfoils[i].DragProfile = drags[i];
             }
+            ScanOffspringCharacteristics();
         }
 
         public void AddOffspringCharacteristics

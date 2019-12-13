@@ -388,7 +388,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
                 liftProfile.MaxAngle == dragProfile.MaxAngle
             )
             {
-                double[,] temp = new double[liftProfile.InterpolatedCharacteristics.Length,2];
+                double[,] temp = new double[liftProfile.InterpolatedCharacteristics.GetLength(0),2];
 
                 for (int i = 0; i < liftProfile.NoInterpolatedPoints; i++)
                 {

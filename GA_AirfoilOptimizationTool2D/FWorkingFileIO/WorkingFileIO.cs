@@ -148,7 +148,7 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
             writingString += EndPart();
 
             writingString += CreateIndex("COEFFICIENT_OF_COMBINATION");
-            writingString += General.CsvManager.CreateCSV(AirfoilOptimizationResource.Instance.CurrentCoefficients.GetCoefficientArray()) + NewLine;
+            writingString += General.CsvManager.CreateCSV(AirfoilOptimizationResource.Instance.CurrentPopulations.CoefficientOfCombination.GetCoefficientArray()) + NewLine;
             writingString += EndPart();
 
             writingString += CreateIndex(PARENT_INDEX);

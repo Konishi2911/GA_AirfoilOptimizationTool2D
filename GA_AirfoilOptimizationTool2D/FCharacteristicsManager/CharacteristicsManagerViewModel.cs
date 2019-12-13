@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
@@ -74,6 +75,21 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
             // Assign Events
             this.PropertyChanged += This_PropertyChanged;
 
+            CloneTargetAirfoil();
+            //// Clone Offsprng Airfoils
+            //if (SelectedSource.Source == PopulationSources.CurrentPopulation)
+            //{
+            //    sourceAirfoils = AirfoilOptimizationResource.Instance.CurrentPopulations;
+            //}
+            //else if (selectedSource.Source == PopulationSources.OffspringCandidates)
+            //{
+            //    sourceAirfoils = AirfoilOptimizationResource.Instance.OffspringCandidates;
+            //}
+            //AssignTargetAirfoils();
+        }
+
+        public void CloneTargetAirfoil()
+        {
             // Clone Offsprng Airfoils
             if (SelectedSource.Source == PopulationSources.CurrentPopulation)
             {
@@ -91,6 +107,7 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
         /// </summary>
         private void AssignTargetAirfoils()
         {
+            TargetAirfoils.Clear();
             for (int i = 0; i < sourceAirfoils.CombinedAirfoils.Length; i++)
             {
                 TargetAirfoils.Add(new TargetAirfoilSelectorViewModel(sourceAirfoils.CombinedAirfoils[i], "Airfoil" + (i + 1)));
@@ -179,8 +196,12 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
         private void This_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(this.SelectedTargetAirfoil))
-            {
+            { 
                 currentAirfoilNumber = TargetAirfoils.IndexOf(selectedTargetAirfoil);
+            }
+            else if ( e.PropertyName == nameof(this.SelectedSource))
+            {
+                CloneTargetAirfoil();
             }
         }
         #endregion

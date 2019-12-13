@@ -33,6 +33,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
         public Double MaxAngle => maxAngle;
         public Double Min => min;
         public Double MinAngle => minAngle;
+        public Double[,] RawCharacteristics => chr;
         public Double[,] InterpolatedCharacteristics => interpolatedChr;
         #endregion
 
@@ -41,9 +42,9 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
             nData = characteristics.GetLength(0);
             this.chr = characteristics;
 
-            searchMaxCharac(ConvertArrayToJuggedArray(this.chr));
-            searchMinCharac(ConvertArrayToJuggedArray(this.chr));
             InterpolateCharacteristics();
+            searchMaxCharac(ConvertArrayToJuggedArray(this.interpolatedChr));
+            searchMinCharac(ConvertArrayToJuggedArray(this.interpolatedChr));
         }
         public AngleBasedCharacteristics()
         {

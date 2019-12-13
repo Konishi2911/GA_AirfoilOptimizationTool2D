@@ -167,11 +167,11 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
                 writingString += EndSubPart();
 
                 writingString += CreateSubIndex(LIFT);
-                writingString += General.CsvManager.CreateCSV(item.LiftProfile?.InterpolatedCharacteristics) + NewLine;
+                writingString += General.CsvManager.CreateCSV(item.LiftProfile?.RawCharacteristics) + NewLine;
                 writingString += EndSubPart();
 
                 writingString += CreateSubIndex(DRAG);
-                writingString += General.CsvManager.CreateCSV(item.DragProfile?.InterpolatedCharacteristics) + NewLine;
+                writingString += General.CsvManager.CreateCSV(item.DragProfile?.RawCharacteristics) + NewLine;
                 writingString += EndSubPart();
             }
             writingString += EndPart();
@@ -184,11 +184,11 @@ namespace GA_AirfoilOptimizationTool2D.FWorkingFileIO
                 writingString += EndSubPart();
 
                 writingString += CreateSubIndex(LIFT);
-                writingString += General.CsvManager.CreateCSV(item.LiftProfile?.InterpolatedCharacteristics) + NewLine;
+                writingString += General.CsvManager.CreateCSV(item.LiftProfile?.RawCharacteristics) + NewLine;
                 writingString += EndSubPart();
 
                 writingString += CreateSubIndex(DRAG);
-                writingString += General.CsvManager.CreateCSV(item.DragProfile?.InterpolatedCharacteristics) + NewLine;
+                writingString += General.CsvManager.CreateCSV(item.DragProfile?.RawCharacteristics) + NewLine;
                 writingString += EndSubPart();
             }
             writingString += EndPart();

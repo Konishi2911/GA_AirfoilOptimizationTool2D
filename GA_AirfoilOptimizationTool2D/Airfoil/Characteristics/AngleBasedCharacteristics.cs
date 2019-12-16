@@ -35,7 +35,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
         public Double MaxAngle => maxAngle;
         public Double Min => min;
         public Double MinAngle => minAngle;
-        public Double LoewrAngle => lowerAngle;
+        public Double LowerAngle => lowerAngle;
         public Double UpperAngle => upperAngle;
         public Double[,] RawCharacteristics => chr;
         public Double[,] InterpolatedCharacteristics => interpolatedChr;
@@ -169,9 +169,9 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
             var maxIndex = 0;
             for (int i = 1; i < reference.Length; i++)
             {
-                if (reference[i][1] > max)
+                if (reference[i][0] > max)
                 {
-                    max = reference[i][1];
+                    max = reference[i][0];
                     maxIndex = i;
                 }
             }

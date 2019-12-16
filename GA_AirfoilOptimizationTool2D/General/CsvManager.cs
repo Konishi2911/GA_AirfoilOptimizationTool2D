@@ -67,8 +67,22 @@ namespace GA_AirfoilOptimizationTool2D.General
 
         private static String[] rowSeparator(String source)
         {
-            var newLine = new String[] { "\r\n" };
-            return source.Split(newLine, StringSplitOptions.RemoveEmptyEntries);
+            var newLine = new String[] { };
+
+            if (source.Contains("\r\n"))
+            {
+                newLine = new String[] { "\r\n" };
+                return source.Split(newLine, StringSplitOptions.RemoveEmptyEntries);
+            }
+            else if (source.Contains("\n"))
+            {
+                newLine = new String[] { "\n" };
+                return source.Split(newLine, StringSplitOptions.RemoveEmptyEntries);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         private static Double[,] getDoubleArray(String[] strLine)

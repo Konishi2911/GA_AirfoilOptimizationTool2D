@@ -379,13 +379,14 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             return newValue;
         }
         private void calcLiftDrag()
+        
         {
             if
             (
                 liftProfile != null && dragProfile != null &&
                 liftProfile.NoInterpolatedPoints == dragProfile.NoInterpolatedPoints &&
-                liftProfile.MinAngle == dragProfile.MinAngle &&
-                liftProfile.MaxAngle == dragProfile.MaxAngle
+                liftProfile.LowerAngle == dragProfile.LowerAngle &&
+                liftProfile.UpperAngle == dragProfile.UpperAngle
             )
             {
                 double[,] temp = new double[liftProfile.InterpolatedCharacteristics.GetLength(0),2];

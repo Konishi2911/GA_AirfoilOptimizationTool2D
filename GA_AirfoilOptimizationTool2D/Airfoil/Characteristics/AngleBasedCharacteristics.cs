@@ -17,6 +17,8 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
         private double maxAngle;
         private double min;
         private double minAngle;
+        private double lowerAngle;
+        private double upperAngle;
         #endregion
 
         #region Properties
@@ -33,6 +35,8 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
         public Double MaxAngle => maxAngle;
         public Double Min => min;
         public Double MinAngle => minAngle;
+        public Double LowerAngle => lowerAngle;
+        public Double UpperAngle => upperAngle;
         public Double[,] RawCharacteristics => chr;
         public Double[,] InterpolatedCharacteristics => interpolatedChr;
         #endregion
@@ -43,6 +47,8 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
             this.chr = characteristics;
 
             InterpolateCharacteristics();
+            searchLowerAngle(ConvertArrayToJuggedArray(this.interpolatedChr));
+            searchUpperAngle(ConvertArrayToJuggedArray(this.interpolatedChr));
             searchMaxCharac(ConvertArrayToJuggedArray(this.interpolatedChr));
             searchMinCharac(ConvertArrayToJuggedArray(this.interpolatedChr));
         }
@@ -140,6 +146,36 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
                     minIndex = i;
                 }
             }
+        }
+
+        private void searchUpperAngle(double[][] reference)
+        {
+            var max = reference[0][0];
+            var maxIndex = 0;
+            for (int i = 1; i < reference.Length; i++)
+            {
+                if (reference[i][0] > max)
+                {
+                    max = reference[i][0];
+                    maxIndex = i;
+                }
+            }
+            upperAngle = max;
+        }
+
+        private void searchLowerAngle(double[][] reference)
+        {
+            var min = reference[0][0];
+            var minIndex = 0;
+            for (int i = 1; i < reference.Length; i++)
+            {
+                if (reference[i][0] < min)
+                {
+                    min = reference[i][0];
+                    minIndex = i;
+                }
+            }
+            lowerAngle = min;
         }
 
         private static T[][] ConvertArrayToJuggedArray<T>(T[,] array)

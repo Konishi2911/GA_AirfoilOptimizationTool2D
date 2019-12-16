@@ -67,7 +67,8 @@ namespace GA_AirfoilOptimizationTool2D.General
 
         private static String[] rowSeparator(String source)
         {
-            var newLine = new String[] { "" };
+            var newLine = new String[] { };
+
             if (source.Contains("\r\n"))
             {
                 newLine = new String[] { "\r\n" };

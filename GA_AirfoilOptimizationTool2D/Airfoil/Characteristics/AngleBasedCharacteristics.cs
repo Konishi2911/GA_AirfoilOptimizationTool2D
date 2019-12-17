@@ -35,7 +35,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
         public Double MaxAngle => maxAngle;
         public Double Min => min;
         public Double MinAngle => minAngle;
-        public Double LoewrAngle => lowerAngle;
+        public Double LowerAngle => lowerAngle;
         public Double UpperAngle => upperAngle;
         public Double[,] RawCharacteristics => chr;
         public Double[,] InterpolatedCharacteristics => interpolatedChr;

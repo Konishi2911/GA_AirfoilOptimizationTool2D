@@ -169,9 +169,9 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
             var maxIndex = 0;
             for (int i = 1; i < reference.Length; i++)
             {
-                if (reference[i][1] > max)
+                if (reference[i][0] > max)
                 {
-                    max = reference[i][1];
+                    max = reference[i][0];
                     maxIndex = i;
                 }
             }

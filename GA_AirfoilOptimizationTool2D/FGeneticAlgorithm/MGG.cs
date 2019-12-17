@@ -27,7 +27,7 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
             targetIndividuals.IndivisualsGroup.Remove(elite);
             var roulette = RouletteSelection(targetIndividuals);
 
-            if (SelectedIndividualsIndex[0] < targetIndividuals.IndexOf(roulette))
+            if (SelectedIndividualsIndex[0] <= targetIndividuals.IndexOf(roulette))
             {
                 SelectedIndividualsIndex[1] = targetIndividuals.IndexOf(roulette) + 1;
             }

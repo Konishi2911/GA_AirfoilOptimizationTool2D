@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using System.Windows.Media;
 
 namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
 {
@@ -21,6 +22,9 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
 
         private SourceSelectorViewModel selectedSource;
         private TargetAirfoilSelectorViewModel selectedTargetAirfoil;
+
+        private System.Windows.Media.Brush liftIndicatorColor;
+        private System.Windows.Media.Brush dragIndicatorColor;
         #endregion
 
         #region DelegateCommand
@@ -30,6 +34,25 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
         #endregion
 
         #region Properties
+        public System.Windows.Media.Brush LiftIndicatorColor 
+        {
+            get => liftIndicatorColor;
+            private set
+            {
+                liftIndicatorColor = value;
+                OnPropertyChanged(nameof(LiftIndicatorColor));
+            }
+        }
+        public System.Windows.Media.Brush DragIndicatorColor
+        {
+            get => dragIndicatorColor;
+            private set
+            {
+                dragIndicatorColor = value;
+                OnPropertyChanged(nameof(DragIndicatorColor));
+            }
+        }
+
         public List<SourceSelectorViewModel> Sources { get; private set; }
         public SourceSelectorViewModel SelectedSource
         {
@@ -76,6 +99,9 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
             this.PropertyChanged += This_PropertyChanged;
 
             CloneTargetAirfoil();
+
+            updateIndicator();
+
             //// Clone Offsprng Airfoils
             //if (SelectedSource.Source == PopulationSources.CurrentPopulation)
             //{
@@ -198,6 +224,8 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
             if (e.PropertyName == nameof(this.SelectedTargetAirfoil))
             { 
                 currentAirfoilNumber = TargetAirfoils.IndexOf(selectedTargetAirfoil);
+
+                updateIndicator();
             }
             else if ( e.PropertyName == nameof(this.SelectedSource))
             {
@@ -205,5 +233,55 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
             }
         }
         #endregion
+
+        private void updateIndicator()
+        {
+            // Check wheather Lift is imported
+            if (isLiftDetected(sourceAirfoils.CombinedAirfoils[currentAirfoilNumber]))
+            {
+                this.LiftIndicatorColor = new System.Windows.Media.SolidColorBrush(Colors.LightGreen);
+            }
+            else
+            {
+                this.LiftIndicatorColor = new System.Windows.Media.SolidColorBrush(Colors.Gray);
+            }
+            // Check wheather Drag is imported
+            if (isDragDetected(sourceAirfoils.CombinedAirfoils[currentAirfoilNumber]))
+            {
+                this.DragIndicatorColor = new System.Windows.Media.SolidColorBrush(Colors.LightGreen);
+            }
+            else
+            {
+                this.DragIndicatorColor = new System.Windows.Media.SolidColorBrush(Colors.Gray);
+            }
+        }
+
+        private bool isLiftDetected(Airfoil.AirfoilManager airfoil)
+        {
+            return isCharacteristicsDetected(airfoil, 0);
+        }
+        private bool isDragDetected(Airfoil.AirfoilManager airfoil)
+        {
+            return isCharacteristicsDetected(airfoil, 1);
+        }
+
+        private bool isCharacteristicsDetected(Airfoil.AirfoilManager airfoil, int type)
+        {
+            if (airfoil == null)
+            {
+                return false;
+            }
+
+            if (type == 0)
+            {
+                return airfoil.LiftProfile != null;
+            }
+            else if (type == 1)
+            {
+                return airfoil.DragProfile != null;
+            }
+
+            return false;
+        }
     }
 }

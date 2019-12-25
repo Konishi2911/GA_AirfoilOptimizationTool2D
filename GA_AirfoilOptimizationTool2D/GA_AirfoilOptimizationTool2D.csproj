@@ -160,7 +160,9 @@
     <Compile Include="Airfoil\IAirfoilGroupManager.cs" />
     <Compile Include="Airfoil\Representation\AirfoilCombiner.cs" />
     <Compile Include="Chart\AxisStyle.cs" />
-    <Compile Include="Chart\LineChart.cs" />
+    <Compile Include="Chart\LineChart.xaml.cs">
+      <DependentUpon>LineChart.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Chart\NotifyPropertyChangedDataClass.cs" />
     <Compile Include="FAirfoilGAManager\AirfoilCrossover.cs" />
     <Compile Include="FAirfoilGAManager\AirfoilGAManager.cs" />
@@ -230,6 +232,10 @@
     <Compile Include="General\Triggers\SaveFileDialogTriger.cs" />
     <Compile Include="OptimizingConfiguration.cs" />
     <Compile Include="SizeObserver.cs" />
+    <Page Include="Chart\LineChart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="FCharacteristicsManager\CharacteristicsManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -280,10 +286,6 @@
     <Page Include="OptConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Themes\Generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

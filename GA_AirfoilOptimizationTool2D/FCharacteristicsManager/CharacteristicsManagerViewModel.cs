@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using System.Windows;
 using System.Windows.Media;
 
 namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
@@ -25,6 +26,10 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
 
         private System.Windows.Media.Brush liftIndicatorColor;
         private System.Windows.Media.Brush dragIndicatorColor;
+
+        private Chart.AxisStyle xStyle;
+        private Chart.AxisStyle yStyle;
+        private Point[] characteristicsPlot;
         #endregion
 
         #region DelegateCommand
@@ -74,6 +79,33 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
                 OnPropertyChanged(nameof(this.SelectedTargetAirfoil));
             }
         }
+        public Chart.AxisStyle XStyle
+        {
+            get => xStyle;
+            set
+            {
+                xStyle = value;
+                OnPropertyChanged(nameof(XStyle));
+            }
+        }
+        public Chart.AxisStyle YStyle
+        {
+            get => yStyle;
+            set
+            {
+                yStyle = value;
+                OnPropertyChanged(nameof(YStyle));
+            }
+        }
+        public Point[] CharacteristicsPlot
+        {
+            get => characteristicsPlot;
+            set
+            {
+                characteristicsPlot = value;
+                OnPropertyChanged(nameof(CharacteristicsPlot));
+            }
+        }
         #endregion
 
         public CharacteristicsManagerViewModel()
@@ -94,6 +126,10 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
             LiftCoefProfileSelection = new General.DelegateCommand(SelectLiftCoefProfile, () => true);
             DragCoefProfileSelection = new General.DelegateCommand(SelectDragCoefProfile, () => true);
             ClickApplyButton = new General.DelegateCommand(ApplyButtonClicked, IsApplyButtonAvailable);
+
+            // Characteristics Chart Related
+            XStyle = new Chart.AxisStyle() { Min = 0.0, Max = 10.0 };
+            YStyle = new Chart.AxisStyle() { Min = 0.0, Max = 2.0 };
 
             // Assign Events
             this.PropertyChanged += This_PropertyChanged;
@@ -174,6 +210,8 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
                 // Apply lift profiles to temporary airfoils collection
                 sourceAirfoils.CombinedAirfoils[currentAirfoilNumber].LiftProfile = liftProfile;
                 liftProfiles.Add(liftProfile);
+                updateIndicator();
+                updateCharacteristicsPlot();
             }
         }
 
@@ -194,6 +232,8 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
                 // Apply lift profiles to temporary airfoils collection
                 sourceAirfoils.CombinedAirfoils[currentAirfoilNumber].DragProfile = dragProfile;
                 dragProfiles.Add(dragProfile);
+                updateIndicator();
+                updateCharacteristicsPlot();
             }
         }
 
@@ -226,6 +266,7 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
                 currentAirfoilNumber = TargetAirfoils.IndexOf(selectedTargetAirfoil);
 
                 updateIndicator();
+                updateCharacteristicsPlot();
             }
             else if ( e.PropertyName == nameof(this.SelectedSource))
             {
@@ -282,6 +323,20 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
             }
 
             return false;
+        }
+
+        private void updateCharacteristicsPlot()
+        {
+            List<Point> points = new List<Point>();
+            for (int i = 0; 
+                i < sourceAirfoils.CombinedAirfoils[currentAirfoilNumber].LiftProfile.InterpolatedCharacteristics.GetLength(0);
+                ++i)
+            {
+                var p = sourceAirfoils.CombinedAirfoils[currentAirfoilNumber].LiftProfile.InterpolatedCharacteristics;
+                points.Add(new Point(p[i, 0], p[i, 1]));
+            }
+
+            CharacteristicsPlot = points.ToArray();
         }
     }
 }

@@ -86,7 +86,15 @@
             }
 
             // Executes selection to extract airfoil from offsprings
-            selectionExecutor.ExecuteSelection(offsprings);
+            var selectedParents = new Airfoil.CombinedAirfoilsGroup(parentAirfoils.BasisAirfoils);
+            foreach (var item in parentsIndex)
+            {
+                selectedParents.Add(
+                    parentAirfoils.CombinedAirfoils[item],
+                    parentAirfoils.CoefficientOfCombination.GetCoefficients(item));
+            }
+
+            selectionExecutor.ExecuteSelection(offsprings + selectedParents);
 
             // Extract selected offsprings
             SelectedOffspringsNo = selectionExecutor.SelectedAirfoilsNo;

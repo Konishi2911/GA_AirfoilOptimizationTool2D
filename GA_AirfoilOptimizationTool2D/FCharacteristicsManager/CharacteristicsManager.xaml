@@ -56,12 +56,13 @@
         <ComboBox Margin="65,5,10,0" VerticalAlignment="Top" ItemsSource="{Binding Path=Sources}" SelectedItem="{Binding Path=SelectedSource}"/>
         <Label Content="Source" HorizontalAlignment="Left" Margin="10,2,0,0" VerticalAlignment="Top"/>
         <Label Content="Airfoil" HorizontalAlignment="Left" Margin="10,2,0,0" Grid.Row="1" VerticalAlignment="Top"/>
-        <MyNamespace:LineChart Grid.Column="1" Grid.ColumnSpan="1" Grid.Row="1" Grid.RowSpan="5" ChartTitle="Characteristics" Margin="0,0,0,10" 
+        <MyNamespace:LineChart Grid.Column="1" Grid.ColumnSpan="1" Grid.Row="1" Grid.RowSpan="5" ChartTitle="Characteristics" Margin="10,0,10,10" 
                                PointsCollection="{Binding Path=CharacteristicsPlot}"
                                XAxis="{Binding Path=XStyle}"
                                YAxis="{Binding Path=YStyle}"/>
         <Rectangle Fill="{Binding Path=LiftIndicatorColor}" Height="10" Margin="0,10,14,0" Grid.Row="2" Stroke="Gray" VerticalAlignment="Top" Width="10" HorizontalAlignment="Right" RenderOptions.EdgeMode="Aliased"/>
         <Rectangle Fill="{Binding Path=DragIndicatorColor}" Height="10" Margin="0,10,14,0" Grid.Row="3" Stroke="Gray" VerticalAlignment="Top" Width="10" HorizontalAlignment="Right" RenderOptions.EdgeMode="Aliased"/>
+        <ComboBox Grid.Column="1" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Width="376" ItemsSource="{Binding Characteristics}" SelectedItem="{Binding SelectedCharacteristics}"/>
 
     </Grid>
 </Window>

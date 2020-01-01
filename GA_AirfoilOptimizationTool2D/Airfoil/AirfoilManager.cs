@@ -94,6 +94,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             set
             {
                 liftProfile = value;
+                calcLiftDrag();
             }
         }
         public Characteristics.AngleBasedCharacteristics DragProfile
@@ -102,13 +103,13 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             set
             {
                 dragProfile = value;
+                calcLiftDrag(); 
             }
         }
         public Characteristics.AngleBasedCharacteristics LiftDragProfile
         {
             get
             {
-                calcLiftDrag();
                 return liftDragProfile;
             }
             set
@@ -378,8 +379,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
             newValue.Import(refinedCoordinateArray);
             return newValue;
         }
-        private void calcLiftDrag()
-        
+        private void calcLiftDrag()      
         {
             if
             (

@@ -37,7 +37,7 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
         public void ExecuteSelection(Airfoil.CombinedAirfoilsGroup offspringAirfoils)
         {
             // Create Indiviuals
-            var parentsIndividuals = CreateIndividuals(offspringAirfoils);
+            var offspringIndividuals = CreateIndividuals(offspringAirfoils);
 
             // MGG Selection
             if (selectionModel == SelectionModel.MGG)
@@ -45,7 +45,7 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
                 var mggExecutor = new FGeneticAlgorithm.MGG();
 
                 // Execute selection with MGG
-                selectedIndividuals  = mggExecutor.ExecuteSelection(parentsIndividuals);
+                selectedIndividuals  = mggExecutor.ExecuteSelection(offspringIndividuals);
                 var selectedIndex = mggExecutor.SelectedIndividualsIndex;
 
                 // Store selected Airfoils' characteristics

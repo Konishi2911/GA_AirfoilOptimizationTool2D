@@ -175,6 +175,8 @@
       <DependentUpon>CharacteristicsManager.xaml</DependentUpon>
     </Compile>
     <Compile Include="FCharacteristicsManager\CharacteristicsManagerViewModel.cs" />
+    <Compile Include="FCharacteristicsManager\CharacteristicsSelectorViewModel.cs" />
+    <Compile Include="FCharacteristicsManager\CharacteristicsSources.cs" />
     <Compile Include="FCharacteristicsManager\PopulationSources.cs" />
     <Compile Include="FCharacteristicsManager\SourceSelectorViewModel.cs" />
     <Compile Include="FCharacteristicsManager\TargetAirfoilSelectorViewModel.cs" />

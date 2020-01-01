@@ -117,5 +117,31 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         //    int _n_numberOfBasisAirfoils = _numberOfBasisAirfoils;
         //    var _n_coefficientOfCombination = _coefficientsOfCombination.Clone();
         //}
+
+        public static CombinedAirfoilsGroup operator + (CombinedAirfoilsGroup A, CombinedAirfoilsGroup B)
+        {
+            if (A == null || B == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            CombinedAirfoilsGroup C = new CombinedAirfoilsGroup(A.BasisAirfoils);
+            for (int i = 0; i < A.CombinedAirfoils.Length; i++)
+            {
+                C.Add(
+                    A.CombinedAirfoils[i],
+                    A.CoefficientOfCombination.GetCoefficients(i)
+                    );
+            }
+            for (int i = 0; i < B.CombinedAirfoils.Length; i++)
+            {
+                C.Add(
+                    B.CombinedAirfoils[i],
+                    B.CoefficientOfCombination.GetCoefficients(i)
+                    );
+            }
+
+            return C;
+        }
     }
 }

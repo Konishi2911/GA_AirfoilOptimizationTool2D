@@ -23,6 +23,7 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
 
         private SourceSelectorViewModel selectedSource;
         private TargetAirfoilSelectorViewModel selectedTargetAirfoil;
+        private CharacteristicsSelectorViewModel selectedCharacteristics;
 
         private System.Windows.Media.Brush liftIndicatorColor;
         private System.Windows.Media.Brush dragIndicatorColor;
@@ -79,6 +80,18 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
                 OnPropertyChanged(nameof(this.SelectedTargetAirfoil));
             }
         }
+
+        public List<CharacteristicsSelectorViewModel> Characteristics { get; private set; }
+        public CharacteristicsSelectorViewModel SelectedCharacteristics
+        {
+            get => selectedCharacteristics;
+            set
+            {
+                selectedCharacteristics = value;
+                OnPropertyChanged(nameof(this.SelectedCharacteristics));
+            }
+        }
+
         public Chart.AxisStyle XStyle
         {
             get => xStyle;
@@ -130,6 +143,8 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
             // Characteristics Chart Related
             XStyle = new Chart.AxisStyle() { Min = 0.0, Max = 10.0 };
             YStyle = new Chart.AxisStyle() { Min = 0.0, Max = 2.0 };
+            this.Characteristics = CharacteristicsSelectorViewModel.Create();
+            this.SelectedCharacteristics = Characteristics[0];
 
             // Assign Events
             this.PropertyChanged += This_PropertyChanged;
@@ -272,6 +287,10 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
             {
                 CloneTargetAirfoil();
             }
+            else if (e.PropertyName == nameof(this.selectedCharacteristics))
+            {
+                updateCharacteristicsPlot();
+            }
         }
         #endregion
 
@@ -328,14 +347,48 @@ namespace GA_AirfoilOptimizationTool2D.FCharacteristicsManager
         private void updateCharacteristicsPlot()
         {
             List<Point> points = new List<Point>();
-            for (int i = 0; 
-                i < sourceAirfoils.CombinedAirfoils[currentAirfoilNumber].LiftProfile.InterpolatedCharacteristics.GetLength(0);
-                ++i)
+            if (SelectedCharacteristics.Source == CharacteristicsSources.Lift &&
+                sourceAirfoils.CombinedAirfoils[currentAirfoilNumber].LiftProfile != null)
             {
-                var p = sourceAirfoils.CombinedAirfoils[currentAirfoilNumber].LiftProfile.InterpolatedCharacteristics;
-                points.Add(new Point(p[i, 0], p[i, 1]));
-            }
+                XStyle = new Chart.AxisStyle() { Min = 0.0, Max = 10.0 };
+                YStyle = new Chart.AxisStyle() { Min = 0.0, Max = 2.0 };
 
+                for (int i = 0;
+                    i < sourceAirfoils.CombinedAirfoils[currentAirfoilNumber].LiftProfile.InterpolatedCharacteristics.GetLength(0);
+                    ++i)
+                {
+                    var p = sourceAirfoils.CombinedAirfoils[currentAirfoilNumber].LiftProfile.InterpolatedCharacteristics;
+                    points.Add(new Point(p[i, 0], p[i, 1]));
+                }
+            }
+            else if (SelectedCharacteristics.Source == CharacteristicsSources.Drag &&
+                    sourceAirfoils.CombinedAirfoils[currentAirfoilNumber].DragProfile != null)
+            {
+                XStyle = new Chart.AxisStyle() { Min = 0.0, Max = 10.0 };
+                YStyle = new Chart.AxisStyle() { Min = 0.0, Max = 0.3 };
+
+                for (int i = 0;
+                    i < sourceAirfoils.CombinedAirfoils[currentAirfoilNumber].DragProfile.InterpolatedCharacteristics.GetLength(0);
+                    ++i)
+                {
+                    var p = sourceAirfoils.CombinedAirfoils[currentAirfoilNumber].DragProfile.InterpolatedCharacteristics;
+                    points.Add(new Point(p[i, 0], p[i, 1]));
+                }
+            }
+            else if (SelectedCharacteristics.Source == CharacteristicsSources.LiftDrag &&
+                    sourceAirfoils.CombinedAirfoils[currentAirfoilNumber].LiftDragProfile != null)
+            {
+                XStyle = new Chart.AxisStyle() { Min = 0.0, Max = 10.0 };
+                YStyle = new Chart.AxisStyle() { Min = 0.0, Max = 60.0 };
+
+                for (int i = 0;
+                    i < sourceAirfoils.CombinedAirfoils[currentAirfoilNumber].LiftDragProfile.InterpolatedCharacteristics.GetLength(0);
+                    ++i)
+                {
+                    var p = sourceAirfoils.CombinedAirfoils[currentAirfoilNumber].LiftDragProfile.InterpolatedCharacteristics;
+                    points.Add(new Point(p[i, 0], p[i, 1]));
+                }
+            }
             CharacteristicsPlot = points.ToArray();
         }
     }

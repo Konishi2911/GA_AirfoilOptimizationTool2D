@@ -1,6 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Reflection;
 
 namespace GA_AirfoilOptimizationTool2D
 {
@@ -17,12 +15,25 @@ namespace GA_AirfoilOptimizationTool2D
 
         private FAirfoilGAManager.AirfoilGAManager _airfoilGAManager;
 
+        private OptimizingMode _optimizingMode;
+
         // Temporary
         private String CsvExportDirectory;
         private int ExportResolution;
         #endregion
 
+        #region Enums
+        enum OptimizingMode
+        {
+            Lift,
+            Drag,
+            LiftDrag
+        }
+        #endregion
+
         #region Properties
+        public General.LogMessage LogMessage { get; } = new General.LogMessage();
+
         public General.BasisAirfoils BasisAirfoils
         {
             get => this._basisAirfoils;
@@ -54,8 +65,8 @@ namespace GA_AirfoilOptimizationTool2D
             }
         }
 
-        public int[] ParentsIndex 
-        { 
+        public int[] ParentsIndex
+        {
             get => _parentsIndex;
             set => _parentsIndex = value;
         }
@@ -85,10 +96,12 @@ namespace GA_AirfoilOptimizationTool2D
                 OnPropertyChanged(nameof(OffspringCandidates));
             }
         }
+        public bool CurrentAirfoilsReady { get; private set; }
         public bool OffspringAirfoilsReady { get; private set; }
         #endregion
 
         #region Events
+        public event EventHandler LogMessageAdded;
         public event EventHandler CurrentParameterUpdated;
         public event EventHandler CurrentPopulationUpdated;
         public event EventHandler OffspringCandidatesUpdated;
@@ -102,8 +115,19 @@ namespace GA_AirfoilOptimizationTool2D
 
         private AirfoilOptimizationResource()
         {
+            _optimizingMode = OptimizingMode.LiftDrag;
+            LogMessage.MessageUpdated += AddLogMessage;
+
             CsvExportDirectory = "..\\..\\..\\Offsprings";
         }
+
+        #region Event Callbacks
+        private void AddLogMessage(object sender, EventArgs e)
+        {
+            LogMessageAdded?.Invoke(sender, e);
+        }
+        #endregion
+
         public static AirfoilOptimizationResource Instance { get; } = new AirfoilOptimizationResource();
 
         #region Methods
@@ -161,7 +185,7 @@ namespace GA_AirfoilOptimizationTool2D
                 }
 
                 this._basisAirfoils = basisAirfoils;
-                
+
                 // Initialization
                 _currentPopulations = new Airfoil.CombinedAirfoilsGroup(basisAirfoils);
                 //
@@ -229,6 +253,89 @@ namespace GA_AirfoilOptimizationTool2D
             // Fire the event updated coefficient are ready
             CurrentParameterUpdated?.Invoke(this, new EventArgs());
         }
+        public void SetSource
+        (
+            General.BasisAirfoils basisAirfoils,
+            Airfoil.CoefficientOfCombination coefficients,
+            System.Collections.Generic.List<String> names,
+            System.Collections.Generic.List<Airfoil.Characteristics.AngleBasedCharacteristics> lifts,
+            System.Collections.Generic.List<Airfoil.Characteristics.AngleBasedCharacteristics> drags
+        )
+        {
+            // Null check
+            if
+            (
+                lifts == null ||
+                drags == null ||
+                names == null
+            )
+            {
+                SetSource(basisAirfoils, coefficients);
+                return;
+            }
+
+            //Format check
+            if 
+            (
+                lifts.Count != coefficients.NoAirfoils || 
+                drags.Count != coefficients.NoAirfoils ||
+                names.Count != coefficients.NoAirfoils
+            )
+            {
+                SetSource(basisAirfoils, coefficients);
+                return;
+            }
+
+            SetSource(basisAirfoils, coefficients);
+
+            for (int i = 0; i < _currentPopulations.NoAirfoils; i++)
+            {
+                _currentPopulations.CombinedAirfoils[i].AirfoilName = names[i];
+                _currentPopulations.CombinedAirfoils[i].LiftProfile = lifts[i];
+                _currentPopulations.CombinedAirfoils[i].DragProfile = drags[i];
+            }
+            ScanCurrentCharacteristics();
+        }
+
+        public void AddCurrentCharacteristics
+        (
+            System.Collections.Generic.List<String> names,
+            System.Collections.Generic.List<Airfoil.Characteristics.AngleBasedCharacteristics> lifts,
+            System.Collections.Generic.List<Airfoil.Characteristics.AngleBasedCharacteristics> drags
+        )
+        {
+            // Null check
+            if
+            (
+                lifts == null ||
+                drags == null ||
+                names == null ||
+                _currentPopulations == null
+            )
+            {
+                return;
+            }
+
+            //Format check
+            if
+            (
+                lifts.Count != _currentPopulations.NoAirfoils ||
+                drags.Count != _currentPopulations.NoAirfoils ||
+                names.Count != _currentPopulations.NoAirfoils
+            )
+            {
+                return;
+            }
+
+            for (int i = 0; i < _currentPopulations.NoAirfoils; i++)
+            {
+                _currentPopulations.CombinedAirfoils[i].AirfoilName = names[i];
+                _currentPopulations.CombinedAirfoils[i].LiftProfile = lifts[i];
+                _currentPopulations.CombinedAirfoils[i].DragProfile = drags[i];
+            }
+
+            ScanCurrentCharacteristics();
+        }
 
         /// <summary>
         /// Set offspring candidates to fields
@@ -246,6 +353,88 @@ namespace GA_AirfoilOptimizationTool2D
 
             // Fire the event updated SourceData are ready
             OffspringCandidatesUpdated?.Invoke(this, new EventArgs());
+        }
+        public void SetOffspringCandidates
+        (
+            Airfoil.CoefficientOfCombination coefficients,
+            System.Collections.Generic.List<String> names,
+            System.Collections.Generic.List<Airfoil.Characteristics.AngleBasedCharacteristics> lifts,
+            System.Collections.Generic.List<Airfoil.Characteristics.AngleBasedCharacteristics> drags
+        )
+        {
+            // Null check
+            if
+            (
+                lifts == null ||
+                drags == null ||
+                names == null
+            )
+            {
+                SetOffspringCandidates(coefficients);
+                return;
+            }
+
+            //Format check
+            if
+            (
+                lifts.Count != coefficients.NoAirfoils ||
+                drags.Count != coefficients.NoAirfoils ||
+                names.Count != coefficients.NoAirfoils
+            )
+            {
+                SetOffspringCandidates(coefficients);
+                return;
+            }
+
+            SetOffspringCandidates(coefficients);
+
+            for (int i = 0; i < _offsptingCandidates.NoAirfoils; i++)
+            {
+                _offsptingCandidates.CombinedAirfoils[i].AirfoilName = names[i];
+                _offsptingCandidates.CombinedAirfoils[i].LiftProfile = lifts[i];
+                _offsptingCandidates.CombinedAirfoils[i].DragProfile = drags[i];
+            }
+            ScanOffspringCharacteristics();
+        }
+
+        public void AddOffspringCharacteristics
+        (
+            System.Collections.Generic.List<String> names,
+            System.Collections.Generic.List<Airfoil.Characteristics.AngleBasedCharacteristics> lifts,
+            System.Collections.Generic.List<Airfoil.Characteristics.AngleBasedCharacteristics> drags
+        )
+        {
+            // Null check
+            if
+            (
+                lifts == null ||
+                drags == null ||
+                names == null ||
+                _offsptingCandidates == null
+            )
+            {
+                return;
+            }
+
+            //Format check
+            if
+            (
+                lifts.Count != _offsptingCandidates.NoAirfoils ||
+                drags.Count != _offsptingCandidates.NoAirfoils ||
+                names.Count != _offsptingCandidates.NoAirfoils
+            )
+            {
+                return;
+            }
+
+            for (int i = 0; i < _offsptingCandidates.NoAirfoils; i++)
+            {
+                _offsptingCandidates.CombinedAirfoils[i].AirfoilName = names[i];
+                _offsptingCandidates.CombinedAirfoils[i].LiftProfile = lifts[i];
+                _offsptingCandidates.CombinedAirfoils[i].DragProfile = drags[i];
+            }
+
+            ScanOffspringCharacteristics();
         }
 
         public void StartCrossovers()
@@ -272,7 +461,14 @@ namespace GA_AirfoilOptimizationTool2D
             // Update currnet populations with selected next generation
             _currentPopulations = NextGeneration;
 
-            // Crear the data of offspring populations.
+            LogMessage.Write("================ Selection Result =================");
+            for (int i = 0; i < _airfoilGAManager.SelectedOffspringsNo.Count; i++)
+            {
+                var num = _airfoilGAManager.SelectedOffspringsNo[i];
+                LogMessage.Write("> Selected offspring : " + num);
+            }
+
+            // Clear the data of offspring populations.
             _offsptingCandidates = null;
             _offspringCoefficients = null;
             OffspringAirfoilsReady = false;
@@ -291,7 +487,7 @@ namespace GA_AirfoilOptimizationTool2D
                 airfoils = _currentPopulations.CombinedAirfoils;
                 Tags = "CurrentPopulation_";
             }
-            else if(exportAirfoils == ExportAirfoilsGroup.OffspringPopulation)
+            else if (exportAirfoils == ExportAirfoilsGroup.OffspringPopulation)
             {
                 airfoils = _offsptingCandidates.CombinedAirfoils;
                 Tags = "Offspring_";
@@ -311,9 +507,51 @@ namespace GA_AirfoilOptimizationTool2D
         private void ScanOffspringCharacteristics()
         {
             OffspringAirfoilsReady = true;
-            foreach (var item in _offsptingCandidates.CombinedAirfoils)
+            if (_optimizingMode == OptimizingMode.Lift)
             {
-                OffspringAirfoilsReady &= item.LiftProfile != null;
+                foreach (var item in _offsptingCandidates.CombinedAirfoils)
+                {
+                    OffspringAirfoilsReady &= item.LiftProfile != null;
+                }
+            }
+            else if (_optimizingMode == OptimizingMode.Drag)
+            {
+                foreach (var item in _offsptingCandidates.CombinedAirfoils)
+                {
+                    OffspringAirfoilsReady &= item.DragProfile != null;
+                }
+            }
+            else if (_optimizingMode == OptimizingMode.LiftDrag)
+            {
+                foreach (var item in _offsptingCandidates.CombinedAirfoils)
+                {
+                    OffspringAirfoilsReady &= item.LiftProfile != null && item.DragProfile != null;
+                }
+            }
+        }
+        private void ScanCurrentCharacteristics()
+        {
+            CurrentAirfoilsReady = true;
+            if (_optimizingMode == OptimizingMode.Lift)
+            {
+                foreach (var item in _currentPopulations.CombinedAirfoils)
+                {
+                    CurrentAirfoilsReady &= item.LiftProfile != null;
+                }
+            }
+            else if (_optimizingMode == OptimizingMode.Drag)
+            {
+                foreach (var item in _currentPopulations.CombinedAirfoils)
+                {
+                    CurrentAirfoilsReady &= item.DragProfile != null;
+                }
+            }
+            else if (_optimizingMode == OptimizingMode.LiftDrag)
+            {
+                foreach (var item in _currentPopulations.CombinedAirfoils)
+                {
+                    CurrentAirfoilsReady &= item.LiftProfile != null && item.DragProfile != null;
+                }
             }
         }
     }

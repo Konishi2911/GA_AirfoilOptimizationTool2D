@@ -45,7 +45,8 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
                 var undxExecutor = new FGeneticAlgorithm.UNDX(undxParameters);
 
                 // Execute crossover with UNDX
-                optParameters = undxExecutor.ExecuteCrossover(parentsIndividuals);
+                var temp = undxExecutor.ExecuteCrossover(parentsIndividuals);
+                optParameters = CorrectInvalidParams(temp);
                 parentsIndex = undxExecutor.ParentsIndex;
             }
 
@@ -73,6 +74,31 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
             }
 
             return individuals;
+        }
+
+        /// <summary>
+        /// Correct parameters to 0 if they are less than 0.
+        /// </summary>
+        /// <param name="parameters"></param>
+        private double[][] CorrectInvalidParams(in double[][] parameters)
+        {
+            for 
+            (
+                int i = 0; 
+                i < parameters.Length; 
+                i++
+            )
+            {
+                for (int j = 0; j < parameters[i].Length; j++)
+                {
+                    if (parameters[i][j] < 0)
+                    {
+                        parameters[i][j] = 0;
+                    }
+                }
+            }
+
+            return parameters;
         }
     }
 }

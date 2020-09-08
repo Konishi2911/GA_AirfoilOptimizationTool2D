@@ -68,7 +68,11 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         public CoefficientOfCombination(double[,] coefficients)
         {
             noBasisAirfoils = coefficients.GetLength(0);
-            SetCoefficient(coefficients);
+
+            if (noBasisAirfoils != 0)
+            {
+                SetCoefficient(coefficients);
+            }
         }
 
         public double GetCoefficient(int airfoilNumber, int basisAirfoilNumber)

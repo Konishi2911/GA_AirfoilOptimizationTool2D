@@ -9,6 +9,7 @@
         private Airfoil.CombinedAirfoilsGroup offspringAirfoilsCombiner;
         private Airfoil.CombinedAirfoilsGroup offspringAirfoils;
         private Airfoil.CombinedAirfoilsGroup nextAirfoilGenerations;
+        private System.Collections.Generic.List<int> selectedOffsprings;
         private ExternalAirfoilEvaluation airfoilEvaluation;
         private AirfoilCrossover crossoverExecutor;
         private AirfoilSelection selectionExecutor;
@@ -18,6 +19,8 @@
         public int[] ParentsIndex => parentsIndex;
         public Airfoil.CombinedAirfoilsGroup OffspringAirfoilCandidates => offspringAirfoilsCombiner;
         public Airfoil.CombinedAirfoilsGroup NextAirfoilGenerations => nextAirfoilGenerations;
+        public System.Collections.Generic.List<int> SelectedOffsprings => selectedOffsprings;
+        public System.Collections.Generic.List<int> SelectedOffspringsNo { get; private set; }
         #endregion
 
         #region Classes
@@ -76,10 +79,25 @@
 
         public void StartSelection(Airfoil.CombinedAirfoilsGroup offsprings)
         {
+            // Initialize Basis airfoils
+            if (basisAirfoils == null)
+            {
+                basisAirfoils = new General.BasisAirfoils(parentAirfoils.BasisAirfoils.AirfoilGroup);
+            }
+
             // Executes selection to extract airfoil from offsprings
-            selectionExecutor.ExecuteSelection(offsprings);
+            var selectedParents = new Airfoil.CombinedAirfoilsGroup(parentAirfoils.BasisAirfoils);
+            foreach (var item in parentsIndex)
+            {
+                selectedParents.Add(
+                    parentAirfoils.CombinedAirfoils[item],
+                    parentAirfoils.CoefficientOfCombination.GetCoefficients(item));
+            }
+
+            selectionExecutor.ExecuteSelection(offsprings + selectedParents);
 
             // Extract selected offsprings
+            SelectedOffspringsNo = selectionExecutor.SelectedAirfoilsNo;
             var selectedAirfoils = selectionExecutor.SelectedAirfoils;
             offspringAirfoils = new Airfoil.CombinedAirfoilsGroup(basisAirfoils);
             for (int i = 0; i < selectedAirfoils.CombinedAirfoils.Length; i++)

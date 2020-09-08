@@ -22,5 +22,11 @@
         <DataTemplate DataType="{x:Type mvm:PreviewWindowSelecterViewModel}">
             <TextBlock Text="{Binding Label}"/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type cvm:SourceSelectorViewModel}">
+            <TextBlock Text="{Binding Label}"/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type cvm:CharacteristicsSelectorViewModel}">
+            <TextBlock Text="{Binding Label}"/>
+        </DataTemplate>
     </Application.Resources>
 </Application>

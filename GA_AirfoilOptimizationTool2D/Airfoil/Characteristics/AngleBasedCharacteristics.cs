@@ -9,6 +9,7 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
     public class AngleBasedCharacteristics
     {
         #region Fields
+        private int nInterpolatedPoints;
         private int nData;
         private double[,] chr;
         private double[,] interpolatedChr;
@@ -16,37 +17,61 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
         private double maxAngle;
         private double min;
         private double minAngle;
+        private double lowerAngle;
+        private double upperAngle;
         #endregion
 
         #region Properties
+        public int NoInterpolatedPoints 
+        {
+            get => nInterpolatedPoints;
+            set
+            {
+                nInterpolatedPoints = value;
+                InterpolateCharacteristics();
+            }
+        }
         public Double Max => max;
         public Double MaxAngle => maxAngle;
         public Double Min => min;
         public Double MinAngle => minAngle;
+        public Double LowerAngle => lowerAngle;
+        public Double UpperAngle => upperAngle;
+        public Double[,] RawCharacteristics => chr;
         public Double[,] InterpolatedCharacteristics => interpolatedChr;
         #endregion
-
-        public AngleBasedCharacteristics()
-        {
-            nData = 0;
-        }
 
         private void InitializeCharaceristics(double[,] characteristics)
         {
             nData = characteristics.GetLength(0);
             this.chr = characteristics;
 
-            searchMaxCharac(ConvertArrayToJuggedArray(this.chr));
-            searchMinCharac(ConvertArrayToJuggedArray(this.chr));
             InterpolateCharacteristics();
+            searchMaxCharac(ConvertArrayToJuggedArray(this.interpolatedChr));
+            searchMinCharac(ConvertArrayToJuggedArray(this.interpolatedChr));
+            searchLowerAngle(ConvertArrayToJuggedArray(this.interpolatedChr));
+            searchUpperAngle(ConvertArrayToJuggedArray(this.interpolatedChr));
+        }
+        public AngleBasedCharacteristics()
+        {
+            nData = 0;
+            nInterpolatedPoints = 200;
         }
         public AngleBasedCharacteristics(double[][] characteristics)
         {
-            InitializeCharaceristics(ConvertJuggedArrayToArray(characteristics));
+            nInterpolatedPoints = 200;
+            InitializeCharaceristics(General.ArrayManager.ConvertJuggedArrayToArray(characteristics));
         }
 
         public AngleBasedCharacteristics(double[,] characteristics)
         {
+            nInterpolatedPoints = 200;
+            InitializeCharaceristics(characteristics);
+        }
+
+        public AngleBasedCharacteristics(double[,] characteristics, int nInterPoint)
+        {
+            nInterpolatedPoints = nInterPoint;
             InitializeCharaceristics(characteristics);
         }
 
@@ -70,8 +95,8 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
         private void InterpolateCharacteristics()
         {
             // Interpoplate profile with 3-dimensional Spline
-            var splinedChr =  General.Interpolation.SplineInterpolation(chr, 200);
-            interpolatedChr = General.Interpolation.LinearInterpolation(splinedChr, 100);
+            var splinedChr =  General.Interpolation.SplineInterpolation(chr, nInterpolatedPoints);
+            interpolatedChr = General.Interpolation.LinearInterpolation(splinedChr, nInterpolatedPoints);
         }
         private void searchMaxCharac(double[][] reference)
         {
@@ -121,6 +146,36 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil.Characteristics
                     minIndex = i;
                 }
             }
+        }
+
+        private void searchLowerAngle(double[][] reference)
+        {
+            var min = reference[0][0];
+            var minIndex = 0;
+            for (int i = 1; i < reference.Length; i++)
+            {
+                if (reference[i][0] < min)
+                {
+                    min = reference[i][0];
+                    minIndex = i;
+                }
+            }
+            lowerAngle = min;
+        }
+
+        private void searchUpperAngle(double[][] reference)
+        {
+            var max = reference[0][0];
+            var maxIndex = 0;
+            for (int i = 1; i < reference.Length; i++)
+            {
+                if (reference[i][0] > max)
+                {
+                    max = reference[i][0];
+                    maxIndex = i;
+                }
+            }
+            upperAngle = max;
         }
 
         private static T[][] ConvertArrayToJuggedArray<T>(T[,] array)

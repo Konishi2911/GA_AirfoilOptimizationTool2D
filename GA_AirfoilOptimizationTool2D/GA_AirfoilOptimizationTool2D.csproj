@@ -108,6 +108,7 @@
       <HintPath>..\packages\System.Composition.TypedParts.1.0.31\lib\portable-net45+win8+wp8+wpa81\System.Composition.TypedParts.dll</HintPath>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.5.3\lib\netstandard2.0\System.Memory.dll</HintPath>
     </Reference>
@@ -127,6 +128,7 @@
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.3\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -157,16 +159,26 @@
     <Compile Include="Airfoil\Evaluation\ExternalEvaluation.cs" />
     <Compile Include="Airfoil\IAirfoilGroupManager.cs" />
     <Compile Include="Airfoil\Representation\AirfoilCombiner.cs" />
+    <Compile Include="Chart\AxisStyle.cs" />
+    <Compile Include="Chart\LineChart.xaml.cs">
+      <DependentUpon>LineChart.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Chart\NotifyPropertyChangedDataClass.cs" />
     <Compile Include="FAirfoilGAManager\AirfoilCrossover.cs" />
     <Compile Include="FAirfoilGAManager\AirfoilGAManager.cs" />
     <Compile Include="FAirfoilGAManager\AirfoilSelection.cs" />
     <Compile Include="FAirfoilGAManager\ExternalAirfoilEvaluation.cs" />
     <Compile Include="FAirfoilGAManager\FitnessCalculator.cs" />
     <Compile Include="FCharacteristicsManager\Actions\ApplyButtonAction.cs" />
+    <Compile Include="FCharacteristicsManager\Actions\FileIndicatorAction.cs" />
     <Compile Include="FCharacteristicsManager\CharacteristicsManager.xaml.cs">
       <DependentUpon>CharacteristicsManager.xaml</DependentUpon>
     </Compile>
     <Compile Include="FCharacteristicsManager\CharacteristicsManagerViewModel.cs" />
+    <Compile Include="FCharacteristicsManager\CharacteristicsSelectorViewModel.cs" />
+    <Compile Include="FCharacteristicsManager\CharacteristicsSources.cs" />
+    <Compile Include="FCharacteristicsManager\PopulationSources.cs" />
+    <Compile Include="FCharacteristicsManager\SourceSelectorViewModel.cs" />
     <Compile Include="FCharacteristicsManager\TargetAirfoilSelectorViewModel.cs" />
     <Compile Include="FCoefManager\CoefficientManager.xaml.cs">
       <DependentUpon>CoefficientManager.xaml</DependentUpon>
@@ -211,6 +223,7 @@
     <Compile Include="General\Converter\PointCollectionConverter.cs" />
     <Compile Include="General\CsvManager.cs" />
     <Compile Include="General\DelegateCommand.cs" />
+    <Compile Include="General\LogMessage.cs" />
     <Compile Include="General\Messengers\SaveFileMessenger.cs" />
     <Compile Include="General\ParamDelegateCommand.cs" />
     <Compile Include="General\RandomNumber\BoxMuller.cs" />
@@ -221,6 +234,10 @@
     <Compile Include="General\Triggers\SaveFileDialogTriger.cs" />
     <Compile Include="OptimizingConfiguration.cs" />
     <Compile Include="SizeObserver.cs" />
+    <Page Include="Chart\LineChart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="FCharacteristicsManager\CharacteristicsManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

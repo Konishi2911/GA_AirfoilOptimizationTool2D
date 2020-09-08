@@ -12,10 +12,16 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
         private SelectionModel selectionModel;
         private FGeneticAlgorithm.IndividualsGroup selectedIndividuals;
         private Airfoil.CombinedAirfoilsGroup selectedAirfoils;
+        private List<int> selectedAirfoilsNo;
         #endregion
 
         #region Properties
         public Airfoil.CombinedAirfoilsGroup SelectedAirfoils => selectedAirfoils;
+        public List<int> SelectedAirfoilsNo
+        {
+            get => selectedAirfoilsNo;
+            private set => selectedAirfoilsNo = value;
+        }
         #endregion
 
         public AirfoilSelection(SelectionModel crossoverOperator)
@@ -31,7 +37,7 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
         public void ExecuteSelection(Airfoil.CombinedAirfoilsGroup offspringAirfoils)
         {
             // Create Indiviuals
-            var parentsIndividuals = CreateIndividuals(offspringAirfoils);
+            var offspringIndividuals = CreateIndividuals(offspringAirfoils);
 
             // MGG Selection
             if (selectionModel == SelectionModel.MGG)
@@ -39,7 +45,7 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
                 var mggExecutor = new FGeneticAlgorithm.MGG();
 
                 // Execute selection with MGG
-                selectedIndividuals  = mggExecutor.ExecuteSelection(parentsIndividuals);
+                selectedIndividuals  = mggExecutor.ExecuteSelection(offspringIndividuals);
                 var selectedIndex = mggExecutor.SelectedIndividualsIndex;
 
                 // Store selected Airfoils' characteristics
@@ -49,6 +55,7 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
                     Airfoil.AirfoilManager airfoil = offspringAirfoils.CombinedAirfoils[selectedIndex[i]];
                     double[] coefficients = offspringAirfoils.CoefficientOfCombination.GetCoefficients(selectedIndex[i]);
 
+                    SelectedAirfoilsNo = new List<int>(selectedIndex);
                     SelectedAirfoils.Add(airfoil, coefficients);
                 }
             }
@@ -64,7 +71,7 @@ namespace GA_AirfoilOptimizationTool2D.FAirfoilGAManager
             {
                 //double fitness = 1.0;
                 // Calculate fintness based on Lift
-                FitnessCalculator fitnessCalculator = new FitnessCalculator(item, FitnessCalculator.FitnessMode.Lift);
+                FitnessCalculator fitnessCalculator = new FitnessCalculator(item, FitnessCalculator.FitnessMode.LiftDrag);
                 fitnessCalculator.CalculateFitness();
                 fitness.Add(fitnessCalculator.Fitness);
             }

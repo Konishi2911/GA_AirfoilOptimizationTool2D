@@ -16,18 +16,28 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
         /// </summary>
         /// <param name="targetIndividuals"></param>
         /// <returns></returns>
-        public IndividualsGroup ExecuteSelection(IndividualsGroup targetIndividuals)
+        public IndividualsGroup ExecuteSelection(IndividualsGroup _targetIndividuals)
         {
             IndividualsGroup selectedIndividuals = new IndividualsGroup();
+            IndividualsGroup targetIndividuals = new IndividualsGroup(_targetIndividuals);
 
             var elite = EliteSelection(targetIndividuals);
+            SelectedIndividualsIndex[0] = targetIndividuals.IndexOf(elite);
+
+            targetIndividuals.IndivisualsGroup.Remove(elite);
             var roulette = RouletteSelection(targetIndividuals);
 
-            SelectedIndividualsIndex[0] = targetIndividuals.IndexOf(elite);
-            SelectedIndividualsIndex[1] = targetIndividuals.IndexOf(roulette);
+            if (SelectedIndividualsIndex[0] <= targetIndividuals.IndexOf(roulette))
+            {
+                SelectedIndividualsIndex[1] = targetIndividuals.IndexOf(roulette) + 1;
+            }
+            else
+            {
+                SelectedIndividualsIndex[1] = targetIndividuals.IndexOf(roulette);
+            }
 
-            selectedIndividuals.AddIndivisual(EliteSelection(targetIndividuals));
-            selectedIndividuals.AddIndivisual(RouletteSelection(targetIndividuals));
+            selectedIndividuals.AddIndivisual(elite);
+            selectedIndividuals.AddIndivisual(roulette);
 
             return selectedIndividuals;
         }
@@ -42,7 +52,7 @@ namespace GA_AirfoilOptimizationTool2D.FGeneticAlgorithm
             elite = population.IndivisualsGroup[0];
             for (int i = 1; i < length; i++)
             {
-                if (maximumFitness < population.IndivisualsGroup[0].Fitness)
+                if (maximumFitness < population.IndivisualsGroup[i].Fitness)
                 {
                     maximumFitness = population.IndivisualsGroup[i].Fitness;
                     elite = population.IndivisualsGroup[i];

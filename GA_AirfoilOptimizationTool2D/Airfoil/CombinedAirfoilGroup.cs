@@ -88,11 +88,60 @@ namespace GA_AirfoilOptimizationTool2D.Airfoil
         {
         }
 
+        public void AddCharacteristics
+            (
+            List<Airfoil.Characteristics.AngleBasedCharacteristics> lifts, 
+            List<Airfoil.Characteristics.AngleBasedCharacteristics> drags
+            )
+        {
+            if (lifts == null || drags == null)
+            {
+                return;
+            }
+
+            if (lifts.Count != this.NoAirfoils || drags.Count != this.NoAirfoils)
+            {
+                return;
+            }
+
+            for (int i = 0; i < NoAirfoils; i++)
+            {
+                CombinedAirfoils[i].LiftProfile = lifts[i];
+                CombinedAirfoils[i].DragProfile = drags[i];
+            }
+        }
+
         //public CoefficientOfCombination Clone()
         //{
         //    int _n_numberOfAirfoils = _numberOfAirfoils;
         //    int _n_numberOfBasisAirfoils = _numberOfBasisAirfoils;
         //    var _n_coefficientOfCombination = _coefficientsOfCombination.Clone();
         //}
+
+        public static CombinedAirfoilsGroup operator + (CombinedAirfoilsGroup A, CombinedAirfoilsGroup B)
+        {
+            if (A == null || B == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            CombinedAirfoilsGroup C = new CombinedAirfoilsGroup(A.BasisAirfoils);
+            for (int i = 0; i < A.CombinedAirfoils.Length; i++)
+            {
+                C.Add(
+                    A.CombinedAirfoils[i],
+                    A.CoefficientOfCombination.GetCoefficients(i)
+                    );
+            }
+            for (int i = 0; i < B.CombinedAirfoils.Length; i++)
+            {
+                C.Add(
+                    B.CombinedAirfoils[i],
+                    B.CoefficientOfCombination.GetCoefficients(i)
+                    );
+            }
+
+            return C;
+        }
     }
 }

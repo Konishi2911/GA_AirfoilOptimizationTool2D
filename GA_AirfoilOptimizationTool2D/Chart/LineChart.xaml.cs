@@ -132,14 +132,17 @@ namespace GA_AirfoilOptimizationTool2D.Chart
             double xMagnification = (ChartWindow.ActualWidth - 2 * xMargine) / XAxis.Width;
             double yMagnifidation = (ChartWindow.ActualHeight - 2 * yMargine) / YAxis.Width;
 
+            Console.WriteLine("Debugging log ============= //");
             foreach (var p in PointsCollection)
             {
                 double x = xMargine + xMagnification * p.X;
                 double y = ChartWindow.ActualHeight - yMargine - yMagnifidation * p.Y;
 
                 CharacLine.Points.Add(new Point(x, y));
-            }
 
+                Console.WriteLine(p.X + "," + p.Y);
+            }
+            
             return true;
         }
 
